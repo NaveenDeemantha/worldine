@@ -128,10 +128,74 @@ const prevHeroSlide = () => {
     typeText();
 };
 
+// About Section Destination Image Showcase Data
+const aboutDestinations = ref([
+    {
+        country: 'Worldine Expeditions',
+        flag: '🌐',
+        tagline: 'Over 20 Years of Premier Travel & Visa Expertise',
+        image: '/images/Logo/aboutback.png'
+    },
+    {
+        country: 'Sri Lanka',
+        flag: '🇱🇰',
+        tagline: 'Sigiriya Rock Citadel & UNESCO Ancient Kingdoms',
+        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+        country: 'Australia',
+        flag: '🇦🇺',
+        tagline: 'Sydney Harbour Opera House & Great Barrier Reef',
+        image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+        country: 'Japan',
+        flag: '🇯🇵',
+        tagline: 'Kyoto Zen Temples, Mount Fuji & Shinkansen Trains',
+        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+        country: 'Thailand',
+        flag: '🇹🇭',
+        tagline: 'Bangkok Grand Palaces & Turquoise Beach Lagoons',
+        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+        country: 'Malaysia',
+        flag: '🇲🇾',
+        tagline: 'Petronas Twin Towers & Rainforest Island Escapes',
+        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+        country: 'Singapore',
+        flag: '🇸🇬',
+        tagline: 'Marina Bay Sands Towers & Supertree Grove',
+        image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+        country: 'China',
+        flag: '🇨🇳',
+        tagline: 'Great Wall of China & Historical Forbidden City',
+        image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=1200&q=80'
+    }
+]);
+
+const currentAboutSlide = ref(0);
+let aboutSlideTimer = null;
+
+const setAboutSlide = (idx) => {
+    currentAboutSlide.value = idx;
+};
+
+const nextAboutSlide = () => {
+    currentAboutSlide.value = (currentAboutSlide.value + 1) % aboutDestinations.value.length;
+};
+
 onMounted(() => {
     window.addEventListener('scroll', handleScroll);
     typeText();
     destCarouselTimer = setInterval(nextDestSlide, 3500);
+    aboutSlideTimer = setInterval(nextAboutSlide, 3500);
     loadAirlineLogos();
 });
 
@@ -139,6 +203,7 @@ onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
     if (typewriterTimeout) clearTimeout(typewriterTimeout);
     if (destCarouselTimer) clearInterval(destCarouselTimer);
+    if (aboutSlideTimer) clearInterval(aboutSlideTimer);
 });
 
 // Category & Search State
@@ -646,56 +711,48 @@ const features = [
                     </div>
                 </div>
 
-                <!-- Right Side: Auto-Sliding Image Cards Carousel (Infinite Seamless Loop) -->
-                <div class="lg:col-span-7 w-full overflow-hidden">
+                <!-- Right Side: 2 Full Cards Carousel View with Smooth Edge Feather Mask -->
+                <div class="lg:col-span-7 w-full overflow-hidden smooth-carousel-edge-fade">
                     <div 
                         class="flex gap-6"
                         :class="{ 'transition-transform duration-700 ease-out': isTransitioning }"
-                        :style="{ transform: 'translateX(-' + (destCarouselIndex * 85) + '%)' }"
+                        :style="{ transform: 'translateX(-' + (destCarouselIndex * 50) + '%)' }"
                     >
                         <div 
                             v-for="(dest, i) in loopedGlimpseDestinations" 
                             :key="i"
-                            class="min-w-[85%] sm:min-w-[48%] group relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 h-88 sm:h-96 cursor-pointer border border-slate-100 flex-shrink-0"
+                            class="w-full sm:w-[calc(50%-12px)] flex-shrink-0 relative rounded-3xl overflow-hidden shadow-xl h-88 sm:h-96 cursor-pointer border border-slate-200/50"
                             @click="searchCategory = 'all'"
                         >
                             <!-- Background Image -->
                             <img 
                                 :src="dest.image" 
                                 :alt="dest.name" 
-                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                class="w-full h-full object-cover"
                             />
-                            <!-- Gradient Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent"></div>
+                            <!-- Sleek Dark Gradient Protection Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
 
-                            <!-- Top Left Badge -->
-                            <div class="absolute top-4 left-4">
-                                <span class="bg-[#2196F3] text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-md">
-                                    {{ dest.badge }}
-                                </span>
-                            </div>
-
-                            <!-- Top Right Package Count Pill -->
-                            <div class="absolute top-4 right-4">
-                                <span class="bg-white/95 backdrop-blur-md text-[#0D47A1] font-black text-xs px-3.5 py-1.5 rounded-full shadow-md border border-white">
+                            <!-- Top Right Glassmorphic Package Counter Pill -->
+                            <div class="absolute top-5 right-5">
+                                <span class="bg-slate-950/40 backdrop-blur-md text-white font-extrabold text-[11px] px-3.5 py-1.5 rounded-full border border-white/20 shadow-sm">
                                     {{ dest.packagesCount }}
                                 </span>
                             </div>
 
-                            <!-- Bottom Content -->
-                            <div class="absolute bottom-5 left-5 right-5 text-white">
-                                <h3 class="text-2xl font-black tracking-tight group-hover:text-[#90CAF9] transition-colors">
-                                    {{ dest.name }}
-                                </h3>
-                                <p class="text-xs text-slate-300 font-medium mt-1 leading-snug">
-                                    {{ dest.subtitle }}
-                                </p>
-                                <div class="mt-3 flex items-center justify-between pt-3 border-t border-white/20">
-                                    <span class="text-[11px] font-bold text-amber-400">⭐ 4.9+ Top Rated</span>
-                                    <span class="text-xs font-extrabold uppercase text-[#90CAF9] group-hover:translate-x-1 transition-transform inline-flex items-center">
-                                        Explore &rarr;
+                            <!-- Bottom Content: Clean Title, Subtitle & Static Glass Arrow -->
+                            <div class="absolute bottom-6 left-6 right-6 text-white space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight">
+                                        {{ dest.name }}
+                                    </h3>
+                                    <span class="w-9 h-9 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-sm font-bold text-white shadow-md border border-white/30">
+                                        →
                                     </span>
                                 </div>
+                                <p class="text-xs text-slate-300 font-medium line-clamp-1 leading-relaxed">
+                                    {{ dest.subtitle }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -703,176 +760,39 @@ const features = [
             </div>
         </section>
 
-        <!-- BLUE VALUE PROPOSITION STRIP BANNER & WHY CHOOSE WORLDINE DESTINATIONS SECTION -->
-        <section id="why-choose-us-section" class="w-full overflow-hidden">
-            
-            <!-- TOP OCEAN BLUE ICON BANNER STRIP WITH SUBTLE BACKGROUND ANIMATION & SVG PATTERN -->
-            <div class="relative bg-gradient-to-r from-[#0D47A1] via-[#1e6cb8] to-[#1565C0] text-white py-12 sm:py-16 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 overflow-hidden">
-                
-                <!-- Low-Visibility Subtle SVG World Map Grid Pattern Overlay -->
-                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1.5px,transparent_1.5px)] [background-size:24px_24px] pointer-events-none"></div>
 
-                <!-- Animated Subtle Floating Ambient Glow Orbs -->
-                <div class="absolute -top-24 -left-24 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-pulse pointer-events-none"></div>
-                <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl animate-pulse pointer-events-none" style="animation-delay: 2s;"></div>
 
-                <!-- Subtle Decorative World Compass Watermark -->
-                <div class="absolute right-10 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none hidden md:block">
-                    <svg class="w-96 h-96 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 3v3m0 12v3M3 12h3m12 0h3m-3.414-5.586l-2.121 2.121m-6.93 6.93l-2.121 2.121m0-11.172l2.121 2.121m6.93 6.93l2.121 2.121"></path>
-                    </svg>
-                </div>
+        <!-- ABOUT SECTION WITH SYNCHRONIZED DYNAMIC BACKGROUND -->
+        <section id="about" class="relative py-16 sm:py-24 border-b border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 overflow-hidden bg-slate-950">
+            <!-- Synchronized Full-Section Background Images Layer (80% opacity + blur) -->
+            <img 
+                v-for="(dest, idx) in aboutDestinations" 
+                :key="'bg-img-' + idx" 
+                :src="dest.image"
+                :alt="dest.country"
+                :class="[
+                    'absolute inset-0 w-full h-full object-cover transition-all duration-1000 transform pointer-events-none filter blur-sm',
+                    currentAboutSlide === idx ? 'opacity-80 scale-100 z-0' : 'opacity-0 scale-105 z-0'
+                ]"
+            />
 
-                <!-- Floating Animated Airplane & Dotted Flight Trail -->
-                <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-                    <svg class="w-full h-full text-white/20" fill="none" viewBox="0 0 1200 160" preserveAspectRatio="none">
-                        <!-- Trajectory Dotted Curved Line -->
-                        <path id="flightTrajectoryPath" d="M -50 120 Q 350 10, 800 90 T 1300 20" stroke="currentColor" stroke-width="2.5" stroke-dasharray="8,8" fill="none"></path>
+            <!-- Soft Ambient Light Gradient Overlay for Perfect Contrast -->
+            <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-white/30 pointer-events-none z-0"></div>
 
-                        <!-- Animated Passenger Airliner Jet Group (Pointing forward in exact direction of motion) -->
-                        <g>
-                            <g class="filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]">
-                                <!-- Main Aircraft Fuselage & Wings -->
-                                <path 
-                                    d="M 22 0 L -2 -7 L -16 -20 L -22 -20 L -14 -4 L -24 -4 L -29 -10 L -34 -10 L -30 0 L -34 10 L -29 10 L -24 4 L -14 4 L -22 20 L -16 20 L -2 7 Z" 
-                                    fill="#FFFFFF" 
-                                    stroke="#E2E8F0"
-                                    stroke-width="1.2"
-                                    stroke-linejoin="round"
-                                />
-                                <!-- Jet Engine Glow Accents -->
-                                <circle cx="-6" cy="-11" r="2" fill="#38BDF8" />
-                                <circle cx="-6" cy="11" r="2" fill="#38BDF8" />
-                            </g>
-                            <animateMotion 
-                                path="M -50 120 Q 350 10, 800 90 T 1300 20" 
-                                dur="12s" 
-                                repeatCount="indefinite" 
-                                rotate="auto"
-                            />
-                        </g>
-                    </svg>
-                </div>
-
-                <!-- Content Grid -->
-                <div class="relative z-10 w-full grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center items-center">
-                    
-                    <!-- Item 1: Globe -->
-                    <div class="flex flex-col items-center space-y-3 group">
-                        <div class="group-hover:scale-110 transition-transform p-2">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V7a2 2 0 00-2-2h-1.5A2.5 2.5 0 0113 2.5V2M12 21a9 9 0 100-18 9 9 0 000 18z"></path>
-                            </svg>
-                        </div>
-                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
-                            300+ Amazing Destinations
-                        </h4>
-                    </div>
-
-                    <!-- Item 2: Hotels -->
-                    <div class="flex flex-col items-center space-y-3 group">
-                        <div class="group-hover:scale-110 transition-transform p-2">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0v10m-4-10h4m-4 0V5m8 6h-4m4 0v10m-4-10v10"></path>
-                            </svg>
-                        </div>
-                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
-                            Comfortable Hotels
-                        </h4>
-                    </div>
-
-                    <!-- Item 3: Fast Bookings -->
-                    <div class="flex flex-col items-center space-y-3 group">
-                        <div class="group-hover:scale-110 transition-transform p-2">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
-                            Super Fast Bookings
-                        </h4>
-                    </div>
-
-                    <!-- Item 4: Tour Guides -->
-                    <div class="flex flex-col items-center space-y-3 group">
-                        <div class="group-hover:scale-110 transition-transform p-2">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                        </div>
-                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
-                            Friendly Tour Guides
-                        </h4>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BOTTOM WHY CHOOSE WORLDINE DESTINATIONS SECTION -->
-            <div class="bg-slate-100/90 py-16 sm:py-24 border-b border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
-                <div class="w-full text-center max-w-3xl mx-auto mb-12">
-                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tight leading-snug">
-                        Why Choose <span class="text-[#2196F3]">Worldine Destinations</span>
-                    </h2>
-                </div>
-
-                <!-- 4 White Feature Cards Grid -->
-                <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-                    
-                    <!-- Card 1 -->
-                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
-                        <h3 class="text-sm font-black text-[#1e6cb8] uppercase tracking-wider mb-3 leading-snug min-h-[40px] flex items-center justify-center">
-                            DEDICATED SINGLE POINT OF CONTACT
-                        </h3>
-                        <p class="text-xs text-slate-600 leading-relaxed font-normal">
-                            Eliminate the complexity of coordinating with multiple airlines, hotels, and visa services. Worldine Destinations provides a single, professional consultant who manages your entire international itinerary ensuring a seamless, stress-free planning experience.
-                        </p>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
-                        <h3 class="text-sm font-black text-[#1e6cb8] uppercase tracking-wider mb-3 leading-snug min-h-[40px] flex items-center justify-center">
-                            GUARANTEED VALUE FOR YOUR BUDGET
-                        </h3>
-                        <p class="text-xs text-slate-600 leading-relaxed font-normal">
-                            Thanks to our extensive network of airline and hotel partners, we secure the most competitive rates for your holiday packages. Whether you are planning a cost-conscious getaway or an opulent luxury vacation, we maximize the value of your travel investment.
-                        </p>
-                    </div>
-
-                    <!-- Card 3 -->
-                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
-                        <h3 class="text-sm font-black text-[#1e6cb8] uppercase tracking-wider mb-3 leading-snug min-h-[40px] flex items-center justify-center">
-                            AROUND THE CLOCK TRAVEL SUPPORT
-                        </h3>
-                        <p class="text-xs text-slate-600 leading-relaxed font-normal">
-                            Travel should be about excitement, not anxiety. Our 24/7 dedicated support hotline ensures that expert assistance from our Sri Lanka-based team is always available, regardless of your time zone or the specific travel challenges you may encounter.
-                        </p>
-                    </div>
-
-                    <!-- Card 4 -->
-                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
-                        <h3 class="text-sm font-black text-[#1e6cb8] uppercase tracking-wider mb-3 leading-snug min-h-[40px] flex items-center justify-center">
-                            COMMITMENT TO SUSTAINABLE TOURISM
-                        </h3>
-                        <p class="text-xs text-slate-600 leading-relaxed font-normal">
-                            At Worldine Destinations, we prioritize travel that creates a positive impact. Building on a long-standing dedication to responsible tourism, every international holiday we curate is thoughtfully designed to be mindful of both local communities and the environment.
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- ABOUT SECTION -->
-        <section id="about" class="py-14 sm:py-20 bg-white border-b border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
-            <div class="w-full">
+            <div class="relative z-10 w-full">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center w-full">
+                    <!-- Left Column: Clean Unboxed Text -->
                     <div class="lg:col-span-6 space-y-4">
                         <span class="text-amber-600 text-xs font-black uppercase tracking-widest">ABOUT OUR COMPANY</span>
                         <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-snug">
                             We Create Unforgettable Travel Memories
                         </h2>
                         <p class="text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed">
-                            Adventure Travel is dedicated to providing high-end luxury expeditions, custom tours, and secret island escapes across 150+ worldwide destinations. Our expert travel concierges take care of every detail so you can focus on exploring.
+                            Experience like never seen before we take you on the journey of your lifetime. 
+                            Worldine Destinations Comprises of a dynamic team with an abundance of international experience in the travel industry. 
+                            Our expertise is to deliver excellence service with the highest standards possible, all at excellent value for your money. 
+                            Over 20 years of experience in the travel trade with knowledge in various fields Eg: Ticketing, Visas, outbound & inbound tours & Travel Insurance. 
+                            have worked in top Iata agents,
                         </p>
                         <div class="flex items-center space-x-8 pt-3">
                             <div>
@@ -887,12 +807,31 @@ const features = [
                         </div>
                     </div>
 
-                    <div class="lg:col-span-6 relative rounded-2xl overflow-hidden shadow-xl border border-slate-200 w-full">
-                        <img 
-                            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80" 
-                            alt="Adventure About Us Image" 
-                            class="w-full h-64 sm:h-80 md:h-96 lg:h-[450px] object-cover"
-                        />
+                    <!-- Interactive About Section Destination Gallery Carousel with Smooth Edge Fade -->
+                    <div class="lg:col-span-6 relative rounded-3xl overflow-hidden shadow-2xl w-full group smooth-card-edge-fade">
+                        <!-- Image Container with Smooth Cross-Fade -->
+                        <div class="relative h-72 sm:h-96 lg:h-[480px] w-full overflow-hidden bg-slate-950">
+                            <img 
+                                v-for="(dest, idx) in aboutDestinations"
+                                :key="idx"
+                                :src="dest.image" 
+                                :alt="dest.country" 
+                                :class="[
+                                    'absolute inset-0 w-full h-full object-cover transition-all duration-1000 transform group-hover:scale-110',
+                                    currentAboutSlide === idx ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0'
+                                ]"
+                            />
+                            <!-- Dark Gradient Protection Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent z-20 pointer-events-none"></div>
+
+                            <!-- Bottom Info Caption -->
+                            <div class="absolute bottom-6 left-6 right-6 z-30 text-white space-y-1">
+                                <h3 class="text-xl sm:text-3xl font-black tracking-wide">{{ aboutDestinations[currentAboutSlide].country }}</h3>
+                                <p class="text-xs sm:text-sm text-slate-200 font-medium leading-tight">
+                                    {{ aboutDestinations[currentAboutSlide].tagline }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1181,6 +1120,181 @@ const features = [
             </div>
         </section>
 
+        <!-- BLUE VALUE PROPOSITION STRIP BANNER & WHY CHOOSE WORLDINE DESTINATIONS SECTION -->
+        <section id="why-choose-us-section" class="w-full overflow-hidden">
+            
+            <!-- TOP OCEAN BLUE ICON BANNER STRIP WITH SUBTLE BACKGROUND ANIMATION & SVG PATTERN -->
+            <div class="relative bg-gradient-to-r from-[#0D47A1] via-[#1e6cb8] to-[#1565C0] text-white py-12 sm:py-16 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 overflow-hidden">
+                
+                <!-- Low-Visibility Subtle SVG World Map Grid Pattern Overlay -->
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1.5px,transparent_1.5px)] [background-size:24px_24px] pointer-events-none"></div>
+
+                <!-- Animated Subtle Floating Ambient Glow Orbs -->
+                <div class="absolute -top-24 -left-24 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-pulse pointer-events-none"></div>
+                <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl animate-pulse pointer-events-none" style="animation-delay: 2s;"></div>
+
+                <!-- Subtle Decorative World Compass Watermark -->
+                <div class="absolute right-10 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none hidden md:block">
+                    <svg class="w-96 h-96 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 3v3m0 12v3M3 12h3m12 0h3m-3.414-5.586l-2.121 2.121m-6.93 6.93l-2.121 2.121m0-11.172l2.121 2.121m6.93 6.93l2.121 2.121"></path>
+                    </svg>
+                </div>
+
+                <!-- Floating Animated Airplanes & Dotted Flight Trail (Native SVG animateMotion + mpath) -->
+                <div class="absolute inset-0 pointer-events-none z-[1] overflow-hidden">
+                    <svg class="w-full h-full" viewBox="0 0 1200 160" preserveAspectRatio="none">
+                        <!-- Curved Dotted Trajectory Line -->
+                        <path 
+                            id="flightPathCurve" 
+                            d="M -60 110 Q 350 20, 750 90 T 1260 30" 
+                            stroke="rgba(255, 255, 255, 0.45)" 
+                            stroke-width="3" 
+                            stroke-dasharray="8,8" 
+                            fill="none" 
+                        />
+
+                        <!-- Plane 1 (Primary Flight) -->
+                        <g class="filter drop-shadow-[0_4px_14px_rgba(0,0,0,0.7)]">
+                            <path 
+                                d="M 22 0 L -2 -7 L -16 -20 L -22 -20 L -14 -4 L -24 -4 L -29 -10 L -34 -10 L -30 0 L -34 10 L -29 10 L -24 4 L -14 4 L -22 20 L -16 20 L -2 7 Z" 
+                                fill="#FFFFFF" 
+                                stroke="#E2E8F0"
+                                stroke-width="1.2"
+                                stroke-linejoin="round"
+                            />
+                            <circle cx="-6" cy="-11" r="2.5" fill="#38BDF8" />
+                            <circle cx="-6" cy="11" r="2.5" fill="#38BDF8" />
+                            <animateMotion dur="7s" repeatCount="indefinite" rotate="auto">
+                                <mpath href="#flightPathCurve" />
+                            </animateMotion>
+                        </g>
+
+                        <!-- Plane 2 (Staggered Flight - Guaranteed continuous coverage on screen) -->
+                        <g class="filter drop-shadow-[0_4px_14px_rgba(0,0,0,0.7)]">
+                            <path 
+                                d="M 22 0 L -2 -7 L -16 -20 L -22 -20 L -14 -4 L -24 -4 L -29 -10 L -34 -10 L -30 0 L -34 10 L -29 10 L -24 4 L -14 4 L -22 20 L -16 20 L -2 7 Z" 
+                                fill="#FFFFFF" 
+                                stroke="#E2E8F0"
+                                stroke-width="1.2"
+                                stroke-linejoin="round"
+                            />
+                            <circle cx="-6" cy="-11" r="2.5" fill="#38BDF8" />
+                            <circle cx="-6" cy="11" r="2.5" fill="#38BDF8" />
+                            <animateMotion dur="7s" begin="-3.5s" repeatCount="indefinite" rotate="auto">
+                                <mpath href="#flightPathCurve" />
+                            </animateMotion>
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="relative z-10 w-full grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center items-center">
+                    
+                    <!-- Item 1: Globe -->
+                    <div class="flex flex-col items-center space-y-3 group">
+                        <div class="group-hover:scale-110 transition-transform p-2">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V7a2 2 0 00-2-2h-1.5A2.5 2.5 0 0113 2.5V2M12 21a9 9 0 100-18 9 9 0 000 18z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
+                            300+ Amazing Destinations
+                        </h4>
+                    </div>
+
+                    <!-- Item 2: Hotels -->
+                    <div class="flex flex-col items-center space-y-3 group">
+                        <div class="group-hover:scale-110 transition-transform p-2">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0v10m-4-10h4m-4 0V5m8 6h-4m4 0v10m-4-10v10"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
+                            Comfortable Hotels
+                        </h4>
+                    </div>
+
+                    <!-- Item 3: Fast Bookings -->
+                    <div class="flex flex-col items-center space-y-3 group">
+                        <div class="group-hover:scale-110 transition-transform p-2">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
+                            Super Fast Bookings
+                        </h4>
+                    </div>
+
+                    <!-- Item 4: Tour Guides -->
+                    <div class="flex flex-col items-center space-y-3 group">
+                        <div class="group-hover:scale-110 transition-transform p-2">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
+                            Friendly Tour Guides
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM WHY CHOOSE WORLDINE DESTINATIONS SECTION -->
+            <div class="bg-slate-100/90 py-16 sm:py-24 border-b border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
+                <div class="w-full text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tight leading-snug">
+                        Why Choose <span class="text-[#2196F3]">Worldine Destinations</span>
+                    </h2>
+                </div>
+
+                <!-- 4 White Feature Cards Grid with High-Visibility Topics -->
+                <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                    
+                    <!-- Card 1 -->
+                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
+                        <h3 class="text-base sm:text-lg font-black text-slate-900 uppercase tracking-wide mb-3.5 leading-snug min-h-[48px] flex items-center justify-center border-b border-slate-100 pb-3">
+                            DEDICATED SINGLE POINT OF CONTACT
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                            Eliminate the complexity of coordinating with multiple airlines, hotels, and visa services. Worldine Destinations provides a single, professional consultant who manages your entire international itinerary ensuring a seamless, stress-free planning experience.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
+                        <h3 class="text-base sm:text-lg font-black text-slate-900 uppercase tracking-wide mb-3.5 leading-snug min-h-[48px] flex items-center justify-center border-b border-slate-100 pb-3">
+                            GUARANTEED VALUE FOR YOUR BUDGET
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                            Thanks to our extensive network of airline and hotel partners, we secure the most competitive rates for your holiday packages. Whether you are planning a cost-conscious getaway or an opulent luxury vacation, we maximize the value of your travel investment.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
+                        <h3 class="text-base sm:text-lg font-black text-slate-900 uppercase tracking-wide mb-3.5 leading-snug min-h-[48px] flex items-center justify-center border-b border-slate-100 pb-3">
+                            AROUND THE CLOCK TRAVEL SUPPORT
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                            Travel should be about excitement, not anxiety. Our 24/7 dedicated support hotline ensures that expert assistance from our Sri Lanka-based team is always available, regardless of your time zone or the specific travel challenges you may encounter.
+                        </p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
+                        <h3 class="text-base sm:text-lg font-black text-slate-900 uppercase tracking-wide mb-3.5 leading-snug min-h-[48px] flex items-center justify-center border-b border-slate-100 pb-3">
+                            COMMITMENT TO SUSTAINABLE TOURISM
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                            At Worldine Destinations, we prioritize travel that creates a positive impact. Building on a long-standing dedication to responsible tourism, every international holiday we curate is thoughtfully designed to be mindful of both local communities and the environment.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
         <!-- NEWSLETTER SUBSCRIPTION CARD -->
         <section class="py-12 sm:py-16 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
             <div class="w-full relative rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-teal-900 p-6 sm:p-12 overflow-hidden shadow-xl text-white">
@@ -1420,5 +1534,17 @@ const features = [
 .marquee-forward:hover,
 .marquee-reverse:hover {
     animation-play-state: paused;
+}
+
+/* Smooth Feathered Edge Mask for About Image Container */
+.smooth-card-edge-fade {
+    -webkit-mask-image: radial-gradient(ellipse 94% 94% at 50% 50%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
+    mask-image: radial-gradient(ellipse 94% 94% at 50% 50%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* Smooth Linear Edge Fade for Destination Carousel Container */
+.smooth-carousel-edge-fade {
+    -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, rgba(0, 0, 0, 0) 100%);
 }
 </style>
