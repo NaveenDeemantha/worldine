@@ -23,38 +23,38 @@ const handleScroll = () => {
 const heroSlides = ref([
     {
         id: 1,
-        image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'DISCOVER THE COLORFUL WORLD',
-        title: 'NEW ADVENTURE',
-        subtitle: 'Experience breathtaking alpine heights, untouched mountain wilderness, and bespoke expeditions designed for true explorers.'
+        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'DISCOVER PARADISE ISLAND',
+        title: 'VISIT SRI LANKA',
+        subtitle: 'Experience over 20 years of travel expertise. From ancient rock fortresses to golden palm-fringed beaches, embark on the journey of your lifetime.'
     },
     {
         id: 2,
-        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'TROPICAL LUXURY ESCAPES',
-        title: 'PARADISE ISLANDS',
-        subtitle: 'Submerge into crystal turquoise lagoons, awaken to tropical sea life beneath your bedroom floor, and unwind in secluded luxury.'
+        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'ANCIENT KINGDOMS & UNESCO HERITAGE',
+        title: 'HERITAGE & CULTURAL TOURS',
+        subtitle: 'Explore Sigiriya Rock Fortress, Polonnaruwa ancient ruins, Dambulla Cave Temples, and the Sacred Tooth Relic Temple in Kandy.'
     },
     {
         id: 3,
-        image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'MEDITERRANEAN BLISS',
-        title: 'SANTORINI SUNSETS',
-        subtitle: 'Experience pure Mediterranean bliss with cliffside infinity pools, private yacht tours across volcanic islands, and world-renowned sunsets.'
+        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'TROPICAL COASTLINES & SURF BAYS',
+        title: 'BEACH ADVENTURE TOURS',
+        subtitle: 'Unwind along Negombo, Kalpitiya, Marawilla, Hikkaduwa, and Mirissa. Whale watching, coral snorkeling, and pristine ocean retreats.'
     },
     {
         id: 4,
         image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'WILD SAFARI EXPEDITIONS',
-        title: 'SERENGETI SAFARI',
-        subtitle: 'Witness the Great Migration firsthand, camp under starlit African skies, and capture majestic lion prides and elephant herds in action.'
+        tagline: 'UNTOUCHED BIODIVERSITY & WILD SAFARIS',
+        title: 'SRI LANKA WILDLIFE EXPEDITIONS',
+        subtitle: 'Track wild elephants in Minneriya, leopards in Yala National Park, and rare endemic birds in lush rainforest sanctuaries.'
     },
     {
         id: 5,
-        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'ANCIENT CULTURAL SANCTUARIES',
-        title: 'KYOTO TEMPLES',
-        subtitle: 'Immerse in Japan’s historic soul—walk amidst towering bamboo forests, centuries-old zen gardens, and tranquil mountainside shrines.'
+        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'STUDY IN CANADA, MALTA & DUBAI',
+        title: 'WORLDINE EDUCATION & VISAS',
+        subtitle: 'Empowering students with global higher education pathways, visa consulting, and admissions at Acadia University, GBS Malta, & GBS Dubai.'
     }
 ]);
 
@@ -131,11 +131,14 @@ const prevHeroSlide = () => {
 onMounted(() => {
     window.addEventListener('scroll', handleScroll);
     typeText();
+    destCarouselTimer = setInterval(nextDestSlide, 3500);
+    loadAirlineLogos();
 });
 
 onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
     if (typewriterTimeout) clearTimeout(typewriterTimeout);
+    if (destCarouselTimer) clearInterval(destCarouselTimer);
 });
 
 // Category & Search State
@@ -154,137 +157,281 @@ const toggleWishlist = (id) => {
 
 // Categories
 const categories = [
-    { id: 'all', label: '🌟 All Destinations', count: 124 },
-    { id: 'tropical', label: '🏝️ Tropical & Islands', count: 38 },
-    { id: 'alpine', label: '🏔️ Alpine & Mountains', count: 26 },
-    { id: 'cultural', label: '🏛️ Cultural & Historical', count: 31 },
-    { id: 'luxury', label: '✨ Luxury Escapes', count: 19 },
-    { id: 'wildlife', label: '🦁 Safari & Nature', count: 15 }
+    { id: 'all', label: 'All Featured Tours', count: 8 },
+    { id: 'inbound', label: 'Sri Lanka Inbound Tours', count: 4 },
+    { id: 'outbound', label: 'Global Outbound Tours', count: 4 }
 ];
 
-// Sample Destinations Data
+// Authentic Worldine Destinations Packages Data
+const glimpseDestinations = ref([
+    {
+        name: 'Sri Lanka',
+        subtitle: 'Pearl of the Indian Ocean & UNESCO Heritage',
+        packagesCount: '15+ Packages',
+        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80',
+        badge: 'Inbound Specialist'
+    },
+    {
+        name: 'Maldives',
+        subtitle: 'Overwater Tropical Coral Lagoon',
+        packagesCount: '8 Packages',
+        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80',
+        badge: 'Outbound Escape'
+    },
+    {
+        name: 'Canada & North America',
+        subtitle: 'Acadia University & Higher Studies Pathways',
+        packagesCount: '6 Programs',
+        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80',
+        badge: 'Worldine Education'
+    },
+    {
+        name: 'Malta & Europe',
+        subtitle: 'GBS Malta Campus & Schengen Student Visas',
+        packagesCount: '5 Programs',
+        image: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80',
+        badge: 'Study & Work'
+    },
+    {
+        name: 'Dubai & UAE',
+        subtitle: 'GBS Dubai & Business Degrees',
+        packagesCount: '7 Packages',
+        image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
+        badge: 'Executive Studies'
+    },
+    {
+        name: 'Japan & East Asia',
+        subtitle: 'Kyoto Temples & Cultural Expeditions',
+        packagesCount: '9 Packages',
+        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
+        badge: 'Heritage & Culture'
+    }
+]);
+
+// Destinations Infinite Looping Carousel Engine
+const destCarouselIndex = ref(0);
+let destCarouselTimer = null;
+const isTransitioning = ref(true);
+
+const loopedGlimpseDestinations = computed(() => {
+    return [...glimpseDestinations.value, ...glimpseDestinations.value];
+});
+
+const nextDestSlide = () => {
+    destCarouselIndex.value++;
+    if (destCarouselIndex.value >= glimpseDestinations.value.length) {
+        setTimeout(() => {
+            isTransitioning.value = false;
+            destCarouselIndex.value = 0;
+            setTimeout(() => { isTransitioning.value = true; }, 50);
+        }, 700);
+    }
+};
+
+const prevDestSlide = () => {
+    if (destCarouselIndex.value === 0) {
+        isTransitioning.value = false;
+        destCarouselIndex.value = glimpseDestinations.value.length;
+        setTimeout(() => {
+            isTransitioning.value = true;
+            destCarouselIndex.value--;
+        }, 50);
+    } else {
+        destCarouselIndex.value--;
+    }
+};
+
 const destinations = ref([
+    // INBOUND TOURS (SRI LANKA)
     {
         id: 1,
-        title: 'Santorini Sunset Luxury Escape',
-        location: 'Cyclades, Greece',
-        category: 'luxury',
-        price: 2450,
-        originalPrice: 2900,
-        rating: 4.96,
-        reviewsCount: 342,
-        duration: '7 Days / 6 Nights',
-        badge: 'Bestseller',
-        image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Caldera View Villa', 'Private Catamaran Tour', 'Wine Tasting', 'Helicopter Transfer'],
-        description: 'Experience pure Mediterranean bliss with cliffside infinity pools, private yacht tours across volcanic islands, and world-renowned sunsets.'
+        title: 'Heritage & Cultural Tour Sri Lanka',
+        location: 'Anuradhapura • Polonnaruwa • Sigiriya • Kandy',
+        category: 'inbound',
+        price: 850,
+        originalPrice: 1050,
+        rating: 4.98,
+        reviewsCount: 240,
+        duration: '5 Days / 4 Nights',
+        badge: 'Inbound Tour',
+        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80',
+        highlights: ['Sigiriya Lion Rock Citadel', 'Dambulla Golden Cave Temple', 'Sacred Tooth Relic Temple', 'Colombo City Sightseeing'],
+        description: 'Explore the heart of Sri Lanka’s ancient kingdoms, sacred UNESCO World Heritage sites, and vibrant royal city of Kandy with expert local guides.'
     },
     {
         id: 2,
-        title: 'Bora Bora Overwater Bungalows',
-        location: 'French Polynesia',
-        category: 'tropical',
-        price: 3800,
-        originalPrice: 4400,
-        rating: 4.99,
-        reviewsCount: 218,
+        title: 'Grand Sri Lanka Heritage Expedition',
+        location: 'Negombo • Pinnawala • Sigiriya • Nuwara Eliya',
+        category: 'inbound',
+        price: 1280,
+        originalPrice: 1500,
+        rating: 4.96,
+        reviewsCount: 310,
         duration: '8 Days / 7 Nights',
-        badge: 'Exclusive Deal',
-        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Glass Floor Bungalow', 'Shark & Ray Safari', 'Spa Credit $300', 'Full Board Gourmet'],
-        description: 'Submerge into crystal turquoise lagoons, awaken to tropical sea life beneath your bedroom floor, and unwind in secluded luxury.'
+        badge: 'Inbound Tour',
+        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80',
+        highlights: ['Pinnawala Elephant Sanctuary', 'Minneriya Elephant Gathering', 'Tea Plantation & Factory', 'Nuwara Eliya Little England'],
+        description: 'An all-inclusive 8-day island journey spanning lush mist-covered tea hills, ancient ruins, elephant gatherings, and coastal Negombo.'
     },
     {
         id: 3,
-        title: 'Kyoto Ancient Temples & Bamboo',
-        location: 'Kyoto, Japan',
-        category: 'cultural',
-        price: 1890,
-        originalPrice: 2200,
-        rating: 4.91,
-        reviewsCount: 412,
-        duration: '6 Days / 5 Nights',
-        badge: 'Trending',
-        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Ryokan & Onsen Stay', 'Tea Ceremony Masterclass', 'Bullet Train Pass', 'Private Geisha Dinner'],
-        description: 'Immerse in Japan’s historic soul—walk amidst towering bamboo forests, centuries-old zen gardens, and tranquil mountainside shrines.'
+        title: 'Sri Lanka Coastal Beach Adventure',
+        location: 'Negombo • Kalpitiya • Hikkaduwa • Mirissa',
+        category: 'inbound',
+        price: 1150,
+        originalPrice: 1350,
+        rating: 4.92,
+        reviewsCount: 185,
+        duration: '8 Days / 7 Nights',
+        badge: 'Inbound Tour',
+        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+        highlights: ['Blue Whale Watching Mirissa', 'Kalpitiya Lagoon Kitesurfing', 'Hikkaduwa Coral Snorkeling', 'Beachfront Luxury Resort'],
+        description: 'Experience Sri Lanka’s finest coastal waters—from dolphin & whale watching to coral reef diving, seafood banquets, and sunset beach lounges.'
     },
     {
         id: 4,
-        title: 'Swiss Alps & Matterhorn Express',
-        location: 'Zermatt, Switzerland',
-        category: 'alpine',
-        price: 2750,
-        originalPrice: 3100,
-        rating: 4.94,
-        reviewsCount: 189,
-        duration: '7 Days / 6 Nights',
-        badge: 'Winter Special',
-        image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Glacier Express First Class', 'Alpine Chalet Suite', 'Ski Pass Included', 'Fondue Gourmet Night'],
-        description: 'Marvel at snow-capped peaks, ride scenic panoramic mountain trains, and relax in thermal baths with unobstructed Matterhorn vistas.'
+        title: 'Sri Lanka Wildlife & Nature Safari',
+        location: 'Yala National Park • Minneriya • Sinharaja',
+        category: 'inbound',
+        price: 990,
+        originalPrice: 1200,
+        rating: 4.97,
+        reviewsCount: 195,
+        duration: '6 Days / 5 Nights',
+        badge: 'Inbound Tour',
+        image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80',
+        highlights: ['Yala Leopard Safari 4x4', 'Minneriya Elephant Gathering', 'Sinharaja Rainforest Trek', 'Eco Luxury Jungle Glamping'],
+        description: 'Witness wild leopards, Asian elephants, sloth bears, and endemic tropical flora across Sri Lanka’s world-famous wildlife reserves.'
     },
+
+    // OUTBOUND TOURS (GLOBAL)
     {
         id: 5,
-        title: 'Serengeti Big Five Safari Expedition',
-        location: 'Serengeti, Tanzania',
-        category: 'wildlife',
-        price: 3200,
-        originalPrice: 3650,
-        rating: 4.98,
-        reviewsCount: 156,
-        duration: '9 Days / 8 Nights',
-        badge: 'Eco Adventure',
-        image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Hot Air Balloon Safari', 'Luxury Tented Camp', 'Expert Wildlife Tracker', 'Ngorongoro Crater Tour'],
-        description: 'Witness the Great Migration firsthand, camp under starlit African skies, and capture majestic lion prides and elephant herds in action.'
+        title: 'Maldives Luxury Overwater Escape',
+        location: 'Malé Atoll • Maldives',
+        category: 'outbound',
+        price: 1850,
+        originalPrice: 2200,
+        rating: 4.99,
+        reviewsCount: 215,
+        duration: '5 Days / 4 Nights',
+        badge: 'Outbound Tour',
+        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80',
+        highlights: ['Overwater Villa Stay', 'Seaplane Airport Transfer', 'Undersea Dining Experience', 'Sunset Dolphin Cruise'],
+        description: 'Submerge into crystal turquoise lagoons, private luxury water villas, and world-renowned undersea dining in the Maldives.'
     },
     {
         id: 6,
-        title: 'Amalfi Coast Cliffside Villa',
-        location: 'Positano, Italy',
-        category: 'luxury',
-        price: 2150,
-        originalPrice: 2500,
-        rating: 4.89,
-        reviewsCount: 284,
-        duration: '6 Days / 5 Nights',
-        badge: 'Popular Choice',
-        image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Private Convertible Car', 'Capri Island Speedboat', 'Cooking Class with Local Chef', 'Limoncello Tasting'],
-        description: 'Cruise winding coastline roads overlooking pastel-hued villages, feast on fresh seafood pasta, and swim in emerald sea coves.'
+        title: 'Dubai Sky Towers & Desert Safari',
+        location: 'Dubai • United Arab Emirates',
+        category: 'outbound',
+        price: 1280,
+        originalPrice: 1550,
+        rating: 4.94,
+        reviewsCount: 178,
+        duration: '5 Days / 4 Nights',
+        badge: 'Outbound Tour',
+        image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
+        highlights: ['Burj Khalifa Observation Deck', '4x4 Dune Bashing & BBQ', 'Dubai Marina Dinner Cruise', 'Gold & Spice Souk Guided Tour'],
+        description: 'Experience futuristic luxury skyscrapers, golden sand dunes, luxury marina cruises, and world-class shopping in Dubai.'
     },
     {
         id: 7,
-        title: 'Maldives Overwater Private Sanctuary',
-        location: 'Malé Atoll, Maldives',
-        category: 'tropical',
-        price: 3450,
-        originalPrice: 3950,
-        rating: 4.97,
-        reviewsCount: 310,
-        duration: '7 Days / 6 Nights',
-        badge: 'Island Sanctuary',
-        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Seaplane Transfer', 'Undersea Dining', 'Private Infinity Pool', 'Coral Reef Snorkeling'],
-        description: 'Escape to ultra-private coral islands surrounded by vivid turquoise waters, coral reefs, and world-class luxury pampering.'
+        title: 'Europe Schengen Grand Expedition',
+        location: 'Paris • Swiss Alps • Rome • Europe',
+        category: 'outbound',
+        price: 2450,
+        originalPrice: 2890,
+        rating: 4.98,
+        reviewsCount: 162,
+        duration: '10 Days / 9 Nights',
+        badge: 'Outbound Tour',
+        image: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80',
+        highlights: ['Eiffel Tower & Seine Cruise', 'Swiss Alps Cable Car Peak', 'Colosseum & Vatican Tour', 'Full Schengen Visa Support'],
+        description: 'Journey across iconic European capitals, snow-capped Swiss mountains, and historical UNESCO landmarks with complete visa assistance.'
     },
     {
         id: 8,
-        title: 'Patagonia Fjords & Glacier Expedition',
-        location: 'Torres del Paine, Chile',
-        category: 'alpine',
-        price: 2950,
-        originalPrice: 3300,
-        rating: 4.93,
-        reviewsCount: 167,
-        duration: '8 Days / 7 Nights',
-        badge: 'Wild Wilderness',
-        image: 'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Eco-Lodge Stay', 'Glacier Trekking', 'Puma Tracking Guide', 'Private Catamaran Cruise'],
-        description: 'Trek towering granite peaks, navigate turquoise glacial lakes, and discover South America’s most dramatic untouched wilderness.'
+        title: 'East Asia Cultural Discovery - Japan',
+        location: 'Tokyo • Mount Fuji • Kyoto • Japan',
+        category: 'outbound',
+        price: 2100,
+        originalPrice: 2500,
+        rating: 4.97,
+        reviewsCount: 145,
+        duration: '7 Days / 6 Nights',
+        badge: 'Outbound Tour',
+        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
+        highlights: ['Shinkansen Bullet Train Experience', 'Mount Fuji Panoramic View', 'Kyoto Fushimi Inari Shrine', 'Tokyo Skytree & Shibuya'],
+        description: 'Discover the perfect harmony of futuristic metropolis and ancient Zen temples with high-speed bullet trains across Japan.'
     }
 ]);
+
+// Airline Partners Brand Data — logos auto-discovered via Wikipedia Commons search API
+const airlinePartners = ref([
+    { name: 'Emirates',          searchQuery: 'Emirates airline logo',          accent: '#D71921', img: null },
+    { name: 'Qatar Airways',     searchQuery: 'Qatar Airways logo',             accent: '#5C0632', img: null },
+    { name: 'Singapore Airlines',searchQuery: 'Singapore Airlines logo',        accent: '#00205B', img: null },
+    { name: 'Etihad Airways',    searchQuery: 'Etihad Airways logo',            accent: '#BF9B30', img: null },
+    { name: 'British Airways',   searchQuery: 'British Airways logo',           accent: '#2176AE', img: null },
+    { name: 'Lufthansa',         searchQuery: 'Lufthansa logo',                 accent: '#05164D', img: null },
+    { name: 'Air France',        searchQuery: 'Air France logo',                accent: '#002157', img: null },
+    { name: 'Turkish Airlines',  searchQuery: 'Turkish Airlines logo',          accent: '#E81932', img: null },
+    { name: 'American Airlines', searchQuery: 'American Airlines logo',         accent: '#0078D2', img: null },
+    { name: 'Delta Air Lines',   searchQuery: 'Delta Air Lines logo',           accent: '#003366', img: null },
+    { name: 'United Airlines',   searchQuery: 'United Airlines logo',           accent: '#002244', img: null },
+    { name: 'Cathay Pacific',    searchQuery: 'Cathay Pacific logo',            accent: '#005155', img: null },
+    { name: 'ANA',               searchQuery: 'All Nippon Airways logo',        accent: '#1B3A6B', img: null },
+    { name: 'Japan Airlines',    searchQuery: 'Japan Airlines logo',            accent: '#CC0000', img: null },
+    { name: 'Korean Air',        searchQuery: 'Korean Air logo',                accent: '#00256C', img: null },
+    { name: 'Malaysia Airlines', searchQuery: 'Malaysia Airlines logo',         accent: '#CC0001', img: null },
+    { name: 'Thai Airways',      searchQuery: 'Thai Airways logo',              accent: '#6B2D8B', img: null },
+    { name: 'SriLankan Airlines',searchQuery: 'SriLankan Airlines logo',        accent: '#1D6FA4', img: null },
+    { name: 'Air Arabia',        searchQuery: 'Air Arabia logo',                accent: '#CC0000', img: null },
+    { name: 'flydubai',          searchQuery: 'flydubai logo',                  accent: '#FF6600', img: null },
+]);
+
+// Auto-discover airline logo via Wikipedia Commons search API, then fetch thumbnail URL
+const loadAirlineLogos = async () => {
+    await Promise.allSettled(
+        airlinePartners.value.map(async (airline, index) => {
+            try {
+                // Step 1: Search for the SVG logo file by airline name
+                const searchUrl = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(airline.searchQuery + ' filetype:svg')}&srnamespace=6&srlimit=5&format=json&origin=*`;
+                const searchRes = await fetch(searchUrl);
+                const searchData = await searchRes.json();
+                const results = searchData?.query?.search || [];
+
+                // Pick first SVG result whose title contains 'logo' or 'Logo'
+                const match = results.find(r => 
+                    r.title.toLowerCase().includes('logo') && 
+                    r.title.toLowerCase().endsWith('.svg')
+                ) || results.find(r => r.title.toLowerCase().endsWith('.svg'));
+
+                if (!match) return;
+
+                // Step 2: Get the thumbnail URL for that file
+                const fileTitle = match.title;
+                const infoUrl = `https://commons.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(fileTitle)}&prop=imageinfo&iiprop=url&iiurlwidth=240&format=json&origin=*`;
+                const infoRes = await fetch(infoUrl);
+                const infoData = await infoRes.json();
+                const pages = infoData?.query?.pages;
+                const page = pages ? Object.values(pages)[0] : null;
+                const thumburl = page?.imageinfo?.[0]?.thumburl;
+
+                if (thumburl) {
+                    airlinePartners.value[index] = { ...airlinePartners.value[index], img: thumburl };
+                }
+            } catch (e) {
+                // Silently fall back to brand pill
+            }
+        })
+    );
+};
+
+const loopedAirlinePartners = computed(() => {
+    return [...airlinePartners.value, ...airlinePartners.value, ...airlinePartners.value];
+});
 
 // Computed Filtered Destinations
 const filteredDestinations = computed(() => {
@@ -309,47 +456,7 @@ const closeModal = () => {
     activeModalDestination.value = null;
 };
 
-// Interactive Vibe Quiz Engine
-const quizStep = ref(1);
-const quizAnswers = ref({ climate: '', activity: '', budget: '' });
-const quizResult = ref(null);
 
-const setQuizAnswer = (key, val) => {
-    quizAnswers.value[key] = val;
-};
-
-const resetQuiz = () => {
-    quizStep.value = 1;
-    quizAnswers.value = { climate: '', activity: '', budget: '' };
-    quizResult.value = null;
-};
-
-const calculateQuizResult = () => {
-    quizStep.value = 4;
-    if (quizAnswers.value.climate === 'tropical') {
-        quizResult.value = destinations.value[1]; // Bora Bora
-    } else if (quizAnswers.value.climate === 'alpine') {
-        quizResult.value = destinations.value[3]; // Swiss Alps
-    } else if (quizAnswers.value.activity === 'cultural') {
-        quizResult.value = destinations.value[2]; // Kyoto
-    } else if (quizAnswers.value.activity === 'wildlife') {
-        quizResult.value = destinations.value[4]; // Serengeti
-    } else {
-        quizResult.value = destinations.value[0]; // Santorini
-    }
-};
-
-// Interactive Cost Estimator
-const calcDays = ref(7);
-const calcTravelers = ref(2);
-const calcTier = ref('luxury');
-const calcIncludeGuide = ref(true);
-
-const estimatedCost = computed(() => {
-    const baseDailyRate = calcTier.value === 'ultra' ? 450 : calcTier.value === 'luxury' ? 280 : 160;
-    const guideFee = calcIncludeGuide.value ? 65 : 0;
-    return (baseDailyRate + guideFee) * calcDays.value * calcTravelers.value;
-});
 
 // Newsletter Form
 const emailInput = ref('');
@@ -365,52 +472,52 @@ const handleSubscribe = () => {
 // Testimonials Data
 const testimonials = [
     {
-        name: 'Elena Rostova & Mark',
-        location: 'New York, USA',
-        destination: 'Bora Bora Overwater Escape',
+        name: 'Samantha & Richard Vance',
+        location: 'London, UK',
+        destination: 'Sri Lanka 8D7N Grand Heritage Tour',
         rating: 5,
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-        text: 'Adventure handled every single detail flawlessly! From our helicopter transfer to the private champagne dinner on the reef, it was truly a once-in-a-lifetime honeymoon.'
+        text: 'Worldine Destinations made our Sri Lanka trip unforgettable! From our private chauffeur guide to the Sigiriya luxury hotel, every detail was handled with top-tier professionalism.'
     },
     {
-        name: 'David Chen',
-        location: 'Singapore',
-        destination: 'Swiss Alps & Matterhorn Express',
+        name: 'Kasun & Dilini Wickramasinghe',
+        location: 'Colombo, Sri Lanka',
+        destination: 'Canada Student Visa (Acadia Univ)',
         rating: 5,
         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
-        text: 'The glacier train ride was breathtaking. Booking through Adventure saved us over $600 compared to other agencies, and their 24/7 concierge was incredibly responsive.'
+        text: 'Worldine Education guided me step-by-step through my Acadia University application and Canada student visa approval. Their 20+ years of travel trade expertise truly shines!'
     },
     {
-        name: 'Sophia & Liam Williams',
-        location: 'London, UK',
-        destination: 'Kyoto Heritage Tour',
+        name: 'Hans & Greta Müller',
+        location: 'Frankfurt, Germany',
+        destination: 'Sri Lanka Wildlife & Safari Tour',
         rating: 5,
         avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80',
-        text: 'Unbelievable authenticity! Staying at a traditional Ryokan with private hot springs was the highlight of our trip to Japan. We are already planning our next journey.'
+        text: 'Seeing wild leopards in Yala and hundreds of elephants in Minneriya was magical! Worldine Destinations is definitely the best tour operator in Sri Lanka.'
     }
 ];
 
 // Why Choose Us Features
 const features = [
     {
-        icon: '🛡️',
-        title: '100% Guaranteed Price & Quality',
-        desc: 'Direct partnerships with premium resorts and luxury fleets ensure unbeatable rates with zero hidden fees.'
+        icon: '🏆',
+        title: '20+ Years Travel Trade Expertise',
+        desc: 'Over two decades of excellence in IATA ticketing, visa consulting, inbound & outbound tours, and travel insurance.'
     },
     {
-        icon: '💎',
-        title: 'Handpicked VIP Experiences',
-        desc: 'Every itinerary is inspected and curated by our global team of travel experts for ultimate comfort.'
+        icon: '🇱🇰',
+        title: 'Official Sri Lanka Inbound Specialists',
+        desc: 'Bespoke Sri Lanka tour packages—Heritage & Cultural, Beach Adventures, Wildlife Safaris, and Ramayana Trails.'
     },
     {
-        icon: '🧭',
-        title: 'Personalized Travel Concierge',
-        desc: 'Enjoy dedicated round-the-clock support from your personal travel assistant wherever you roam.'
+        icon: '🎓',
+        title: 'Worldine Global Education Portal',
+        desc: 'Direct university admissions and student visa processing for Canada (Acadia Univ), Malta (GBS Malta), & Dubai.'
     },
     {
-        icon: '🌱',
-        title: 'Sustainable & Eco-Conscious',
-        desc: 'We plant 10 trees for every booking and support local indigenous conservation initiatives globally.'
+        icon: '📞',
+        title: '24/7 Dedicated Concierge Hotline',
+        desc: 'Immediate customer assistance via our Sri Lanka hotlines (+94 766 834 881 | +94 718 834 881) and global support.'
     }
 ];
 </script>
@@ -501,6 +608,260 @@ const features = [
             </div>
         </section>
 
+        <!-- GLIMPSE OF DESTINATIONS SECTION (SIDE-BY-SIDE SLIDING CAROUSEL IN SAME ROW) -->
+        <section id="glimpse-destinations" class="py-16 sm:py-24 bg-white border-b border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 overflow-hidden">
+            <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                
+                <!-- Left Side: Text Content & Carousel Controls -->
+                <div class="lg:col-span-5 space-y-5 text-left">
+                    <span class="text-xs font-black uppercase tracking-[0.25em] text-[#2196F3] bg-[#E3F2FD] px-4 py-1.5 rounded-full border border-[#90CAF9]/40 inline-block">
+                        DESTINATIONS
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-black text-[#0D47A1] tracking-tight leading-tight">
+                        A glimpse of destinations
+                    </h2>
+                    <p class="text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed">
+                        Explore handpicked world-class travel destinations, tropical beach escapes, and higher education portals. Our curated packages offer unforgettable memories with 20+ years of travel expertise.
+                    </p>
+
+                    <!-- Interactive Slider Controls & Counter -->
+                    <div class="pt-4 flex items-center space-x-4">
+                        <button 
+                            @click="prevDestSlide" 
+                            class="w-12 h-12 rounded-full bg-[#E3F2FD] hover:bg-[#2196F3] text-[#0D47A1] hover:text-white flex items-center justify-center font-black transition-all shadow-md border border-[#90CAF9]/40"
+                            aria-label="Previous destination"
+                        >
+                            ←
+                        </button>
+                        <button 
+                            @click="nextDestSlide" 
+                            class="w-12 h-12 rounded-full bg-[#2196F3] hover:bg-[#0D47A1] text-white flex items-center justify-center font-black transition-all shadow-md"
+                            aria-label="Next destination"
+                        >
+                            →
+                        </button>
+                        <span class="text-xs font-extrabold text-slate-400 font-mono tracking-widest pl-2">
+                            0{{ destCarouselIndex + 1 }} / 0{{ glimpseDestinations.length }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Right Side: Auto-Sliding Image Cards Carousel (Infinite Seamless Loop) -->
+                <div class="lg:col-span-7 w-full overflow-hidden">
+                    <div 
+                        class="flex gap-6"
+                        :class="{ 'transition-transform duration-700 ease-out': isTransitioning }"
+                        :style="{ transform: 'translateX(-' + (destCarouselIndex * 85) + '%)' }"
+                    >
+                        <div 
+                            v-for="(dest, i) in loopedGlimpseDestinations" 
+                            :key="i"
+                            class="min-w-[85%] sm:min-w-[48%] group relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 h-88 sm:h-96 cursor-pointer border border-slate-100 flex-shrink-0"
+                            @click="searchCategory = 'all'"
+                        >
+                            <!-- Background Image -->
+                            <img 
+                                :src="dest.image" 
+                                :alt="dest.name" 
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            />
+                            <!-- Gradient Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent"></div>
+
+                            <!-- Top Left Badge -->
+                            <div class="absolute top-4 left-4">
+                                <span class="bg-[#2196F3] text-white font-black text-[10px] uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-md">
+                                    {{ dest.badge }}
+                                </span>
+                            </div>
+
+                            <!-- Top Right Package Count Pill -->
+                            <div class="absolute top-4 right-4">
+                                <span class="bg-white/95 backdrop-blur-md text-[#0D47A1] font-black text-xs px-3.5 py-1.5 rounded-full shadow-md border border-white">
+                                    {{ dest.packagesCount }}
+                                </span>
+                            </div>
+
+                            <!-- Bottom Content -->
+                            <div class="absolute bottom-5 left-5 right-5 text-white">
+                                <h3 class="text-2xl font-black tracking-tight group-hover:text-[#90CAF9] transition-colors">
+                                    {{ dest.name }}
+                                </h3>
+                                <p class="text-xs text-slate-300 font-medium mt-1 leading-snug">
+                                    {{ dest.subtitle }}
+                                </p>
+                                <div class="mt-3 flex items-center justify-between pt-3 border-t border-white/20">
+                                    <span class="text-[11px] font-bold text-amber-400">⭐ 4.9+ Top Rated</span>
+                                    <span class="text-xs font-extrabold uppercase text-[#90CAF9] group-hover:translate-x-1 transition-transform inline-flex items-center">
+                                        Explore &rarr;
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLUE VALUE PROPOSITION STRIP BANNER & WHY CHOOSE WORLDINE DESTINATIONS SECTION -->
+        <section id="why-choose-us-section" class="w-full overflow-hidden">
+            
+            <!-- TOP OCEAN BLUE ICON BANNER STRIP WITH SUBTLE BACKGROUND ANIMATION & SVG PATTERN -->
+            <div class="relative bg-gradient-to-r from-[#0D47A1] via-[#1e6cb8] to-[#1565C0] text-white py-12 sm:py-16 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 overflow-hidden">
+                
+                <!-- Low-Visibility Subtle SVG World Map Grid Pattern Overlay -->
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1.5px,transparent_1.5px)] [background-size:24px_24px] pointer-events-none"></div>
+
+                <!-- Animated Subtle Floating Ambient Glow Orbs -->
+                <div class="absolute -top-24 -left-24 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-pulse pointer-events-none"></div>
+                <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl animate-pulse pointer-events-none" style="animation-delay: 2s;"></div>
+
+                <!-- Subtle Decorative World Compass Watermark -->
+                <div class="absolute right-10 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none hidden md:block">
+                    <svg class="w-96 h-96 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 3v3m0 12v3M3 12h3m12 0h3m-3.414-5.586l-2.121 2.121m-6.93 6.93l-2.121 2.121m0-11.172l2.121 2.121m6.93 6.93l2.121 2.121"></path>
+                    </svg>
+                </div>
+
+                <!-- Floating Animated Airplane & Dotted Flight Trail -->
+                <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                    <svg class="w-full h-full text-white/20" fill="none" viewBox="0 0 1200 160" preserveAspectRatio="none">
+                        <!-- Trajectory Dotted Curved Line -->
+                        <path id="flightTrajectoryPath" d="M -50 120 Q 350 10, 800 90 T 1300 20" stroke="currentColor" stroke-width="2.5" stroke-dasharray="8,8" fill="none"></path>
+
+                        <!-- Animated Passenger Airliner Jet Group (Pointing forward in exact direction of motion) -->
+                        <g>
+                            <g class="filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]">
+                                <!-- Main Aircraft Fuselage & Wings -->
+                                <path 
+                                    d="M 22 0 L -2 -7 L -16 -20 L -22 -20 L -14 -4 L -24 -4 L -29 -10 L -34 -10 L -30 0 L -34 10 L -29 10 L -24 4 L -14 4 L -22 20 L -16 20 L -2 7 Z" 
+                                    fill="#FFFFFF" 
+                                    stroke="#E2E8F0"
+                                    stroke-width="1.2"
+                                    stroke-linejoin="round"
+                                />
+                                <!-- Jet Engine Glow Accents -->
+                                <circle cx="-6" cy="-11" r="2" fill="#38BDF8" />
+                                <circle cx="-6" cy="11" r="2" fill="#38BDF8" />
+                            </g>
+                            <animateMotion 
+                                path="M -50 120 Q 350 10, 800 90 T 1300 20" 
+                                dur="12s" 
+                                repeatCount="indefinite" 
+                                rotate="auto"
+                            />
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="relative z-10 w-full grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center items-center">
+                    
+                    <!-- Item 1: Globe -->
+                    <div class="flex flex-col items-center space-y-3 group">
+                        <div class="group-hover:scale-110 transition-transform p-2">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V7a2 2 0 00-2-2h-1.5A2.5 2.5 0 0113 2.5V2M12 21a9 9 0 100-18 9 9 0 000 18z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
+                            300+ Amazing Destinations
+                        </h4>
+                    </div>
+
+                    <!-- Item 2: Hotels -->
+                    <div class="flex flex-col items-center space-y-3 group">
+                        <div class="group-hover:scale-110 transition-transform p-2">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0v10m-4-10h4m-4 0V5m8 6h-4m4 0v10m-4-10v10"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
+                            Comfortable Hotels
+                        </h4>
+                    </div>
+
+                    <!-- Item 3: Fast Bookings -->
+                    <div class="flex flex-col items-center space-y-3 group">
+                        <div class="group-hover:scale-110 transition-transform p-2">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
+                            Super Fast Bookings
+                        </h4>
+                    </div>
+
+                    <!-- Item 4: Tour Guides -->
+                    <div class="flex flex-col items-center space-y-3 group">
+                        <div class="group-hover:scale-110 transition-transform p-2">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white filter drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xs sm:text-sm font-black uppercase tracking-wider max-w-[160px] leading-tight">
+                            Friendly Tour Guides
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM WHY CHOOSE WORLDINE DESTINATIONS SECTION -->
+            <div class="bg-slate-100/90 py-16 sm:py-24 border-b border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
+                <div class="w-full text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tight leading-snug">
+                        Why Choose <span class="text-[#2196F3]">Worldine Destinations</span>
+                    </h2>
+                </div>
+
+                <!-- 4 White Feature Cards Grid -->
+                <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                    
+                    <!-- Card 1 -->
+                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
+                        <h3 class="text-sm font-black text-[#1e6cb8] uppercase tracking-wider mb-3 leading-snug min-h-[40px] flex items-center justify-center">
+                            DEDICATED SINGLE POINT OF CONTACT
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed font-normal">
+                            Eliminate the complexity of coordinating with multiple airlines, hotels, and visa services. Worldine Destinations provides a single, professional consultant who manages your entire international itinerary ensuring a seamless, stress-free planning experience.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
+                        <h3 class="text-sm font-black text-[#1e6cb8] uppercase tracking-wider mb-3 leading-snug min-h-[40px] flex items-center justify-center">
+                            GUARANTEED VALUE FOR YOUR BUDGET
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed font-normal">
+                            Thanks to our extensive network of airline and hotel partners, we secure the most competitive rates for your holiday packages. Whether you are planning a cost-conscious getaway or an opulent luxury vacation, we maximize the value of your travel investment.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
+                        <h3 class="text-sm font-black text-[#1e6cb8] uppercase tracking-wider mb-3 leading-snug min-h-[40px] flex items-center justify-center">
+                            AROUND THE CLOCK TRAVEL SUPPORT
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed font-normal">
+                            Travel should be about excitement, not anxiety. Our 24/7 dedicated support hotline ensures that expert assistance from our Sri Lanka-based team is always available, regardless of your time zone or the specific travel challenges you may encounter.
+                        </p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-white p-7 sm:p-8 rounded-3xl shadow-lg border border-slate-200/80 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col text-center">
+                        <h3 class="text-sm font-black text-[#1e6cb8] uppercase tracking-wider mb-3 leading-snug min-h-[40px] flex items-center justify-center">
+                            COMMITMENT TO SUSTAINABLE TOURISM
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed font-normal">
+                            At Worldine Destinations, we prioritize travel that creates a positive impact. Building on a long-standing dedication to responsible tourism, every international holiday we curate is thoughtfully designed to be mindful of both local communities and the environment.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
         <!-- ABOUT SECTION -->
         <section id="about" class="py-14 sm:py-20 bg-white border-b border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
             <div class="w-full">
@@ -563,11 +924,11 @@ const features = [
         <section id="destinations" class="py-14 sm:py-20 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
             <div class="w-full flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10">
                 <div>
-                    <span class="text-teal-700 text-xs font-black uppercase tracking-widest">POPULAR DESTINATIONS</span>
-                    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-1">Featured Travel Packages</h2>
+                    <span class="text-[#2196F3] text-xs font-black uppercase tracking-widest">WORLDINE DESTINATIONS</span>
+                    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-1">Inbound & Outbound Tour Packages</h2>
                 </div>
                 <p class="text-slate-600 text-xs sm:text-sm max-w-md mt-2 md:mt-0 font-medium leading-relaxed">
-                    Explore top-rated luxury packages tailored to provide authentic experiences and stress-free travel.
+                    Discover authentic Sri Lanka Inbound expeditions and premier Global Outbound tour packages curated with 20+ years of travel expertise.
                 </p>
             </div>
 
@@ -678,232 +1039,93 @@ const features = [
             </div>
         </section>
 
-        <!-- INTERACTIVE TRIP FINDER QUIZ WIDGET -->
-        <section id="quiz" class="py-14 sm:py-20 bg-gradient-to-b from-slate-100 via-sky-50/50 to-white border-t border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
-            <div class="w-full text-center">
-                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-100 border border-teal-200 text-teal-900 text-xs font-bold uppercase tracking-wider mb-3">
-                    <span>✨ AI Matchmaker</span>
-                </div>
-                <h2 class="text-2xl sm:text-4xl font-black text-slate-900">Not Sure Where to Travel?</h2>
-                <p class="text-slate-600 text-xs sm:text-sm mt-1.5 max-w-lg mx-auto font-medium">
-                    Take our 30-second Travel Vibe Quiz and let our smart algorithm discover your ideal vacation match!
-                </p>
+        <!-- WE ARE FEATURED IN / OUR AIRLINE PARTNERS CAROUSEL SECTION -->
+        <section id="airline-partners-section" class="py-10 sm:py-16 bg-white border-t border-b border-slate-100 w-full overflow-hidden">
+            <!-- Section Headers -->
+            <div class="w-full text-center max-w-3xl mx-auto mb-8 sm:mb-12 px-4">
+                <h2 class="text-xl sm:text-3xl lg:text-4xl font-black text-[#00A3E0] tracking-wider uppercase mb-1">
+                    WE ARE FEATURED IN
+                </h2>
+                <h3 class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">
+                    OUR AIRLINE PARTNERS
+                </h3>
+                <div class="w-12 sm:w-16 h-0.5 sm:h-1 bg-[#00A3E0] mx-auto mt-2.5 rounded-full"></div>
+            </div>
 
-                <!-- Quiz Box Container -->
-                <div class="mt-8 bg-white border border-slate-200 rounded-2xl p-5 sm:p-8 shadow-lg text-left relative overflow-hidden w-full">
-                    
-                    <!-- Step 1: Climate Choice -->
-                    <div v-if="quizStep === 1" class="space-y-4">
-                        <div class="flex items-center justify-between text-xs text-slate-500 font-bold uppercase">
-                            <span>Step 1 of 3</span>
-                            <span>Climate Vibe</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900">What is your dream holiday environment?</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <button 
-                                @click="setQuizAnswer('climate', 'tropical'); quizStep = 2"
-                                class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-teal-500 text-left hover:bg-teal-50/50 transition-all group"
-                            >
-                                <div class="text-3xl mb-1.5">🏝️</div>
-                                <div class="font-bold text-slate-900 group-hover:text-teal-700 text-sm">Tropical Beach</div>
-                                <div class="text-[11px] text-slate-500 mt-0.5">Sun, turquoise water & palm trees</div>
-                            </button>
-                            <button 
-                                @click="setQuizAnswer('climate', 'alpine'); quizStep = 2"
-                                class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-teal-500 text-left hover:bg-teal-50/50 transition-all group"
-                            >
-                                <div class="text-3xl mb-1.5">🏔️</div>
-                                <div class="font-bold text-slate-900 group-hover:text-teal-700 text-sm">Alpine Peak</div>
-                                <div class="text-[11px] text-slate-500 mt-0.5">Crisp mountain air & chalets</div>
-                            </button>
-                            <button 
-                                @click="setQuizAnswer('climate', 'urban'); quizStep = 2"
-                                class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-teal-500 text-left hover:bg-teal-50/50 transition-all group"
-                            >
-                                <div class="text-3xl mb-1.5">🏛️</div>
-                                <div class="font-bold text-slate-900 group-hover:text-teal-700 text-sm">Historic City</div>
-                                <div class="text-[11px] text-slate-500 mt-0.5">Culture, architecture & cuisine</div>
-                            </button>
-                        </div>
-                    </div>
+            <!-- Marquee Wrapper -->
+            <div class="relative w-full overflow-hidden">
+                <!-- Left/Right Fade Edges -->
+                <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+                <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
-                    <!-- Step 2: Activity Preference -->
-                    <div v-else-if="quizStep === 2" class="space-y-4">
-                        <div class="flex items-center justify-between text-xs text-slate-500 font-bold uppercase">
-                            <span>Step 2 of 3</span>
-                            <span>Pace & Activity</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900">How do you prefer to spend your days?</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <button 
-                                @click="setQuizAnswer('activity', 'relax'); quizStep = 3"
-                                class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-teal-500 text-left hover:bg-teal-50/50 transition-all group"
+                <!-- ROW 1: Left to Right (forward) -->
+                <div class="marquee-row mb-6">
+                    <div class="marquee-track marquee-forward">
+                        <!-- Two identical copies for seamless looping -->
+                        <template v-for="copy in 2" :key="'fwd-copy-' + copy">
+                            <div 
+                                v-for="(airline, idx) in airlinePartners" 
+                                :key="'fwd-' + copy + '-' + idx"
+                                class="marquee-item"
                             >
-                                <div class="text-3xl mb-1.5">🧘‍♀️</div>
-                                <div class="font-bold text-slate-900 group-hover:text-teal-700 text-sm">Pure Relaxation</div>
-                                <div class="text-[11px] text-slate-500 mt-0.5">Spas, fine dining & lounging</div>
-                            </button>
-                            <button 
-                                @click="setQuizAnswer('activity', 'wildlife'); quizStep = 3"
-                                class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-teal-500 text-left hover:bg-teal-50/50 transition-all group"
-                            >
-                                <div class="text-3xl mb-1.5">🦁</div>
-                                <div class="font-bold text-slate-900 group-hover:text-teal-700 text-sm">Thrill & Safari</div>
-                                <div class="text-[11px] text-slate-500 mt-0.5">Wildlife tracking & trekking</div>
-                            </button>
-                            <button 
-                                @click="setQuizAnswer('activity', 'cultural'); quizStep = 3"
-                                class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-teal-500 text-left hover:bg-teal-50/50 transition-all group"
-                            >
-                                <div class="text-3xl mb-1.5">⛩️</div>
-                                <div class="font-bold text-slate-900 group-hover:text-teal-700 text-sm">Immersive Culture</div>
-                                <div class="text-[11px] text-slate-500 mt-0.5">Museums, temples & street food</div>
-                            </button>
-                        </div>
-                        <button @click="quizStep = 1" class="text-xs text-slate-500 hover:text-slate-900 underline">← Back to Step 1</button>
-                    </div>
-
-                    <!-- Step 3: Calculation trigger -->
-                    <div v-else-if="quizStep === 3" class="space-y-4 text-center py-4">
-                        <div class="text-3xl animate-bounce">🔮</div>
-                        <h3 class="text-xl font-bold text-slate-900">Analyzing Your Travel Profile...</h3>
-                        <p class="text-slate-600 text-xs">Matching climate and activity preferences with 150+ luxury packages.</p>
-                        <button 
-                            @click="calculateQuizResult()"
-                            class="px-6 py-3 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-bold text-xs shadow-md hover:scale-105 transition-all"
-                        >
-                            Reveal My Perfect Destination!
-                        </button>
-                    </div>
-
-                    <!-- Step 4: Result Display -->
-                    <div v-else-if="quizStep === 4 && quizResult" class="space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-                            <span class="text-xs font-bold text-teal-700 uppercase tracking-widest">🎉 99.8% Match Found!</span>
-                            <button @click="resetQuiz()" class="text-xs text-slate-500 hover:text-slate-900 underline">Take Quiz Again 🔄</button>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 items-center">
-                            <img :src="quizResult.image" :alt="quizResult.title" class="w-full h-48 object-cover rounded-xl shadow-sm" />
-                            <div class="space-y-2">
-                                <span class="text-[11px] font-bold text-teal-700 uppercase">{{ quizResult.location }}</span>
-                                <h3 class="text-xl font-black text-slate-900">{{ quizResult.title }}</h3>
-                                <p class="text-slate-600 text-xs leading-relaxed">{{ quizResult.description }}</p>
-                                <div class="text-teal-700 font-black text-lg">${{ quizResult.price.toLocaleString() }} <span class="text-[11px] text-slate-500 font-normal">/ person</span></div>
-                                <button @click="openQuickView(quizResult)" class="px-5 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs hover:bg-teal-700 transition-colors shadow">
-                                    Book Recommended Journey
-                                </button>
+                                <img 
+                                    v-if="airline.img"
+                                    :src="airline.img" 
+                                    :alt="airline.name"
+                                    class="h-7 sm:h-10 lg:h-12 w-auto max-w-[100px] sm:max-w-[130px] object-contain"
+                                />
+                                <div 
+                                    v-else
+                                    :style="{ backgroundColor: airline.accent }"
+                                    class="flex items-center gap-2 px-4 py-2.5 rounded-lg shadow-sm"
+                                >
+                                    <svg class="w-3 h-3 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                                    </svg>
+                                    <span class="text-white text-[10px] font-bold uppercase tracking-wide">{{ airline.name }}</span>
+                                </div>
                             </div>
-                        </div>
+                        </template>
                     </div>
+                </div>
 
+                <!-- ROW 2: Right to Left (reverse) with slight offset start -->
+                <div class="marquee-row">
+                    <div class="marquee-track marquee-reverse">
+                        <template v-for="copy in 2" :key="'rev-copy-' + copy">
+                            <div 
+                                v-for="(airline, idx) in airlinePartners" 
+                                :key="'rev-' + copy + '-' + idx"
+                                class="marquee-item"
+                            >
+                                <img 
+                                    v-if="airline.img"
+                                    :src="airline.img" 
+                                    :alt="airline.name"
+                                    class="h-7 sm:h-10 lg:h-12 w-auto max-w-[100px] sm:max-w-[130px] object-contain"
+                                />
+                                <div 
+                                    v-else
+                                    :style="{ backgroundColor: airline.accent }"
+                                    class="flex items-center gap-2 px-4 py-2.5 rounded-lg shadow-sm"
+                                >
+                                    <svg class="w-3 h-3 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                                    </svg>
+                                    <span class="text-white text-[10px] font-bold uppercase tracking-wide">{{ airline.name }}</span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- INTERACTIVE TRIP BUDGET & COST CALCULATOR SECTION -->
-        <section id="estimator" class="py-14 sm:py-20 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
-            <div class="w-full">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
-                    <!-- Left Details -->
-                    <div class="lg:col-span-6 space-y-4">
-                        <span class="text-teal-700 text-xs font-black uppercase tracking-widest">Instant Estimate</span>
-                        <h2 class="text-2xl sm:text-4xl font-black text-slate-900 leading-snug">
-                            Customize & Estimate <br />
-                            Your Vacation Budget
-                        </h2>
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed font-medium">
-                            Use our transparent trip estimator to plan your budget with zero surprises. Adjust days, traveler count, luxury tier, and dedicated guide add-ons in real time.
-                        </p>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                            <div class="flex items-start space-x-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                <span class="text-2xl">⚡</span>
-                                <div>
-                                    <div class="font-bold text-slate-900 text-xs sm:text-sm">Transparent Pricing</div>
-                                    <div class="text-[11px] text-slate-500 mt-0.5">Includes taxes, resorts fees & flight credits.</div>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                <span class="text-2xl">🔒</span>
-                                <div>
-                                    <div class="font-bold text-slate-900 text-xs sm:text-sm">Flexible Cancellations</div>
-                                    <div class="text-[11px] text-slate-500 mt-0.5">100% refund up to 14 days before trip.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Right Calculator Controls -->
-                    <div class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-5 sm:p-8 shadow-lg space-y-5 w-full">
-                        <h3 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-3">Trip Budget Calculator</h3>
-
-                        <!-- Duration Slider -->
-                        <div>
-                            <div class="flex justify-between text-xs font-bold text-slate-700 mb-1.5">
-                                <span>Duration</span>
-                                <span class="text-teal-700 font-black">{{ calcDays }} Days</span>
-                            </div>
-                            <input v-model.number="calcDays" type="range" min="3" max="21" class="w-full accent-teal-600 bg-slate-200 h-2 rounded-lg cursor-pointer" />
-                        </div>
-
-                        <!-- Travelers Counter -->
-                        <div>
-                            <div class="flex justify-between text-xs font-bold text-slate-700 mb-1.5">
-                                <span>Number of Travelers</span>
-                                <span class="text-teal-700 font-black">{{ calcTravelers }} Guests</span>
-                            </div>
-                            <input v-model.number="calcTravelers" type="range" min="1" max="10" class="w-full accent-teal-600 bg-slate-200 h-2 rounded-lg cursor-pointer" />
-                        </div>
-
-                        <!-- Accommodation Tier -->
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1.5">Accommodation Level</label>
-                            <div class="grid grid-cols-3 gap-2">
-                                <button 
-                                    @click="calcTier = 'standard'" 
-                                    :class="['py-2.5 rounded-xl text-xs font-bold transition-all border', calcTier === 'standard' ? 'bg-teal-600 text-white border-teal-600 shadow' : 'bg-slate-50 text-slate-700 border-slate-200']"
-                                >
-                                    🏨 4★ Premium
-                                </button>
-                                <button 
-                                    @click="calcTier = 'luxury'" 
-                                    :class="['py-2.5 rounded-xl text-xs font-bold transition-all border', calcTier === 'luxury' ? 'bg-teal-600 text-white border-teal-600 shadow' : 'bg-slate-50 text-slate-700 border-slate-200']"
-                                >
-                                    ✨ 5★ Luxury
-                                </button>
-                                <button 
-                                    @click="calcTier = 'ultra'" 
-                                    :class="['py-2.5 rounded-xl text-xs font-bold transition-all border', calcTier === 'ultra' ? 'bg-teal-600 text-white border-teal-600 shadow' : 'bg-slate-50 text-slate-700 border-slate-200']"
-                                >
-                                    👑 VIP Villa
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Addon Checkbox -->
-                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
-                            <span class="text-xs font-semibold text-slate-700">Include Private Local Guide ($65/day)</span>
-                            <input v-model="calcIncludeGuide" type="checkbox" class="w-4 h-4 accent-teal-600 rounded cursor-pointer" />
-                        </div>
-
-                        <!-- Result Box -->
-                        <div class="bg-gradient-to-br from-slate-50 to-teal-50/40 border border-teal-200 p-4 sm:p-5 rounded-xl flex items-center justify-between">
-                            <div>
-                                <span class="text-[11px] text-slate-500 font-semibold block">Total Estimated Cost</span>
-                                <span class="text-2xl sm:text-3xl font-black text-teal-700">${{ estimatedCost.toLocaleString() }}</span>
-                            </div>
-                            <a href="#destinations" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl transition-colors shadow">
-                                Lock Rate Now
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- WHY CHOOSE US / FEATURES GRID -->
-        <section class="py-14 sm:py-20 bg-slate-100/60 border-t border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
+        <section id="services" class="py-14 sm:py-20 bg-slate-100/60 border-t border-slate-200 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
             <div class="w-full">
                 <div class="text-center max-w-xl mx-auto mb-12">
                     <span class="text-teal-700 text-xs font-black uppercase tracking-widest">Why Travel With Us</span>
@@ -997,21 +1219,20 @@ const features = [
         </section>
 
         <!-- FOOTER -->
-        <footer class="bg-slate-950 border-t border-slate-900 pt-12 pb-10 text-slate-400 text-xs w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
+        <footer id="footer" class="bg-slate-950 border-t border-slate-900 pt-12 pb-10 text-slate-400 text-xs w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
             <div class="w-full grid grid-cols-1 md:grid-cols-5 gap-8">
                 <!-- Column 1: Brand -->
                 <div class="md:col-span-2 space-y-3">
                     <div class="flex items-center">
-                        <img src="/images/Logo/worldine.png" alt="Worldine Logo" class="h-16 sm:h-24 md:h-28 w-auto object-contain filter drop-shadow-xl" />
+                        <img src="/images/Logo/worldine.png" alt="Worldine Destinations Logo" class="h-16 sm:h-24 md:h-28 w-auto object-contain filter drop-shadow-xl" />
                     </div>
                     <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
-                        Worldine Travel is a premier luxury tour operator delivering bespoke travel experiences, private mountain retreats, and cultural expeditions around the world.
+                        Worldine Destinations (Pvt) Ltd. Over 20 years of experience in the travel trade with deep knowledge in Ticketing, Visas, Outbound & Inbound tours, and Travel Insurance.
                     </p>
                     <div class="flex space-x-3 text-base text-slate-300">
-                        <a href="#" class="hover:text-amber-400">🌐</a>
-                        <a href="#" class="hover:text-amber-400">📸</a>
-                        <a href="#" class="hover:text-amber-400">✈️</a>
-                        <a href="#" class="hover:text-amber-400">💬</a>
+                        <a href="https://www.facebook.com/worldinedestinations/" target="_blank" class="hover:text-amber-400">🌐</a>
+                        <a href="https://www.instagram.com/worldinedestinations" target="_blank" class="hover:text-amber-400">📸</a>
+                        <a href="https://eservices.immigration.gov.lk/emb/eEmbarkation/#/home-page" target="_blank" class="hover:text-amber-400" title="Digital Arrival Portal">🛂</a>
                     </div>
                 </div>
 
@@ -1021,43 +1242,40 @@ const features = [
                     <ul class="space-y-1.5 text-xs">
                         <li><a href="#hero" class="hover:text-amber-400 transition-colors">Home</a></li>
                         <li><a href="#about" class="hover:text-amber-400 transition-colors">About Us</a></li>
-                        <li><a href="#destinations" class="hover:text-amber-400 transition-colors">Services</a></li>
-                        <li><a href="#destinations" class="hover:text-amber-400 transition-colors">Gallery</a></li>
+                        <li><a href="#destinations" class="hover:text-amber-400 transition-colors">Sri Lanka Tours</a></li>
+                        <li><a href="#education" class="hover:text-amber-400 transition-colors">Worldine Education</a></li>
                         <li><a href="#quiz" class="hover:text-amber-400 transition-colors">FAQ</a></li>
                     </ul>
                 </div>
 
-                <!-- Column 3: Travel Styles -->
+                <!-- Column 3: Inbound Packages -->
                 <div class="space-y-2">
-                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Travel Styles</h4>
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Sri Lanka Inbound</h4>
                     <ul class="space-y-1.5 text-xs">
-                        <li><a href="#" class="hover:text-amber-400 transition-colors">Luxury Island Escapes</a></li>
-                        <li><a href="#" class="hover:text-amber-400 transition-colors">Alpine Chalet Tours</a></li>
-                        <li><a href="#" class="hover:text-amber-400 transition-colors">Cultural Heritage Tours</a></li>
-                        <li><a href="#" class="hover:text-amber-400 transition-colors">Honeymoon Specials</a></li>
+                        <li><a href="#destinations" class="hover:text-amber-400 transition-colors">Heritage & Cultural (5D4N)</a></li>
+                        <li><a href="#destinations" class="hover:text-amber-400 transition-colors">Grand Heritage (8D7N)</a></li>
+                        <li><a href="#destinations" class="hover:text-amber-400 transition-colors">Beach Adventure (8D7N)</a></li>
+                        <li><a href="#destinations" class="hover:text-amber-400 transition-colors">Wildlife Safari (6D5N)</a></li>
                     </ul>
                 </div>
 
-                <!-- Column 4: Support -->
+                <!-- Column 4: Contact Hotlines -->
                 <div class="space-y-2">
-                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Support</h4>
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Contact & Hotlines</h4>
                     <ul class="space-y-1.5 text-xs">
-                        <li><a href="#" class="hover:text-amber-400 transition-colors">Contact Concierge</a></li>
-                        <li><a href="#" class="hover:text-amber-400 transition-colors">Cancellation Policy</a></li>
-                        <li><a href="#" class="hover:text-amber-400 transition-colors">Travel Insurance</a></li>
-                        <li><a href="#" class="hover:text-amber-400 transition-colors">Terms of Service</a></li>
+                        <li><a href="tel:+94766834881" class="hover:text-amber-400 transition-colors">📞 +94 766 834 881</a></li>
+                        <li><a href="tel:+94718834881" class="hover:text-amber-400 transition-colors">📞 +94 718 834 881</a></li>
+                        <li><a href="tel:+94778692229" class="hover:text-amber-400 transition-colors">📞 +94 778 869 222</a></li>
+                        <li><a href="mailto:info@worldinedestinations.com" class="hover:text-amber-400 transition-colors">✉️ info@worldinedestinations.com</a></li>
                     </ul>
                 </div>
             </div>
 
             <!-- Bottom Copyright Bar -->
             <div class="w-full mt-10 pt-5 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500">
-                <div>© 2026 Worldine Travel Inc. All Rights Reserved.</div>
+                <div>Copyright © 2026 Worldine Destinations (Pvt) Ltd | All Rights Reserved</div>
                 <div class="mt-2 sm:mt-0 flex space-x-3">
-                    <span>💳 Visa</span>
-                    <span>💳 Mastercard</span>
-                    <span>💳 American Express</span>
-                    <span>🔒 256-Bit SSL Encrypted</span>
+                    <a href="https://eservices.immigration.gov.lk/emb/eEmbarkation/#/home-page" target="_blank" class="hover:text-amber-400 transition-colors">🛂 Digital Arrival Portal ↗</a>
                 </div>
             </div>
         </footer>
@@ -1129,5 +1347,78 @@ const features = [
 .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+/* =============================================
+   AIRLINE MARQUEE — SMOOTH SEAMLESS LOOP
+   Each row holds 2 copies of the list.
+   -50% translation = exactly one copy = seamless.
+   ============================================= */
+
+.marquee-row {
+    width: 100%;
+    overflow: hidden;
+}
+
+.marquee-track {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: max-content;
+    will-change: transform;
+}
+
+@media (min-width: 640px) {
+    .marquee-track { gap: 48px; }
+}
+
+.marquee-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    height: 52px;
+    flex-shrink: 0;
+    /* Snappy 120ms hover response */
+    transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.12s ease;
+    cursor: pointer;
+}
+
+@media (min-width: 640px) {
+    .marquee-item {
+        min-width: 130px;
+        height: 64px;
+    }
+}
+
+.marquee-item:hover {
+    transform: scale(1.18);
+    filter: drop-shadow(0 6px 16px rgba(0,0,0,0.18));
+}
+
+/* Forward: scroll left — 14s for a faster, energetic feel */
+@keyframes marqueeForward {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Reverse: scroll right — 18s slightly slower for visual contrast */
+@keyframes marqueeReverse {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+}
+
+.marquee-forward {
+    animation: marqueeForward 35s linear infinite;
+}
+
+.marquee-reverse {
+    animation: marqueeReverse 35s linear infinite;
+}
+
+.marquee-forward:hover,
+.marquee-reverse:hover {
+    animation-play-state: paused;
 }
 </style>
