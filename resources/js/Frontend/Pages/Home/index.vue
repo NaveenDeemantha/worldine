@@ -679,6 +679,8 @@ const features = [
                     src="/images/Logo/worldineback.png" 
                     alt="Worldine Hero" 
                     class="w-full h-full object-cover object-center"
+                    fetchpriority="high"
+                    decoding="async"
                 />
                 <!-- Mobile-Only Soft Contrast Mask directly on Background Image for Legibility (Subtle bg-white/20) -->
                 <div class="block sm:hidden absolute inset-0 bg-white/20 pointer-events-none z-10"></div>
