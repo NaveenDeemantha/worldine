@@ -87,7 +87,7 @@ const filteredPackages = computed(() => {
             </div>
         </template>
 
-        <div class="space-y-6 font-spinnaker">
+        <div class="space-y-6 font-aptos">
             <!-- SEARCH, CATEGORY FILTERS & ACTION BUTTON INSIDE PAGE -->
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
                 <div class="flex items-center space-x-2 overflow-x-auto pb-1 lg:pb-0">
@@ -182,7 +182,7 @@ const filteredPackages = computed(() => {
 
         <!-- PACKAGE MODAL -->
         <div v-if="isPackageModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
-            <div class="bg-white w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 font-spinnaker space-y-6">
+            <div class="bg-white w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 font-aptos space-y-6">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                     <h2 class="text-xl font-black text-[#0D47A1]">{{ editingPackage ? 'Edit Tour Package' : 'Create New Package' }}</h2>
                     <button @click="isPackageModalOpen = false" class="text-slate-400 font-bold">✕</button>

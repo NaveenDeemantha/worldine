@@ -58,32 +58,33 @@ const toggleCollapse = () => {
 </script>
 
 <template>
-    <div class="min-h-screen bg-slate-50 text-slate-900 flex font-sans antialiased">
+    <div class="min-h-screen bg-slate-50/90 text-slate-900 flex font-aptos antialiased">
         
         <!-- MOBILE SIDEBAR OVERLAY BACKDROP -->
         <div 
             v-if="sidebarOpen" 
             @click="sidebarOpen = false" 
-            class="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs md:hidden transition-opacity"
+            class="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-xs md:hidden transition-opacity"
         ></div>
 
-        <!-- SIDEBAR PANEL (LIGHT THEME) -->
+        <!-- SIDEBAR PANEL (WORLDINE LIGHT THEME WITH SEAMLESS LOGO) -->
         <aside 
             :class="[
-                'fixed md:static inset-y-0 left-0 z-50 flex flex-col bg-white border-r border-slate-200/90 transition-all duration-300 shadow-sm flex-shrink-0',
+                'fixed md:static inset-y-0 left-0 z-50 flex flex-col bg-slate-50/95 border-r border-slate-200/90 transition-all duration-300 shadow-sm flex-shrink-0 font-spinnaker',
                 isCollapsed ? 'md:w-20' : 'md:w-64',
                 sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0'
             ]"
         >
-            <!-- SIDEBAR HEADER (BRAND LOGO) -->
-            <div class="h-20 flex items-center justify-between px-5 border-b border-slate-200/80 bg-slate-50/50">
-                <Link href="/dashboard" class="flex items-center space-x-3 overflow-hidden group">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0D47A1] to-[#2196F3] flex items-center justify-center font-black text-white text-xl shadow-md flex-shrink-0">
-                        W
-                    </div>
+            <!-- SIDEBAR HEADER (SEAMLESS DIRECT LOGO WITHOUT CONTAINER) -->
+            <div class="h-20 flex items-center justify-between px-4 border-b border-slate-200/80 bg-white/60 backdrop-blur-md">
+                <Link href="/dashboard" class="flex items-center space-x-3 overflow-hidden group py-1">
+                    <img 
+                        src="/images/Logo/worldine.png" 
+                        alt="Worldine Logo" 
+                        class="h-10 sm:h-12 w-auto object-contain transition-all duration-300 opacity-95 group-hover:opacity-100 group-hover:scale-105 flex-shrink-0"
+                    />
                     <div v-if="!isCollapsed || sidebarOpen" class="flex flex-col">
-                        <span class="font-black text-base tracking-tight text-[#0D47A1] leading-tight">WORLDINE</span>
-                        <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase">Admin Portal</span>
+                        <span class="font-black text-xs text-[#0D47A1] tracking-wider uppercase leading-none">Admin Portal</span>
                     </div>
                 </Link>
 
@@ -110,10 +111,10 @@ const toggleCollapse = () => {
                     :key="idx"
                     :href="item.href"
                     :class="[
-                        'flex items-center px-3.5 py-3 rounded-xl font-semibold text-xs transition-all duration-150 group relative',
+                        'flex items-center px-3.5 py-3 rounded-xl text-xs font-bold transition-all duration-200 group relative',
                         route().current(item.activeName) 
-                            ? 'bg-[#0D47A1] text-white shadow-sm font-bold' 
-                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                            ? 'bg-[#0D47A1] text-white shadow-md font-extrabold' 
+                            : 'text-slate-600 hover:text-[#0D47A1] hover:bg-[#E3F2FD]/70'
                     ]"
                     :title="isCollapsed ? item.name : ''"
                 >
@@ -125,11 +126,11 @@ const toggleCollapse = () => {
                         stroke="currentColor" 
                         viewBox="0 0 24 24"
                     >
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" :d="item.iconPath" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.iconPath" />
                     </svg>
 
                     <!-- Label Text -->
-                    <span v-if="!isCollapsed || sidebarOpen" class="ml-3 truncate font-semibold">
+                    <span v-if="!isCollapsed || sidebarOpen" class="ml-3 truncate font-bold">
                         {{ item.name }}
                     </span>
 
@@ -137,8 +138,10 @@ const toggleCollapse = () => {
                     <span 
                         v-if="(item.badge && (!isCollapsed || sidebarOpen))" 
                         :class="[
-                            'ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full border',
-                            item.badgeColor || 'bg-blue-50 text-blue-700 border-blue-200'
+                            'ml-auto text-[10px] font-extrabold px-2 py-0.5 rounded-full border',
+                            route().current(item.activeName)
+                                ? 'bg-white/20 text-white border-white/30'
+                                : (item.badgeColor || 'bg-blue-50 text-[#0D47A1] border-blue-200')
                         ]"
                     >
                         {{ item.badge }}
@@ -147,15 +150,15 @@ const toggleCollapse = () => {
             </div>
 
             <!-- SIDEBAR FOOTER CARD (USER PROFILE & LOGOUT) -->
-            <div class="p-3 border-t border-slate-200/80 bg-slate-50/70">
-                <div :class="['flex items-center p-2 rounded-xl bg-white border border-slate-200 shadow-xs', isCollapsed && !sidebarOpen ? 'justify-center' : 'justify-between']">
+            <div class="p-3 border-t border-slate-200/80 bg-white/70">
+                <div :class="['flex items-center p-2 rounded-xl bg-slate-50 border border-slate-200 shadow-xs', isCollapsed && !sidebarOpen ? 'justify-center' : 'justify-between']">
                     <div class="flex items-center space-x-3 overflow-hidden">
-                        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#0D47A1] to-[#2196F3] flex items-center justify-center text-white font-bold text-xs shadow-xs flex-shrink-0">
+                        <div class="w-9 h-9 rounded-full bg-[#0D47A1] text-white font-black flex items-center justify-center text-xs shadow-xs flex-shrink-0">
                             {{ $page.props.auth.user.name.charAt(0) }}
                         </div>
                         <div v-if="!isCollapsed || sidebarOpen" class="flex flex-col truncate">
-                            <span class="text-xs font-bold text-slate-900 truncate">{{ $page.props.auth.user.name }}</span>
-                            <span class="text-[10px] text-slate-500 truncate">{{ $page.props.auth.user.email }}</span>
+                            <span class="text-xs font-extrabold text-slate-900 truncate">{{ $page.props.auth.user.name }}</span>
+                            <span class="text-[10px] font-bold text-slate-400 truncate">{{ $page.props.auth.user.email }}</span>
                         </div>
                     </div>
 
@@ -177,9 +180,9 @@ const toggleCollapse = () => {
         </aside>
 
         <!-- MAIN LAYOUT CONTENT WRAPPER -->
-        <div class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
+        <div class="flex-1 flex flex-col min-w-0 bg-slate-50/90 overflow-y-auto">
             
-            <!-- TOP NAVBAR STRIP (LIGHT THEME) -->
+            <!-- TOP NAVBAR STRIP (WORLDINE BRANDED) -->
             <header class="h-20 bg-white border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
                 
                 <!-- Left Header: Mobile Toggle & Page Title/Breadcrumb -->
@@ -201,17 +204,17 @@ const toggleCollapse = () => {
                 <!-- Right Header Actions: Live Website Link & User Dropdown -->
                 <div class="flex items-center space-x-3 sm:space-x-4">
                     
-                    <!-- View Live Website Button (Vector Icon) -->
+                    <!-- View Live Website Button -->
                     <a 
                         href="/" 
                         target="_blank" 
-                        class="hidden sm:inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs font-bold text-slate-700 hover:text-slate-900 transition-all shadow-xs"
+                        class="hidden sm:inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-blue-50/80 hover:bg-blue-100 border border-blue-200 text-xs font-extrabold text-[#0D47A1] transition-all shadow-xs"
                     >
-                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-[#2196F3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                         </svg>
                         <span>View Website</span>
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 text-[#0D47A1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                     </a>
@@ -219,8 +222,8 @@ const toggleCollapse = () => {
                     <!-- User Account Dropdown -->
                     <Dropdown align="right" width="48">
                         <template #trigger>
-                            <button class="flex items-center space-x-2.5 p-1.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs font-bold text-slate-800 transition-colors">
-                                <div class="w-6 h-6 rounded-full bg-[#0D47A1] text-white font-bold flex items-center justify-center text-[10px]">
+                            <button class="flex items-center space-x-2.5 p-1.5 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-xs font-extrabold text-slate-800 transition-colors">
+                                <div class="w-6 h-6 rounded-full bg-[#0D47A1] text-white font-black flex items-center justify-center text-[10px]">
                                     {{ $page.props.auth.user.name.charAt(0) }}
                                 </div>
                                 <span class="hidden md:inline">{{ $page.props.auth.user.name }}</span>
@@ -231,8 +234,8 @@ const toggleCollapse = () => {
                         </template>
 
                         <template #content>
-                            <div class="px-4 py-2 border-b border-slate-100 text-xs text-slate-500">
-                                Signed in as <strong class="text-slate-800 font-bold block truncate">{{ $page.props.auth.user.email }}</strong>
+                            <div class="px-4 py-2 border-b border-slate-100 text-xs text-slate-500 font-medium">
+                                Signed in as <strong class="text-slate-800 font-extrabold block truncate">{{ $page.props.auth.user.email }}</strong>
                             </div>
                             <DropdownLink :href="route('profile.edit')">
                                 Profile Settings

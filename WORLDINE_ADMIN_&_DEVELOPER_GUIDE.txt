@@ -1,0 +1,189 @@
+================================================================================
+          WORLDINE DESTINATIONS - COMPLETE ADMIN & DEVELOPER GUIDE
+================================================================================
+
+Welcome to the official Administrator & Developer User Guide for Worldine 
+Destinations. This document explains how to access the Admin Panel, manage all 
+website content from scratch, build tour packages and itineraries, and work on 
+the codebase.
+
+--------------------------------------------------------------------------------
+1. INTRODUCTION & SYSTEM OVERVIEW
+--------------------------------------------------------------------------------
+Worldine Destinations is a full-stack Laravel + Inertia.js + Vue 3 travel and 
+tourism platform. It features dynamic content management for both:
+  - Inbound Tours (Sri Lanka Expeditions & Local Travel)
+  - Outbound Tours (Global Travel to Europe, Japan, Dubai, Maldives, etc.)
+
+Everything displayed on the public website—including destination cards, 
+Glimpse carousel items, tour packages, prices, and day-by-day itineraries—is 
+fully controllable from the Admin Panel.
+
+--------------------------------------------------------------------------------
+2. ADMIN PANEL ACCESS & CREDENTIALS
+--------------------------------------------------------------------------------
+To access the Admin Portal:
+
+  - Admin Login URL:  http://127.0.0.1:8000/login
+  - Default Email:    admin@admin.com
+  - Default Password: password
+
+Once logged in, you will be redirected to the Executive Dashboard at:
+  - Dashboard URL:    http://127.0.0.1:8000/dashboard
+
+--------------------------------------------------------------------------------
+3. CORE DATABASE ARCHITECTURE & RELATIONAL CONCEPTS
+--------------------------------------------------------------------------------
+The website content is structured hierarchically in a clean 3-tier database model:
+
+  [1. Destination / Region]
+      └── Can belong to Type: "Inbound" (Sri Lanka) or "Outbound" (Global)
+      └── Contains a "Glimpse Carousel" toggle (is_glimpse: true/false)
+      
+      [2. Tour Package]
+          └── Belongs to a Destination Region
+          └── Has Title, Category, Price (Optional), Duration (Days/Nights), Cover Image
+          
+          [3. Package Itinerary Days]
+              └── Belongs to a Tour Package
+              └── Contains Day Number, Day Title, Detailed Narrative, Hotel, Day Photo
+
+Key Rule for Pricing:
+  - Adding a price to a Tour Package is OPTIONAL.
+  - If a price is set (e.g., $1,500), it displays "$1,500 / person".
+  - If NO price is set (left empty), the system automatically displays an 
+    "Inquire for Pricing" / "Inquire for Quote" badge on the frontend.
+
+--------------------------------------------------------------------------------
+4. STEP-BY-STEP GUIDE: MANAGING CONTENT VIA ADMIN PANEL
+--------------------------------------------------------------------------------
+
+A. MANAGING DESTINATIONS & THE GLIMPSE CAROUSEL
+--------------------------------------------------
+URL: http://127.0.0.1:8000/admin/destinations
+
+1. To Add a New Destination Region:
+   - Click the "+ Add Destination" button on the top toolbar.
+   - Enter Destination Name (e.g., "Switzerland & Alps").
+   - Select Type: "Inbound Tours" (Sri Lanka) or "Outbound Tours" (Global).
+   - Enter Subtitle & Description.
+   - Paste Image URL for the cover photo.
+   - Toggle "★ Show in Glimpse Carousel" to feature it in the homepage carousel.
+   - Click "Save Destination".
+
+2. To Toggle Glimpse Carousel Items:
+   - Go to the "Destinations & Carousel" tab.
+   - Locate the destination card.
+   - Toggle the "★ Glimpse Carousel" switch to immediately feature or hide it on the homepage carousel.
+
+B. MANAGING TOUR PACKAGES
+--------------------------------------------------
+URL: http://127.0.0.1:8000/admin/packages
+
+1. To Create a New Tour Package:
+   - Click the "+ Create New Package" button on the toolbar.
+   - Enter Package Title (e.g., "Maldives Luxury Overwater Escape").
+   - Select Destination Region (e.g., "Maldives").
+   - Enter Price (USD) — OR leave empty if you want to display "Inquire for Pricing".
+   - Set Duration Days & Nights (e.g., 5 Days / 4 Nights).
+   - Paste Cover Image URL.
+   - Enter Package Overview description.
+   - Click "Save Package".
+
+2. To Edit or Delete Packages:
+   - Use the category tabs ("Sri Lanka Inbound", "Global Outbound") or search bar to filter packages.
+   - Click "Edit" to update prices, titles, or cover images.
+   - Click "Delete" to remove a package.
+
+C. BUILDING DAY-BY-DAY ITINERARIES
+--------------------------------------------------
+URL: http://127.0.0.1:8000/admin/itineraries
+
+1. Select a Tour Package:
+   - From the left-hand package list, click on any package (e.g., "Heritage & Cultural Tour Sri Lanka").
+
+2. Add / Edit Itinerary Days:
+   - Click "+ Add Day" to append a new day to the itinerary.
+   - For each day, fill in:
+       * Day Title (e.g., "Day 1: Arrival in Colombo & Scenic Transfer to Kandy")
+       * Day Narrative (Detailed daily itinerary description)
+       * Day Photo Image URL (Photo representing daily visits/attractions)
+       * Hotel Stay (e.g., "Earl's Regency Kandy 5★")
+   - Click "Save Complete Itinerary" at the bottom right.
+
+D. REVIEWING CUSTOMER BOOKINGS & LEADS
+--------------------------------------------------
+URL: http://127.0.0.1:8000/admin/bookings
+
+1. View Customer Reservations:
+   - Review incoming inquiries submitted by travelers on the frontend.
+   - Displays Customer Name, Email, Phone/WhatsApp, Requested Tour, Travel Dates, and Guest Count.
+   - Click "View Details" to open the full inquiry modal.
+
+--------------------------------------------------------------------------------
+5. FRONTEND PAGE MAPPING & LIVE DISPLAY
+--------------------------------------------------------------------------------
+
+  - Homepage (`/`):
+    * Displays Glimpse Destinations Carousel (`is_glimpse = true`).
+    * Displays Featured Tour Packages Grid.
+    * Displays Airline Logos showcase carousel.
+
+  - Sri Lanka Inbound Page (`/srilanka`):
+    * Displays all Inbound Tour Packages assigned to Sri Lanka destinations.
+
+  - Outbound Global Destinations Page (`/destinations`):
+    * Displays all Outbound Global Tour Packages (Europe, Japan, Maldives, Dubai, etc.).
+
+  - Tour Detail & Itinerary Page (`/tours/{slug}`):
+    * Displays full package overview, high-resolution header banner, complete day-by-day itinerary cards with daily photos, and customer inquiry form.
+
+--------------------------------------------------------------------------------
+6. DEVELOPER SETUP & COMMAND-LINE OPERATIONS
+--------------------------------------------------------------------------------
+
+A. PREREQUISITES & STARTING DEV SERVERS
+--------------------------------------------------
+Ensure Node.js and PHP/Composer are installed.
+
+To start local servers:
+  1. Open Terminal 1 (Vite Dev Server):
+     npm run dev
+
+  2. Open Terminal 2 (Laravel Web Server):
+     php artisan serve
+
+  3. Access Site:
+     Frontend: http://127.0.0.1:8000
+     Admin:    http://127.0.0.1:8000/login
+
+B. REBUILDING DATABASE & SAMPLE SEEDERS
+--------------------------------------------------
+To reset the database and re-seed clean sample destinations, packages, and itineraries:
+
+  php artisan migrate:fresh --seed
+
+C. COMPILING ASSETS FOR PRODUCTION
+--------------------------------------------------
+Before deploying changes to live hosting:
+
+  npm run build
+
+D. CLEARING LARAVEL CACHES
+--------------------------------------------------
+If routes or views do not update immediately:
+
+  php artisan route:clear
+  php artisan view:clear
+  php artisan config:clear
+
+--------------------------------------------------------------------------------
+7. BEST PRACTICES & TIPS
+--------------------------------------------------------------------------------
+1. Image URLs: Use high-quality Unsplash or hosted image URLs (`https://images.unsplash.com/...`) for destination and itinerary day photos.
+2. Optional Prices: Leave price empty on custom or high-end luxury packages so travelers are prompted to request a quote.
+3. Spinnaker & Aptos Fonts: Frontend pages use `Spinnaker` font (`font-spinnaker`), while Admin UIs use `Aptos` font (`font-aptos`).
+
+================================================================================
+                     END OF WORLDINE USER & DEVELOPER GUIDE
+================================================================================

@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <div class="min-h-screen font-spinnaker bg-slate-950 text-slate-800 relative flex flex-col justify-between items-center overflow-x-hidden selection:bg-[#2196F3] selection:text-white">
+    <div class="min-h-screen font-aptos bg-slate-950 text-slate-800 relative flex flex-col justify-between items-center overflow-x-hidden selection:bg-[#2196F3] selection:text-white">
         
         <!-- DYNAMIC TRAVEL BACKGROUND LAYER -->
         <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">

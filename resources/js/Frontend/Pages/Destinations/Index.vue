@@ -1,7 +1,7 @@
 <script setup>
 import Navbar from '@/Frontend/Components/Navbar.vue';
 import { Head, Link } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 
 const props = defineProps({
     destinations: Array,
@@ -10,9 +10,27 @@ const props = defineProps({
 
 const selectedRegion = ref('all');
 
+const updateRegionFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const regionParam = params.get('region');
+    if (regionParam) {
+        selectedRegion.value = regionParam;
+    } else {
+        selectedRegion.value = 'all';
+    }
+};
+
+onMounted(() => {
+    updateRegionFromUrl();
+});
+
+watch(() => window.location.search, () => {
+    updateRegionFromUrl();
+});
+
 const filteredOutboundPackages = computed(() => {
     if (selectedRegion.value === 'all') return props.packages;
-    return props.packages.filter(p => p.destination && p.destination.slug === selectedRegion.value);
+    return props.packages.filter(p => p.destination && (p.destination.slug.toLowerCase() === selectedRegion.value.toLowerCase() || p.destination.slug.toLowerCase().includes(selectedRegion.value.toLowerCase())));
 });
 </script>
 

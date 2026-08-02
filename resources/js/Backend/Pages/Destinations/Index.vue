@@ -185,7 +185,7 @@ const filteredDestinations = computed(() => {
             </div>
         </template>
 
-        <div class="space-y-6 font-spinnaker">
+        <div class="space-y-6 font-aptos">
             <!-- TAB CONTROL, SEARCH FILTER & PAGE ACTION BUTTONS INSIDE PAGE -->
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
                 <div class="flex items-center space-x-2 bg-slate-100 p-1 rounded-xl w-fit">

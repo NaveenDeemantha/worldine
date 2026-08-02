@@ -93,19 +93,19 @@ onUnmounted(() => {
                     @mouseenter="openSriLanka"
                     @mouseleave="closeSriLanka"
                 >
-                    <Link :href="route('srilanka')" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                    <Link :href="route('srilanka', { search: 'heritage' })" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
                         <span>Heritage & Cultural Tour</span>
                         <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </Link>
-                    <Link :href="route('srilanka')" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                    <Link :href="route('srilanka', { search: 'heritage' })" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
                         <span>Grand Heritage Expedition</span>
                         <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </Link>
-                    <Link :href="route('srilanka')" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                    <Link :href="route('srilanka', { search: 'coastal' })" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
                         <span>Coastal Beach Adventure</span>
                         <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </Link>
-                    <Link :href="route('srilanka')" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                    <Link :href="route('srilanka', { search: 'wildlife' })" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
                         <span>Wildlife & Nature Safari</span>
                         <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </Link>
@@ -133,23 +133,23 @@ onUnmounted(() => {
                     @mouseenter="openDestinations"
                     @mouseleave="closeDestinations"
                 >
-                    <Link :href="route('outbound.destinations')" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                    <Link :href="route('outbound.destinations', { region: 'maldives-paradise' })" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
                         <span>🇲🇻 Maldives</span>
                         <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </Link>
-                    <Link :href="route('outbound.destinations')" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                    <Link :href="route('outbound.destinations', { region: 'japan-east-asia' })" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
                         <span>🇯🇵 Japan & East Asia</span>
                         <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </Link>
-                    <Link :href="route('outbound.destinations')" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                    <Link :href="route('outbound.destinations', { region: 'switzerland-europe' })" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
                         <span>🇨🇭 Europe & Switzerland</span>
                         <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </Link>
-                    <Link :href="route('outbound.destinations')" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                    <Link :href="route('outbound.destinations', { region: 'dubai-uae' })" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
                         <span>🇦🇪 Dubai & UAE</span>
                         <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </Link>
-                    <Link :href="route('outbound.destinations')" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                    <Link :href="route('outbound.destinations', { region: 'australia-pacific' })" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
                         <span>🇦🇺 Australia & Pacific</span>
                         <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </Link>
@@ -198,10 +198,10 @@ onUnmounted(() => {
                     <span class="text-[10px]">{{ activeSriLankaDropdown ? '▲' : '▼' }}</span>
                 </button>
                 <div v-if="activeSriLankaDropdown" class="mt-2 pl-3 space-y-1.5 text-slate-600 normal-case font-medium">
-                    <Link :href="route('srilanka')" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Heritage & Cultural Tour</Link>
-                    <Link :href="route('srilanka')" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Grand Heritage Expedition</Link>
-                    <Link :href="route('srilanka')" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Coastal Beach Adventure</Link>
-                    <Link :href="route('srilanka')" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Wildlife & Nature Safari</Link>
+                    <Link :href="route('srilanka', { search: 'heritage' })" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Heritage & Cultural Tour</Link>
+                    <Link :href="route('srilanka', { search: 'heritage' })" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Grand Heritage Expedition</Link>
+                    <Link :href="route('srilanka', { search: 'coastal' })" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Coastal Beach Adventure</Link>
+                    <Link :href="route('srilanka', { search: 'wildlife' })" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Wildlife & Nature Safari</Link>
                 </div>
             </div>
 
@@ -212,11 +212,11 @@ onUnmounted(() => {
                     <span class="text-[10px]">{{ activeDestinationsDropdown ? '▲' : '▼' }}</span>
                 </button>
                 <div v-if="activeDestinationsDropdown" class="mt-2 pl-3 space-y-1.5 text-slate-600 normal-case font-medium">
-                    <Link :href="route('outbound.destinations')" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇲🇻 Maldives</Link>
-                    <Link :href="route('outbound.destinations')" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇦🇪 Dubai & UAE</Link>
-                    <Link :href="route('outbound.destinations')" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇪🇺 Europe Schengen</Link>
-                    <Link :href="route('outbound.destinations')" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇯🇵 Japan & East Asia</Link>
-                    <Link :href="route('outbound.destinations')" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇦🇺 Australia & Pacific</Link>
+                    <Link :href="route('outbound.destinations', { region: 'maldives-paradise' })" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇲🇻 Maldives</Link>
+                    <Link :href="route('outbound.destinations', { region: 'dubai-uae' })" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇦🇪 Dubai & UAE</Link>
+                    <Link :href="route('outbound.destinations', { region: 'switzerland-europe' })" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇪🇺 Europe Schengen</Link>
+                    <Link :href="route('outbound.destinations', { region: 'japan-east-asia' })" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇯🇵 Japan & East Asia</Link>
+                    <Link :href="route('outbound.destinations', { region: 'australia-pacific' })" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇦🇺 Australia & Pacific</Link>
                 </div>
             </div>
 

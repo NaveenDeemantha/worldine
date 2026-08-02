@@ -21,7 +21,7 @@ const viewBooking = (b) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 font-spinnaker">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 font-aptos">
                 <div>
                     <h1 class="text-2xl font-black text-slate-900 tracking-tight">Bookings & Customer Leads</h1>
                     <p class="text-xs text-slate-500 mt-0.5 font-medium">Manage incoming tour reservation inquiries submitted by travelers on Worldine Destinations.</p>
@@ -29,7 +29,7 @@ const viewBooking = (b) => {
             </div>
         </template>
 
-        <div class="space-y-6 font-spinnaker">
+        <div class="space-y-6 font-aptos">
             <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
@@ -71,7 +71,7 @@ const viewBooking = (b) => {
         </div>
 
         <!-- MODAL -->
-        <div v-if="isModalOpen && selectedBooking" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs font-spinnaker">
+        <div v-if="isModalOpen && selectedBooking" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs font-aptos">
             <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                     <span class="text-xs font-mono font-extrabold text-[#0D47A1]">{{ selectedBooking.id }}</span>

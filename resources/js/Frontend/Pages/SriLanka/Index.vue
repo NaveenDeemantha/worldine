@@ -1,7 +1,7 @@
 <script setup>
 import Navbar from '@/Frontend/Components/Navbar.vue';
 import { Head, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const props = defineProps({
     destination: Object,
@@ -10,6 +10,31 @@ const props = defineProps({
 
 const selectedPackage = ref(null);
 const isDetailModalOpen = ref(false);
+const searchQuery = ref('all');
+
+const updateSearchFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const searchParam = params.get('search');
+    if (searchParam) {
+        searchQuery.value = searchParam;
+    } else {
+        searchQuery.value = 'all';
+    }
+};
+
+onMounted(() => {
+    updateSearchFromUrl();
+});
+
+const filteredPackages = computed(() => {
+    if (!props.packages) return [];
+    if (searchQuery.value === 'all') return props.packages;
+    return props.packages.filter(p => 
+        p.title.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
+        (p.subtitle && p.subtitle.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+        (p.overview && p.overview.toLowerCase().includes(searchQuery.value.toLowerCase()))
+    );
+});
 
 const openQuickDetail = (pkg) => {
     selectedPackage.value = pkg;
@@ -60,9 +85,9 @@ const openQuickDetail = (pkg) => {
                 </p>
             </div>
 
-            <div v-if="packages && packages.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+            <div v-if="filteredPackages && filteredPackages.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
                 <div 
-                    v-for="pkg in packages" 
+                    v-for="pkg in filteredPackages" 
                     :key="pkg.id"
                     class="group bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col transform hover:-translate-y-1"
                 >

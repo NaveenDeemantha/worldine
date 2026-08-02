@@ -74,7 +74,7 @@ const saveItinerary = () => {
             </div>
         </template>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 font-spinnaker">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 font-aptos">
             
             <!-- LEFT COLUMN: TOUR PACKAGE SELECTOR LIST -->
             <div class="lg:col-span-4 space-y-3">

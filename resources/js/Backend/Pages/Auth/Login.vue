@@ -38,7 +38,7 @@ const submit = () => {
             <span>{{ status }}</span>
         </div>
 
-        <form @submit.prevent="submit" class="space-y-5">
+        <form @submit.prevent="submit" class="space-y-5 font-aptos">
             <!-- Email Field -->
             <div>
                 <label for="email" class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-1.5">
