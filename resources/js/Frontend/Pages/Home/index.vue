@@ -4,10 +4,12 @@ import { Head, Link } from '@inertiajs/vue3';
 import Navbar from '../../Components/Navbar.vue';
 
 // Props passed from Inertia controller (optional)
-defineProps({
+const props = defineProps({
     canLogin: { type: Boolean, default: true },
     canRegister: { type: Boolean, default: true },
-    auth: { type: Object, default: () => ({ user: null }) }
+    auth: { type: Object, default: () => ({ user: null }) },
+    dbGlimpseDestinations: { type: Array, default: () => [] },
+    dbFeaturedPackages: { type: Array, default: () => [] }
 });
 
 // Navigation & UI State
@@ -228,7 +230,7 @@ const categories = [
 ];
 
 // Authentic Worldine Destinations Packages Data
-const glimpseDestinations = ref([
+const defaultGlimpseDestinations = [
     {
         name: 'Sri Lanka',
         subtitle: 'Pearl of the Indian Ocean & UNESCO Heritage',
@@ -271,7 +273,14 @@ const glimpseDestinations = ref([
         image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80',
         badge: 'Pacific Ocean Escape'
     }
-]);
+];
+
+const glimpseDestinations = computed(() => {
+    if (props.dbGlimpseDestinations && props.dbGlimpseDestinations.length) {
+        return props.dbGlimpseDestinations;
+    }
+    return defaultGlimpseDestinations;
+});
 
 // Destinations Infinite Looping Carousel Engine
 const destCarouselIndex = ref(0);
@@ -549,18 +558,32 @@ const loopedAirlinePartners = computed(() => {
 
 // Computed Filtered Destinations (Limited to Max 5 Cards on Mobile View)
 const filteredDestinations = computed(() => {
-    return destinations.value.filter(dest => {
-        const matchesCategory = searchCategory.value === 'all' || dest.category === searchCategory.value;
-        const matchesBudget = dest.price <= searchBudget.value;
+    const list = (props.dbFeaturedPackages && Array.isArray(props.dbFeaturedPackages) && props.dbFeaturedPackages.length > 0) 
+        ? props.dbFeaturedPackages 
+        : (destinations.value || []);
+
+    if (!Array.isArray(list)) return [];
+
+    return list.filter(dest => {
+        if (!dest) return false;
+        const destCat = dest.category || '';
+        const matchesCategory = searchCategory.value === 'all' 
+            || destCat === searchCategory.value 
+            || (searchCategory.value === 'inbound' && (destCat === 'inbound' || destCat.includes('inbound')))
+            || (searchCategory.value === 'outbound' && (destCat === 'outbound' || destCat.includes('outbound') || destCat === 'europe-schengen' || destCat === 'east-asia' || destCat === 'luxury-escapes'));
+        
+        const price = dest.price ? Number(dest.price) : 0;
+        const matchesBudget = price <= searchBudget.value;
         return matchesCategory && matchesBudget;
     });
 });
 
 const displayedFilteredDestinations = computed(() => {
+    const list = filteredDestinations.value || [];
     if (windowWidth.value < 640) {
-        return filteredDestinations.value.slice(0, 5);
+        return list.slice(0, 5);
     }
-    return filteredDestinations.value;
+    return list;
 });
 
 // Modal State
@@ -1004,17 +1027,17 @@ const features = [
                             <div class="text-[11px] font-bold text-teal-700 uppercase tracking-wider mb-1">
                                 ⏱️ {{ dest.duration }}
                             </div>
-                            <h3 class="text-base font-bold text-slate-900 group-hover:text-teal-700 transition-colors line-clamp-1">
+                            <h3 class="text-base font-bold text-slate-900 group-hover:text-[#2196F3] transition-colors line-clamp-1">
                                 {{ dest.title }}
                             </h3>
                             <p class="text-slate-600 text-xs mt-1.5 line-clamp-2 leading-relaxed">
-                                {{ dest.description }}
+                                {{ dest.description || dest.overview }}
                             </p>
                         </div>
 
-                        <!-- Highlights Tags -->
-                        <div class="flex flex-wrap gap-1 pt-1">
-                            <span v-for="(hl, idx) in dest.highlights.slice(0, 3)" :key="idx" class="text-[10px] bg-slate-100 text-slate-700 border border-slate-200/80 px-2 py-0.5 rounded font-semibold">
+                        <!-- Highlights / Inclusions Tags -->
+                        <div v-if="dest.highlights || dest.inclusions" class="flex flex-wrap gap-1 pt-1">
+                            <span v-for="(hl, idx) in (dest.highlights || dest.inclusions || []).slice(0, 3)" :key="idx" class="text-[10px] bg-slate-100 text-slate-700 border border-slate-200/80 px-2 py-0.5 rounded font-semibold">
                                 ✓ {{ hl }}
                             </span>
                         </div>
@@ -1022,16 +1045,23 @@ const features = [
                         <!-- Price & Action Footer -->
                         <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
                             <div>
-                                <span class="text-[10px] text-slate-500 font-medium block">Starting from</span>
-                                <div class="flex items-baseline space-x-1">
-                                    <span class="text-xl font-black text-teal-700">${{ dest.price.toLocaleString() }}</span>
-                                    <span class="text-[10px] text-slate-400 line-through">${{ dest.originalPrice.toLocaleString() }}</span>
-                                </div>
+                                <template v-if="dest.price && Number(dest.price) > 0">
+                                    <span class="text-[10px] text-slate-500 font-medium block">Starting from</span>
+                                    <div class="flex items-baseline space-x-1">
+                                        <span class="text-xl font-black text-[#0D47A1]">${{ Number(dest.price).toLocaleString() }}</span>
+                                        <span v-if="dest.originalPrice" class="text-[10px] text-slate-400 line-through">${{ Number(dest.originalPrice).toLocaleString() }}</span>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <span class="text-[11px] font-extrabold text-[#0D47A1] bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100 block">
+                                        Inquire for Pricing
+                                    </span>
+                                </template>
                             </div>
 
                             <button 
                                 @click="openQuickView(dest)"
-                                class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-800 font-bold text-xs transition-all duration-300"
+                                class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-[#0D47A1] hover:text-white text-slate-800 font-bold text-xs transition-all duration-300"
                             >
                                 Quick View
                             </button>

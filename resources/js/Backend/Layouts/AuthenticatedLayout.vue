@@ -16,31 +16,33 @@ const navItems = [
         iconPath: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
     },
     {
-        name: 'Tours & Packages',
-        href: route('dashboard'),
-        activeName: 'tours',
-        badge: '18 Active',
-        iconPath: 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
-    },
-    {
-        name: 'Destinations',
-        href: route('dashboard'),
-        activeName: 'destinations',
+        name: 'Destinations & Glimpse',
+        href: route('admin.destinations.index'),
+        activeName: 'admin.destinations.index',
+        badge: 'Regions',
         iconPath: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V7a2 2 0 00-2-2h-1.5A2.5 2.5 0 0113 2.5V2M12 21a9 9 0 100-18 9 9 0 000 18z'
     },
     {
-        name: 'Bookings & Leads',
-        href: route('dashboard'),
-        activeName: 'bookings',
-        badge: '5 New',
-        badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
-        iconPath: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'
+        name: 'Tour Packages',
+        href: route('admin.packages.index'),
+        activeName: 'admin.packages.index',
+        badge: 'Catalog',
+        iconPath: 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
     },
     {
-        name: 'Airline Partners',
-        href: route('dashboard'),
-        activeName: 'airlines',
-        iconPath: 'M5 13l4 4L19 7'
+        name: 'Day-by-Day Itineraries',
+        href: route('admin.itineraries.index'),
+        activeName: 'admin.itineraries.index',
+        badge: 'Itineraries',
+        iconPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
+    },
+    {
+        name: 'Bookings & Leads',
+        href: route('admin.bookings.index'),
+        activeName: 'admin.bookings.index',
+        badge: 'Leads',
+        badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+        iconPath: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'
     },
     {
         name: 'Profile & Settings',
