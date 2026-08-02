@@ -57,165 +57,177 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <header :class="[
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full px-6 sm:px-10 lg:px-16 xl:px-20',
-        isScrolled 
-            ? 'bg-slate-950/85 backdrop-blur-md py-3 shadow-lg' 
-            : 'bg-transparent py-4 sm:py-5'
-    ]">
-        <div class="w-full flex items-center justify-between">
-            
-            <!-- Worldine Logo -->
-            <Link href="/" class="flex items-center group">
-                <img 
-                    src="/images/Logo/worldine.png" 
-                    alt="Worldine Logo" 
-                    class="h-10 sm:h-12 lg:h-14 w-auto object-contain group-hover:scale-105 transition-transform filter drop-shadow-md"
-                />
-            </Link>
+    <header class="sticky top-0 left-0 right-0 z-50 w-full bg-white py-2.5 sm:py-3 pl-6 sm:pl-10 lg:pl-14 pr-0 flex items-center justify-between transition-all duration-300 border-none outline-none border-b-0 font-spinnaker">
+        <!-- Worldine Logo -->
+        <Link href="/" class="flex items-center group py-1">
+            <img 
+                src="/images/Logo/worldine.png" 
+                alt="Worldine Logo" 
+                class="h-11 sm:h-13 lg:h-15 xl:h-16 w-auto object-contain group-hover:scale-105 transition-transform"
+            />
+        </Link>
 
-            <!-- Desktop Navigation Links -->
-            <nav class="hidden lg:flex items-center space-x-6 xl:space-x-8 text-xs font-extrabold uppercase tracking-wider text-white">
-                <a href="#hero" class="text-white hover:text-[#90CAF9] transition-colors">Home</a>
-                <a href="#about" class="text-white/90 hover:text-[#90CAF9] transition-colors">About us</a>
-                
-                <!-- Sri Lanka Dropdown (Inbound Tours) -->
+        <!-- Desktop Navigation Links inside Blue Capsule (Auto-responsive sizing & enhanced visibility) -->
+        <nav class="hidden lg:flex items-center bg-[#2B70B4] text-white rounded-l-full px-6 sm:px-8 lg:px-10 xl:px-12 py-3 sm:py-3.5 lg:py-4 space-x-4 sm:space-x-5 lg:space-x-7 xl:space-x-9 text-xs sm:text-sm lg:text-base font-bold tracking-wide shadow-md font-spinnaker">
+            <a href="#hero" class="text-white hover:text-sky-200 transition-colors whitespace-nowrap">Home</a>
+            <a href="#about" class="text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap">About Us</a>
+            
+            <!-- Sri Lanka Dropdown -->
+            <div 
+                class="relative py-1"
+                @mouseenter="openSriLanka"
+                @mouseleave="closeSriLanka"
+            >
+                <a 
+                    href="#destinations" 
+                    class="flex items-center space-x-1 text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap"
+                >
+                    <span>Sri Lanka</span>
+                    <span class="text-[10px] lg:text-xs transform transition-transform duration-200 ml-0.5" :class="{ 'rotate-180': activeSriLankaDropdown }">▼</span>
+                </a>
+
+                <!-- Sri Lanka Inbound Tours Dropdown Menu -->
                 <div 
-                    class="relative py-2"
+                    v-if="activeSriLankaDropdown" 
+                    class="absolute left-0 mt-2 w-64 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left"
                     @mouseenter="openSriLanka"
                     @mouseleave="closeSriLanka"
                 >
-                    <a 
-                        href="#destinations" 
-                        class="flex items-center space-x-1 text-white/90 hover:text-[#90CAF9] transition-colors"
-                    >
-                        <span>Sri Lanka</span>
-                        <span class="text-[9px] transform transition-transform duration-200" :class="{ 'rotate-180': activeSriLankaDropdown }">▼</span>
+                    <a href="#destinations" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                        <span>Heritage & Cultural Tour</span>
+                        <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </a>
-
-                    <!-- Sri Lanka Inbound Tours Dropdown Menu (Clean 1-Line) -->
-                    <div 
-                        v-if="activeSriLankaDropdown" 
-                        class="absolute left-0 mt-2 w-64 bg-slate-950/95 backdrop-blur-xl border border-white/15 rounded-xl shadow-2xl py-2 px-1.5 space-y-0.5 z-50 normal-case font-medium text-xs text-left"
-                        @mouseenter="openSriLanka"
-                        @mouseleave="closeSriLanka"
-                    >
-                        <a href="#destinations" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white/90 hover:bg-[#2196F3] hover:text-white transition-colors group">
-                            <span>Heritage & Cultural Tour</span>
-                            <span class="text-white/40 group-hover:text-white text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                        <a href="#destinations" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white/90 hover:bg-[#2196F3] hover:text-white transition-colors group">
-                            <span>Grand Heritage Expedition</span>
-                            <span class="text-white/40 group-hover:text-white text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                        <a href="#destinations" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white/90 hover:bg-[#2196F3] hover:text-white transition-colors group">
-                            <span>Coastal Beach Adventure</span>
-                            <span class="text-white/40 group-hover:text-white text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                        <a href="#destinations" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white/90 hover:bg-[#2196F3] hover:text-white transition-colors group">
-                            <span>Wildlife & Nature Safari</span>
-                            <span class="text-white/40 group-hover:text-white text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                    </div>
+                    <a href="#destinations" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                        <span>Grand Heritage Expedition</span>
+                        <span class="text-white/70 group-hover:text-white text-xs">→</span>
+                    </a>
+                    <a href="#destinations" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                        <span>Coastal Beach Adventure</span>
+                        <span class="text-white/70 group-hover:text-white text-xs">→</span>
+                    </a>
+                    <a href="#destinations" @click="activeSriLankaDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                        <span>Wildlife & Nature Safari</span>
+                        <span class="text-white/70 group-hover:text-white text-xs">→</span>
+                    </a>
                 </div>
+            </div>
 
-                <!-- Destinations Dropdown (Destination Countries) -->
+            <!-- Destinations Dropdown -->
+            <div 
+                class="relative py-1"
+                @mouseenter="openDestinations"
+                @mouseleave="closeDestinations"
+            >
+                <a 
+                    href="#destinations" 
+                    class="flex items-center space-x-1 text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap"
+                >
+                    <span>Destinations</span>
+                    <span class="text-[10px] lg:text-xs transform transition-transform duration-200 ml-0.5" :class="{ 'rotate-180': activeDestinationsDropdown }">▼</span>
+                </a>
+
+                <!-- Destinations Countries Dropdown Menu -->
                 <div 
-                    class="relative py-2"
+                    v-if="activeDestinationsDropdown" 
+                    class="absolute left-0 mt-2 w-60 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left"
                     @mouseenter="openDestinations"
                     @mouseleave="closeDestinations"
                 >
-                    <a 
-                        href="#destinations" 
-                        class="flex items-center space-x-1 text-white/90 hover:text-[#90CAF9] transition-colors"
-                    >
-                        <span>Destinations</span>
-                        <span class="text-[9px] transform transition-transform duration-200" :class="{ 'rotate-180': activeDestinationsDropdown }">▼</span>
+                    <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                        <span>🇲🇻 Maldives</span>
+                        <span class="text-white/70 group-hover:text-white text-xs">→</span>
                     </a>
-
-                    <!-- Destinations Countries Dropdown Menu (Clean 1-Line) -->
-                    <div 
-                        v-if="activeDestinationsDropdown" 
-                        class="absolute left-0 mt-2 w-60 bg-slate-950/95 backdrop-blur-xl border border-white/15 rounded-xl shadow-2xl py-2 px-1.5 space-y-0.5 z-50 normal-case font-medium text-xs text-left"
-                        @mouseenter="openDestinations"
-                        @mouseleave="closeDestinations"
-                    >
-                        <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white/90 hover:bg-[#2196F3] hover:text-white transition-colors group">
-                            <span>🇲🇻 Maldives</span>
-                            <span class="text-white/40 group-hover:text-white text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                        <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white/90 hover:bg-[#2196F3] hover:text-white transition-colors group">
-                            <span>🇦🇪 Dubai & UAE</span>
-                            <span class="text-white/40 group-hover:text-white text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                        <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white/90 hover:bg-[#2196F3] hover:text-white transition-colors group">
-                            <span>🇪🇺 Europe Schengen</span>
-                            <span class="text-white/40 group-hover:text-white text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                        <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white/90 hover:bg-[#2196F3] hover:text-white transition-colors group">
-                            <span>🇯🇵 Japan & East Asia</span>
-                            <span class="text-white/40 group-hover:text-white text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                        <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white/90 hover:bg-[#2196F3] hover:text-white transition-colors group">
-                            <span>🇨🇦 Canada</span>
-                            <span class="text-white/40 group-hover:text-white text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                        </a>
-                    </div>
+                    <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                        <span>🇦🇪 Dubai & UAE</span>
+                        <span class="text-white/70 group-hover:text-white text-xs">→</span>
+                    </a>
+                    <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                        <span>🇪🇺 Europe Schengen</span>
+                        <span class="text-white/70 group-hover:text-white text-xs">→</span>
+                    </a>
+                    <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                        <span>🇯🇵 Japan & East Asia</span>
+                        <span class="text-white/70 group-hover:text-white text-xs">→</span>
+                    </a>
+                    <a href="#destinations" @click="activeDestinationsDropdown = false" class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group">
+                        <span>🇨🇦 Canada</span>
+                        <span class="text-white/70 group-hover:text-white text-xs">→</span>
+                    </a>
                 </div>
+            </div>
 
-                <a href="#services" class="text-white/90 hover:text-[#90CAF9] transition-colors">Services</a>
-                
-                <!-- CTA Contact Us Pill -->
-                <a href="#footer" class="px-5 py-2 rounded-full bg-[#2196F3] text-white font-extrabold hover:bg-[#90CAF9] hover:text-slate-950 transition-all shadow-md">
-                    Contact us
-                </a>
-            </nav>
+            <a href="#services" class="text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap">Services</a>
 
-            <!-- Mobile Menu Button -->
-            <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-1.5 text-white hover:text-[#90CAF9] focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
+            <a href="#estimator" class="text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap">Worldine Education</a>
+            
+            <a href="#footer" class="text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap">Contact</a>
 
-        <!-- Mobile Drawer with Clean 1-Line Accordion Submenus -->
-        <div v-if="mobileMenuOpen" class="lg:hidden bg-slate-950/95 backdrop-blur-xl border-b border-white/15 px-6 pt-3 pb-5 space-y-3 text-xs font-bold uppercase tracking-wider fixed left-0 right-0 top-16 z-50 max-h-[85vh] overflow-y-auto">
-            <a href="#hero" @click="mobileMenuOpen = false" class="block text-white hover:text-[#90CAF9] py-1 border-b border-white/10">Home</a>
-            <a href="#about" @click="mobileMenuOpen = false" class="block text-white/90 hover:text-[#90CAF9] py-1 border-b border-white/10">About us</a>
+            <!-- Admin Portal Access Link -->
+            <Link href="/dashboard" class="text-white/90 hover:text-white flex items-center space-x-1 px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-all text-xs sm:text-sm font-semibold whitespace-nowrap">
+                <span>🔑 Admin</span>
+            </Link>
+        </nav>
+
+        <!-- Cevorob Uiverse Animated Blue Burger Button (Transparent Background) -->
+        <button 
+            @click="mobileMenuOpen = !mobileMenuOpen" 
+            class="lg:hidden mr-6 relative w-7 h-5 bg-transparent border-none outline-none cursor-pointer flex flex-col justify-between p-0 focus:outline-none group"
+            :aria-label="mobileMenuOpen ? 'Close Menu' : 'Open Menu'"
+        >
+            <!-- Top Line -->
+            <span 
+                class="block h-[3.5px] w-full bg-[#2B70B4] group-hover:bg-[#2196F3] rounded-full transition-all duration-300 ease-in-out origin-[left_center]"
+                :class="mobileMenuOpen ? 'rotate-45 translate-x-[3px] -translate-y-[1px]' : ''"
+            ></span>
+            <!-- Middle Line -->
+            <span 
+                class="block h-[3.5px] w-full bg-[#2B70B4] group-hover:bg-[#2196F3] rounded-full transition-all duration-300 ease-in-out origin-[left_center]"
+                :class="mobileMenuOpen ? 'w-0 opacity-0' : 'opacity-100'"
+            ></span>
+            <!-- Bottom Line -->
+            <span 
+                class="block h-[3.5px] w-full bg-[#2B70B4] group-hover:bg-[#2196F3] rounded-full transition-all duration-300 ease-in-out origin-[left_center]"
+                :class="mobileMenuOpen ? '-rotate-45 translate-x-[3px] translate-y-[1px]' : ''"
+            ></span>
+        </button>
+
+        <!-- Mobile Drawer -->
+        <div v-if="mobileMenuOpen" class="lg:hidden bg-white/95 backdrop-blur-xl border-none outline-none px-6 pt-3 pb-5 space-y-3 text-xs font-bold uppercase tracking-wider fixed left-0 right-0 top-16 z-50 shadow-xl max-h-[85vh] overflow-y-auto text-slate-800 font-spinnaker">
+            <a href="#hero" @click="mobileMenuOpen = false" class="block text-slate-900 hover:text-[#2B70B4] py-1 border-b border-slate-100">Home</a>
+            <a href="#about" @click="mobileMenuOpen = false" class="block text-slate-700 hover:text-[#2B70B4] py-1 border-b border-slate-100">About Us</a>
             
             <!-- Mobile Sri Lanka Dropdown -->
-            <div class="border-b border-white/10 py-1">
-                <button @click="activeSriLankaDropdown = !activeSriLankaDropdown" class="w-full flex items-center justify-between text-white/90 hover:text-[#90CAF9] uppercase font-bold text-left">
+            <div class="border-b border-slate-100 py-1">
+                <button @click="activeSriLankaDropdown = !activeSriLankaDropdown" class="w-full flex items-center justify-between text-slate-700 hover:text-[#2B70B4] uppercase font-bold text-left">
                     <span>Sri Lanka</span>
                     <span class="text-[10px]">{{ activeSriLankaDropdown ? '▲' : '▼' }}</span>
                 </button>
-                <div v-if="activeSriLankaDropdown" class="mt-2 pl-3 space-y-1.5 text-slate-300 normal-case font-medium">
-                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#90CAF9]">Heritage & Cultural Tour</a>
-                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#90CAF9]">Grand Heritage Expedition</a>
-                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#90CAF9]">Coastal Beach Adventure</a>
-                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#90CAF9]">Wildlife & Nature Safari</a>
+                <div v-if="activeSriLankaDropdown" class="mt-2 pl-3 space-y-1.5 text-slate-600 normal-case font-medium">
+                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Heritage & Cultural Tour</a>
+                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Grand Heritage Expedition</a>
+                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Coastal Beach Adventure</a>
+                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">Wildlife & Nature Safari</a>
                 </div>
             </div>
 
             <!-- Mobile Destinations Dropdown -->
-            <div class="border-b border-white/10 py-1">
-                <button @click="activeDestinationsDropdown = !activeDestinationsDropdown" class="w-full flex items-center justify-between text-white/90 hover:text-[#90CAF9] uppercase font-bold text-left">
+            <div class="border-b border-slate-100 py-1">
+                <button @click="activeDestinationsDropdown = !activeDestinationsDropdown" class="w-full flex items-center justify-between text-slate-700 hover:text-[#2B70B4] uppercase font-bold text-left">
                     <span>Destinations</span>
                     <span class="text-[10px]">{{ activeDestinationsDropdown ? '▲' : '▼' }}</span>
                 </button>
-                <div v-if="activeDestinationsDropdown" class="mt-2 pl-3 space-y-1.5 text-slate-300 normal-case font-medium">
-                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#90CAF9]">🇲🇻 Maldives</a>
-                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#90CAF9]">🇦🇪 Dubai & UAE</a>
-                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#90CAF9]">🇪🇺 Europe Schengen</a>
-                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#90CAF9]">🇯🇵 Japan & East Asia</a>
-                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#90CAF9]">🇨🇦 Canada</a>
+                <div v-if="activeDestinationsDropdown" class="mt-2 pl-3 space-y-1.5 text-slate-600 normal-case font-medium">
+                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇲🇻 Maldives</a>
+                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇦🇪 Dubai & UAE</a>
+                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇪🇺 Europe Schengen</a>
+                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇯🇵 Japan & East Asia</a>
+                    <a href="#destinations" @click="mobileMenuOpen = false" class="block py-1 text-xs hover:text-[#2B70B4]">🇨🇦 Canada</a>
                 </div>
             </div>
 
-            <a href="#services" @click="mobileMenuOpen = false" class="block text-white/90 hover:text-[#90CAF9] py-1 border-b border-white/10">Services</a>
-            <a href="#footer" @click="mobileMenuOpen = false" class="inline-block mt-2 px-5 py-2 rounded-full bg-[#2196F3] text-white font-extrabold">Contact us</a>
+            <a href="#services" @click="mobileMenuOpen = false" class="block text-slate-700 hover:text-[#2B70B4] py-1 border-b border-slate-100">Services</a>
+            <a href="#estimator" @click="mobileMenuOpen = false" class="block text-slate-700 hover:text-[#2B70B4] py-1 border-b border-slate-100">Worldine Education</a>
+            <a href="#footer" @click="mobileMenuOpen = false" class="inline-block mt-2 px-5 py-2 rounded-full bg-[#2B70B4] text-white font-extrabold shadow-md">Contact</a>
         </div>
     </header>
 </template>
