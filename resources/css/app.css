@@ -16,6 +16,10 @@
     font-family: 'Outfit', sans-serif;
 }
 
+.font-aptos {
+    font-family: 'Aptos', 'Bierstadt', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
 }

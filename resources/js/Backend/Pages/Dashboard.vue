@@ -88,7 +88,7 @@ const topDestinations = ref([
             </div>
         </template>
 
-        <div class="space-y-8">
+        <div class="space-y-8 font-aptos">
             
             <!-- STATS CARDS GRID (LIGHT EXECUTIVE THEME) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

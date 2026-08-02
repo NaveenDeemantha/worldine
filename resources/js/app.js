@@ -11,17 +11,10 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => {
-        const pages = import.meta.glob([
-            './Frontend/Pages/**/*.vue',
-            './Backend/Pages/**/*.vue',
-            './Pages/**/*.vue',
-        ]);
-
-        if (pages[`./${name}.vue`]) {
-            return pages[`./${name}.vue`]();
-        }
-
+        const pages = import.meta.glob('./**/*.vue');
+        
         const possiblePaths = [
+            `./${name}.vue`,
             `./Frontend/Pages/${name}.vue`,
             `./Backend/Pages/${name}.vue`,
             `./Pages/${name}.vue`,
@@ -29,14 +22,11 @@ createInertiaApp({
 
         for (const path of possiblePaths) {
             if (pages[path]) {
-                return pages[path]();
+                return resolvePageComponent(path, pages);
             }
         }
 
-        return resolvePageComponent(
-            `./Pages/${name}.vue`,
-            import.meta.glob('./**/*.vue'),
-        );
+        return resolvePageComponent(`./${name}.vue`, pages);
     },
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
@@ -45,6 +35,6 @@ createInertiaApp({
             .mount(el);
     },
     progress: {
-        color: '#4B5563',
+        color: '#2196F3',
     },
 });
