@@ -165,6 +165,11 @@ onUnmounted(() => {
 
                 <a href="#services" class="text-white/90 hover:text-[#90CAF9] transition-colors">Services</a>
                 
+                <!-- Admin Portal Quick Access Button -->
+                <Link href="/dashboard" class="text-white/90 hover:text-white flex items-center space-x-1 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all border border-white/15">
+                    <span>🔑 Admin</span>
+                </Link>
+
                 <!-- CTA Contact Us Pill -->
                 <a href="#footer" class="px-5 py-2 rounded-full bg-[#2196F3] text-white font-extrabold hover:bg-[#90CAF9] hover:text-slate-950 transition-all shadow-md">
                     Contact us

@@ -23,38 +23,38 @@ const handleScroll = () => {
 const heroSlides = ref([
     {
         id: 1,
-        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=2400&q=85',
+        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=2400&q=85',
         tagline: 'DISCOVER PARADISE ISLAND',
         title: 'VISIT SRI LANKA',
         subtitle: 'Experience over 20 years of travel expertise. From ancient rock fortresses to golden palm-fringed beaches, embark on the journey of your lifetime.'
     },
     {
         id: 2,
-        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'ANCIENT KINGDOMS & UNESCO HERITAGE',
-        title: 'HERITAGE & CULTURAL TOURS',
-        subtitle: 'Explore Sigiriya Rock Fortress, Polonnaruwa ancient ruins, Dambulla Cave Temples, and the Sacred Tooth Relic Temple in Kandy.'
+        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'TROPICAL OVERWATER VILLAS & CORAL REEFS',
+        title: 'MALDIVES LUXURY ESCAPES',
+        subtitle: 'Submerge into crystal turquoise lagoons, private luxury water villas, seaplane transfers, and world-renowned undersea dining.'
     },
     {
         id: 3,
-        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'TROPICAL COASTLINES & SURF BAYS',
-        title: 'BEACH ADVENTURE TOURS',
-        subtitle: 'Unwind along Negombo, Kalpitiya, Marawilla, Hikkaduwa, and Mirissa. Whale watching, coral snorkeling, and pristine ocean retreats.'
+        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'ANCIENT TEMPLES & CHERRY BLOSSOMS',
+        title: 'JAPAN & EAST ASIA TOURS',
+        subtitle: 'Explore Kyoto Zen temples, Mount Fuji panoramic views, Shibuya Tokyo lights, and high-speed bullet train expeditions across Japan.'
     },
     {
         id: 4,
-        image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'UNTOUCHED BIODIVERSITY & WILD SAFARIS',
-        title: 'SRI LANKA WILDLIFE EXPEDITIONS',
-        subtitle: 'Track wild elephants in Minneriya, leopards in Yala National Park, and rare endemic birds in lush rainforest sanctuaries.'
+        image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'SWISS ALPS & MEDITERRANEAN COASTS',
+        title: 'EUROPE SCHENGEN EXPEDITIONS',
+        subtitle: 'Journey across iconic European capitals, Eiffel Tower Seine cruises, snow-capped Swiss mountains, and historical UNESCO landmarks.'
     },
     {
         id: 5,
-        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'STUDY IN CANADA, MALTA & DUBAI',
-        title: 'WORLDINE EDUCATION & VISAS',
-        subtitle: 'Empowering students with global higher education pathways, visa consulting, and admissions at Acadia University, GBS Malta, & GBS Dubai.'
+        image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'FUTURISTIC SKYLINE & DESERT SAFARIS',
+        title: 'DUBAI & UAE LUXURY HOLIDAYS',
+        subtitle: 'Experience world-class luxury skyscrapers, 4x4 dune bashing safaris, luxury marina cruises, and vibrant oriental souk markets.'
     }
 ]);
 
@@ -140,7 +140,7 @@ const aboutDestinations = ref([
         country: 'Sri Lanka',
         flag: '🇱🇰',
         tagline: 'Sigiriya Rock Citadel & UNESCO Ancient Kingdoms',
-        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80'
+        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1200&q=80'
     },
     {
         country: 'Australia',
@@ -233,43 +233,43 @@ const glimpseDestinations = ref([
         name: 'Sri Lanka',
         subtitle: 'Pearl of the Indian Ocean & UNESCO Heritage',
         packagesCount: '15+ Packages',
-        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80',
         badge: 'Inbound Specialist'
     },
     {
         name: 'Maldives',
-        subtitle: 'Overwater Tropical Coral Lagoon',
+        subtitle: 'Overwater Tropical Coral Lagoon & Water Villas',
         packagesCount: '8 Packages',
         image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80',
         badge: 'Outbound Escape'
     },
     {
-        name: 'Canada & North America',
-        subtitle: 'Acadia University & Higher Studies Pathways',
-        packagesCount: '6 Programs',
-        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80',
-        badge: 'Worldine Education'
-    },
-    {
-        name: 'Malta & Europe',
-        subtitle: 'GBS Malta Campus & Schengen Student Visas',
-        packagesCount: '5 Programs',
-        image: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80',
-        badge: 'Study & Work'
-    },
-    {
-        name: 'Dubai & UAE',
-        subtitle: 'GBS Dubai & Business Degrees',
-        packagesCount: '7 Packages',
-        image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
-        badge: 'Executive Studies'
+        name: 'Switzerland & Europe',
+        subtitle: 'Alpine Snow Peaks & Schengen Grand Expeditions',
+        packagesCount: '12 Packages',
+        image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80',
+        badge: 'European Grand Tour'
     },
     {
         name: 'Japan & East Asia',
-        subtitle: 'Kyoto Temples & Cultural Expeditions',
+        subtitle: 'Kyoto Temples, Mount Fuji & Shinkansen Bullet Trains',
         packagesCount: '9 Packages',
         image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
         badge: 'Heritage & Culture'
+    },
+    {
+        name: 'Dubai & UAE',
+        subtitle: 'Burj Khalifa, Desert Dunes & Marina Luxury Cruises',
+        packagesCount: '7 Packages',
+        image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
+        badge: 'Luxury City Escape'
+    },
+    {
+        name: 'Australia & Pacific',
+        subtitle: 'Great Barrier Reef & Sydney Opera House',
+        packagesCount: '10 Packages',
+        image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80',
+        badge: 'Pacific Ocean Escape'
     }
 ]);
 
@@ -612,8 +612,8 @@ const features = [
                         :alt="slide.title" 
                         class="w-full h-full object-cover object-center scale-105"
                     />
-                    <!-- Overlay Gradient -->
-                    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/40 to-slate-900/80"></div>
+                    <!-- High-Contrast Top Protection Overlay Gradient (Ensures Logo is Never Blocked or Obscured) -->
+                    <div class="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/35 to-slate-950/90"></div>
                 </div>
             </div>
 
@@ -686,7 +686,7 @@ const features = [
                         A glimpse of destinations
                     </h2>
                     <p class="text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed">
-                        Explore handpicked world-class travel destinations, tropical beach escapes, and higher education portals. Our curated packages offer unforgettable memories with 20+ years of travel expertise.
+                        Explore handpicked world-class travel destinations, tropical beach escapes, and tailored international holiday packages. Our curated itineraries offer unforgettable memories with 20+ years of travel expertise.
                     </p>
 
                     <!-- Interactive Slider Controls & Counter -->
@@ -711,8 +711,8 @@ const features = [
                     </div>
                 </div>
 
-                <!-- Right Side: 2 Full Cards Carousel View with Smooth Edge Feather Mask -->
-                <div class="lg:col-span-7 w-full overflow-hidden smooth-carousel-edge-fade">
+                <!-- Right Side: 2 Full Cards Carousel View -->
+                <div class="lg:col-span-7 w-full overflow-hidden">
                     <div 
                         class="flex gap-6"
                         :class="{ 'transition-transform duration-700 ease-out': isTransitioning }"
@@ -1542,9 +1542,4 @@ const features = [
     mask-image: radial-gradient(ellipse 94% 94% at 50% 50%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
 }
 
-/* Smooth Linear Edge Fade for Destination Carousel Container */
-.smooth-carousel-edge-fade {
-    -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, rgba(0, 0, 0, 0) 100%);
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, rgba(0, 0, 0, 0) 100%);
-}
 </style>
