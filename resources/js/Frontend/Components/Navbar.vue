@@ -157,8 +157,6 @@ onUnmounted(() => {
             </div>
 
             <a href="/#services" class="text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap">Services</a>
-
-            <a href="/#estimator" class="text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap">Worldine Education</a>
             
             <a href="/#footer" class="text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap">Contact</a>
         </nav>
@@ -221,7 +219,6 @@ onUnmounted(() => {
             </div>
 
             <a href="/#services" @click="mobileMenuOpen = false" class="block text-slate-700 hover:text-[#2B70B4] py-1 border-b border-slate-100">Services</a>
-            <a href="/#estimator" @click="mobileMenuOpen = false" class="block text-slate-700 hover:text-[#2B70B4] py-1 border-b border-slate-100">Worldine Education</a>
             <a href="/#footer" @click="mobileMenuOpen = false" class="inline-block mt-2 px-5 py-2 rounded-full bg-[#2B70B4] text-white font-extrabold shadow-md">Contact</a>
         </div>
     </header>
