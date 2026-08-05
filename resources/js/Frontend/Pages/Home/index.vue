@@ -1585,7 +1585,7 @@ const features = [
                             <li><a href="#hero" class="hover:text-[#90CAF9] transition-colors">Home</a></li>
                             <li><a href="#about" class="hover:text-[#90CAF9] transition-colors">About Us</a></li>
                             <li><a href="#glimpse-destinations" class="hover:text-[#90CAF9] transition-colors">Destinations</a></li>
-                            <li><a href="#estimator" class="hover:text-[#90CAF9] transition-colors">Worldine Education</a></li>
+                            <li><Link href="/contact" class="hover:text-[#90CAF9] transition-colors">Contact Us</Link></li>
                             <li><a href="#testimonials" class="hover:text-[#90CAF9] transition-colors">Traveler Stories</a></li>
                         </ul>
                     </div>

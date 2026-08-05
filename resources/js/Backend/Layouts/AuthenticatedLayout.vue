@@ -45,6 +45,14 @@ const navItems = [
         iconPath: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'
     },
     {
+        name: 'Contact Page Content',
+        href: route('admin.contact.index'),
+        activeName: 'admin.contact.index',
+        badge: 'CMS',
+        badgeColor: 'bg-sky-100 text-sky-800 border-sky-200',
+        iconPath: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
+    },
+    {
         name: 'Profile & Settings',
         href: route('profile.edit'),
         activeName: 'profile.edit',
