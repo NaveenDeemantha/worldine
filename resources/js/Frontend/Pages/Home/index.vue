@@ -701,16 +701,16 @@ const features = [
                 <img 
                     src="/images/Logo/worldineback.png" 
                     alt="Worldine Hero" 
-                    class="w-full h-full object-cover object-center"
+                    class="w-full h-full object-cover object-top"
                     fetchpriority="high"
                     decoding="async"
                 />
                 <!-- Mobile-Only Soft Contrast Mask directly on Background Image for Legibility (Subtle bg-white/20) -->
                 <div class="block sm:hidden absolute inset-0 bg-white/20 pointer-events-none z-10"></div>
                 <!-- Ultra-Smooth Top Fade Gradient (No Hard Horizontal Seams/Cutoffs Under Navbar) -->
-                <div class="absolute top-0 left-0 right-0 h-44 sm:h-60 bg-gradient-to-b from-white via-white/35 via-40% to-transparent pointer-events-none z-10"></div>
+                <div class="absolute top-0 left-0 right-0 h-20 sm:h-28 bg-gradient-to-b from-white via-white/25 to-transparent pointer-events-none z-10"></div>
                 <!-- Subtle Soft Protection Overlay Gradient for Text Contrast -->
-                <div class="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-transparent to-slate-950/30 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-slate-950/15 via-transparent to-slate-950/30 pointer-events-none"></div>
             </div>
 
             <!-- HERO LEFT-ALIGNED CONTENT WITH LIVE TYPEWRITER & ERASER EFFECT -->
