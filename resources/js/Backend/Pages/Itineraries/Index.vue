@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Backend/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const props = defineProps({
     packages: { type: Array, default: () => [] },
@@ -31,6 +31,17 @@ const loadPackageItinerary = (pkg) => {
 if (props.packages.length > 0) {
     loadPackageItinerary(props.packages[0]);
 }
+
+onMounted(() => {
+    const params = new URLSearchParams(window.location.search);
+    const pkgId = params.get('package_id');
+    if (pkgId && props.packages.length > 0) {
+        const found = props.packages.find(p => p.id === Number(pkgId) || String(p.id) === String(pkgId));
+        if (found) {
+            loadPackageItinerary(found);
+        }
+    }
+});
 
 const addItineraryDay = () => {
     const nextDayNum = itineraryForm.days.length + 1;
@@ -77,7 +88,7 @@ const saveItinerary = () => {
             <!-- GLOBAL IMAGE GUIDANCE BANNER -->
             <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200/90 text-amber-900 text-xs font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
                 <div class="flex items-start space-x-2.5">
-                    <span class="text-base">📸</span>
+                    <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
                     <div>
                         <strong class="font-extrabold text-amber-950">Image Upload Requirements & Compression Reminder:</strong>
                         <p class="text-[11px] text-amber-800 mt-0.5">
@@ -157,14 +168,18 @@ const saveItinerary = () => {
                                     <div class="sm:col-span-2 space-y-2 p-3.5 bg-white rounded-xl border border-slate-200">
                                         <div class="flex items-center justify-between">
                                             <label class="block text-[11px] font-bold text-slate-700 uppercase">Day Photo (Upload File or Enter URL)</label>
-                                            <span class="text-[9px] font-extrabold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                                                📐 Rec: 800×600 px | Max: 500 KB
+                                            <span class="text-[9px] font-extrabold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 flex items-center space-x-1">
+                                                <svg class="w-3 h-3 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></svg>
+                                                <span>Rec: 800×600 px | Max: 500 KB</span>
                                             </span>
                                         </div>
 
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                                             <div>
-                                                <span class="text-[10px] font-bold text-slate-500 block mb-1">📁 Upload File:</span>
+                                                <span class="text-[10px] font-bold text-slate-500 flex items-center space-x-1 mb-1">
+                                                    <svg class="w-3.5 h-3.5 text-slate-500 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                                    <span>Upload File:</span>
+                                                </span>
                                                 <input 
                                                     type="file" 
                                                     @change="onDayFileChange($event, idx)" 
@@ -173,7 +188,10 @@ const saveItinerary = () => {
                                                 />
                                             </div>
                                             <div>
-                                                <span class="text-[10px] font-bold text-slate-500 block mb-1">🔗 Or Web URL:</span>
+                                                <span class="text-[10px] font-bold text-slate-500 flex items-center space-x-1 mb-1">
+                                                    <svg class="w-3.5 h-3.5 text-slate-500 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                                                    <span>Or Web URL:</span>
+                                                </span>
                                                 <input type="text" v-model="day.image" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold" placeholder="https://..." />
                                             </div>
                                         </div>

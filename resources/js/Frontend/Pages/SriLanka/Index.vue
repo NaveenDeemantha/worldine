@@ -100,7 +100,7 @@ const openQuickDetail = (pkg) => {
                         <div class="absolute bottom-4 left-4 right-4 text-white flex justify-between items-end">
                             <span v-if="pkg.price && Number(pkg.price) > 0" class="text-2xl font-black">${{ Number(pkg.price).toLocaleString() }}</span>
                             <span v-else class="text-xs font-extrabold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/30">Inquire for Quote</span>
-                            <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ pkg.duration_days }} Days</span>
+                            <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ (pkg.itinerary_days && pkg.itinerary_days.length > 0) ? pkg.itinerary_days.length : pkg.duration_days }} Days</span>
                         </div>
                     </div>
 
@@ -136,7 +136,7 @@ const openQuickDetail = (pkg) => {
             <div class="bg-white w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 max-h-[85vh] overflow-y-auto">
                 <div class="flex justify-between items-start border-b border-slate-100 pb-4">
                     <div>
-                        <span class="text-xs font-extrabold uppercase text-[#2196F3]">{{ selectedPackage.duration_days }} Days Expedition</span>
+                        <span class="text-xs font-extrabold uppercase text-[#2196F3]">{{ (selectedPackage.itinerary_days && selectedPackage.itinerary_days.length > 0) ? selectedPackage.itinerary_days.length : selectedPackage.duration_days }} Days Expedition</span>
                         <h2 class="text-2xl font-black text-slate-900 mt-0.5">{{ selectedPackage.title }}</h2>
                     </div>
                     <button @click="isDetailModalOpen = false" class="text-slate-400 font-bold text-lg">✕</button>
@@ -148,7 +148,7 @@ const openQuickDetail = (pkg) => {
                 <div v-if="selectedPackage.itinerary_days && selectedPackage.itinerary_days.length" class="space-y-3">
                     <h3 class="text-xs font-black uppercase tracking-wider text-slate-900">Day-by-Day Highlights</h3>
                     <div v-for="day in selectedPackage.itinerary_days" :key="day.id" class="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-start space-x-3">
-                        <span class="text-xs font-black bg-[#0D47A1] text-white px-2.5 py-1 rounded-full flex-shrink-0">Day {{ day.day_number }}</span>
+                        <span class="text-[11px] font-black uppercase tracking-wider bg-[#0D47A1] text-white px-3 py-1 rounded-full flex-shrink-0 whitespace-nowrap">Day-{{ String(day.day_number).padStart(2, '0') }}</span>
                         <div>
                             <div class="text-xs font-bold text-slate-900">{{ day.title }}</div>
                             <div class="text-[11px] text-slate-600 mt-0.5">{{ day.description }}</div>

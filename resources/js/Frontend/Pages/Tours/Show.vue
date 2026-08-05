@@ -52,7 +52,7 @@ const submitInquiry = () => {
                         {{ package.destination ? package.destination.name : 'WORLDINE TOUR' }}
                     </span>
                     <span class="text-xs font-extrabold uppercase bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/30 text-white">
-                        {{ package.duration_days }} Days / {{ package.duration_nights }} Nights
+                        {{ (package.itinerary_days && package.itinerary_days.length > 0) ? package.itinerary_days.length : package.duration_days }} Days Expedition
                     </span>
                     <span v-if="package.badge" class="text-xs font-extrabold uppercase bg-amber-500 text-slate-950 px-3.5 py-1.5 rounded-full shadow">
                         {{ package.badge }}
@@ -108,8 +108,8 @@ const submitInquiry = () => {
                         >
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
                                 <div class="flex items-center space-x-3">
-                                    <span class="w-10 h-10 rounded-2xl bg-[#0D47A1] text-white font-black text-sm flex items-center justify-center shadow-md flex-shrink-0">
-                                        D{{ day.day_number }}
+                                    <span class="px-3.5 py-1.5 rounded-full bg-[#0D47A1] text-white font-black text-xs tracking-wider flex items-center justify-center shadow-sm flex-shrink-0 uppercase whitespace-nowrap">
+                                        Day-{{ String(day.day_number).padStart(2, '0') }}
                                     </span>
                                     <h3 class="text-lg font-black text-slate-900">{{ day.title }}</h3>
                                 </div>

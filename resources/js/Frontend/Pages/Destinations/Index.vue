@@ -1,13 +1,14 @@
 <script setup>
-import Navbar from '@/Frontend/Components/Navbar.vue';
-import { Head, Link } from '@inertiajs/vue3';
 import { ref, computed, onMounted, watch } from 'vue';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import Navbar from '@/Frontend/Components/Navbar.vue';
 
 const props = defineProps({
     destinations: Array,
     packages: Array,
 });
 
+const page = usePage();
 const selectedRegion = ref('all');
 
 const updateRegionFromUrl = () => {
@@ -24,7 +25,7 @@ onMounted(() => {
     updateRegionFromUrl();
 });
 
-watch(() => window.location.search, () => {
+watch(() => page.url, () => {
     updateRegionFromUrl();
 });
 
@@ -122,7 +123,7 @@ const activeHeroImage = computed(() => {
                         <div class="absolute bottom-4 left-4 right-4 text-white flex justify-between items-end">
                             <span v-if="pkg.price && Number(pkg.price) > 0" class="text-2xl font-black">${{ Number(pkg.price).toLocaleString() }}</span>
                             <span v-else class="text-xs font-extrabold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/30">Inquire for Quote</span>
-                            <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ pkg.duration_days }} Days</span>
+                            <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ (pkg.itinerary_days && pkg.itinerary_days.length > 0) ? pkg.itinerary_days.length : pkg.duration_days }} Days</span>
                         </div>
                     </div>
 

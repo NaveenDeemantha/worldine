@@ -58,30 +58,23 @@ class DestinationController extends Controller
      */
     public function indexBookings(): Response
     {
-        $bookings = [
-            [
-                'id' => 'WRD-8021',
-                'customer_name' => 'Alexander Wright',
-                'email' => 'alex.w@gmail.com',
-                'phone' => '+1 (555) 234-5678',
-                'package_title' => 'Heritage & Cultural Tour Sri Lanka',
-                'travel_date' => '2026-08-15',
-                'guests' => 2,
-                'status' => 'Confirmed',
-                'created_at' => '2 hours ago',
-            ],
-            [
-                'id' => 'WRD-8022',
-                'customer_name' => 'Sophia Chen',
-                'email' => 'sophia.c@outlook.com',
-                'phone' => '+44 7700 900077',
-                'package_title' => 'Maldives Luxury Overwater Escape',
-                'travel_date' => '2026-09-02',
-                'guests' => 2,
-                'status' => 'Pending Quote',
-                'created_at' => '5 hours ago',
-            ],
-        ];
+        $bookings = \App\Models\Inquiry::latest()->get()->map(function ($inq) {
+            return [
+                'id' => $inq->reference_id,
+                'db_id' => $inq->id,
+                'type' => $inq->type === 'package_inquiry' ? 'Tour Package Booking' : 'Contact Form Lead',
+                'customer_name' => $inq->customer_name,
+                'email' => $inq->email,
+                'phone' => $inq->phone,
+                'package_title' => $inq->package_title ?: ($inq->destination_name ?: 'General Inquiry'),
+                'inquiry_type' => $inq->inquiry_type ?: 'General Lead',
+                'travel_date' => $inq->travel_date ?: 'Flexible',
+                'guests' => $inq->guests,
+                'message' => $inq->message,
+                'status' => $inq->status,
+                'created_at' => $inq->created_at ? $inq->created_at->diffForHumans() : 'Recent',
+            ];
+        });
 
         return Inertia::render('Backend/Pages/Bookings/Index', [
             'bookings' => $bookings,

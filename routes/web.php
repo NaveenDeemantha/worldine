@@ -21,6 +21,7 @@ Route::get('/tours/{slug}', [TourDetailController::class, 'show'])->name('tours.
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'sendInquiry'])->name('contact.send');
+Route::post('/tours/inquire', [TourDetailController::class, 'sendPackageInquiry'])->name('tours.inquire');
 
 // Admin Dashboard & Auth Protected Routes
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');

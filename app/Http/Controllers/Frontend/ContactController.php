@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactSetting;
+use App\Models\Inquiry;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -55,6 +56,20 @@ class ContactController extends Controller
             'travel_dates' => 'nullable|string|max:255',
             'travelers' => 'nullable|string|max:50',
             'message' => 'nullable|string',
+        ]);
+
+        Inquiry::create([
+            'reference_id' => 'WRD-' . rand(1000, 9999),
+            'type' => 'general_contact',
+            'customer_name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'inquiry_type' => $validated['inquiry_type'] ?? 'General Contact',
+            'destination_name' => $validated['destination'] ?? null,
+            'travel_date' => $validated['travel_dates'] ?? null,
+            'guests' => (int)($validated['travelers'] ?? 1),
+            'message' => $validated['message'] ?? null,
+            'status' => 'Pending',
         ]);
 
         return back()->with('success', 'Thank you! Your inquiry has been received. Our travel concierge will reach out to you within 2 hours.');

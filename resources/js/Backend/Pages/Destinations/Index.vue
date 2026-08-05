@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Backend/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm, router } from '@inertiajs/vue3';
+import { Head, Link, useForm, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
 const props = defineProps({
@@ -232,14 +232,14 @@ const filteredDestinations = computed(() => {
                 </div>
 
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                    <div class="relative w-full sm:w-64">
+                    <div class="relative w-full sm:w-64 flex items-center">
                         <input 
                             type="text" 
                             v-model="searchQuery" 
                             placeholder="Search tours or regions..." 
                             class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2196F3]"
                         />
-                        <span class="absolute left-3 top-3 text-slate-400 text-xs">🔍</span>
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </div>
 
                     <button 
@@ -292,9 +292,14 @@ const filteredDestinations = computed(() => {
                                     <div class="text-[11px] text-slate-500 font-medium">{{ pkg.duration_days }} Days / {{ pkg.duration_nights }} Nights</div>
                                 </td>
                                 <td class="py-4 px-4">
-                                    <span class="px-3 py-1 rounded-full text-[11px] font-extrabold bg-blue-50 text-[#0D47A1] border border-blue-200 whitespace-nowrap inline-block">
-                                        {{ pkg.itinerary_days ? pkg.itinerary_days.length : 0 }} Days Logged
-                                    </span>
+                                    <Link 
+                                        :href="route('admin.itineraries.index') + '?package_id=' + pkg.id" 
+                                        class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-blue-50 hover:bg-blue-100 text-[#0D47A1] border border-blue-200 transition-colors whitespace-nowrap inline-flex items-center space-x-1.5"
+                                        title="Manage Day-by-Day Itinerary"
+                                    >
+                                        <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                        <span>{{ pkg.itinerary_days ? pkg.itinerary_days.length : 0 }} Days (Edit)</span>
+                                    </Link>
                                 </td>
                                 <td class="py-4 px-4 text-center">
                                     <span :class="['px-3 py-1 rounded-full text-[11px] font-extrabold whitespace-nowrap inline-block', pkg.is_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200']">
@@ -303,6 +308,14 @@ const filteredDestinations = computed(() => {
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     <div class="flex items-center justify-end space-x-2">
+                                        <Link 
+                                            :href="route('admin.itineraries.index') + '?package_id=' + pkg.id"
+                                            class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold border border-emerald-200 transition-colors inline-flex items-center space-x-1"
+                                            title="Manage Itinerary Days"
+                                        >
+                                            <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+                                            <span>Itinerary</span>
+                                        </Link>
                                         <button @click="openPackageModal(pkg)" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all text-xs">Edit</button>
                                         <button @click="deletePackage(pkg.id)" class="px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 font-bold transition-all text-xs">Delete</button>
                                     </div>
@@ -408,13 +421,14 @@ const filteredDestinations = computed(() => {
                     <div class="space-y-3 p-4 bg-slate-50 rounded-2xl border border-slate-200">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-200/80 pb-2">
                             <label class="block text-xs font-bold text-slate-800 uppercase">Main Cover Image (Upload File or Enter URL)</label>
-                            <span class="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2.5 py-0.5 rounded-full">
-                                📐 Rec: 1200×800 px | ⚡ Max: 500 KB
+                            <span class="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2.5 py-0.5 rounded-full flex items-center space-x-1">
+                                <svg class="w-3 h-3 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></svg>
+                                <span>Rec: 1200×800 px | Max: 500 KB</span>
                             </span>
                         </div>
                         
                         <div class="p-2.5 bg-amber-50 border border-amber-200/80 rounded-xl text-[11px] text-amber-900 font-medium flex items-start space-x-2">
-                            <span class="text-xs">⚠️</span>
+                            <svg class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
                             <span><strong>Compression Reminder:</strong> Please compress image files (under 500 KB) using free tools like <strong>TinyPNG</strong> or <strong>Squoosh</strong> before uploading to ensure maximum web loading speed.</span>
                         </div>
 
@@ -425,7 +439,10 @@ const filteredDestinations = computed(() => {
 
                             <div class="space-y-2.5 flex-grow w-full">
                                 <div>
-                                    <span class="text-[10px] font-bold text-slate-600 block mb-1">📁 Upload Image File from Device:</span>
+                                    <span class="text-[10px] font-bold text-slate-600 flex items-center space-x-1 mb-1">
+                                        <svg class="w-3.5 h-3.5 text-slate-500 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                        <span>Upload Image File from Device:</span>
+                                    </span>
                                     <input 
                                         type="file" 
                                         @change="onPkgFileChange" 
@@ -435,7 +452,10 @@ const filteredDestinations = computed(() => {
                                 </div>
 
                                 <div>
-                                    <span class="text-[10px] font-bold text-slate-600 block mb-1">🔗 Or Enter Image Web URL:</span>
+                                    <span class="text-[10px] font-bold text-slate-600 flex items-center space-x-1 mb-1">
+                                        <svg class="w-3.5 h-3.5 text-slate-500 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                                        <span>Or Enter Image Web URL:</span>
+                                    </span>
                                     <input type="text" v-model="pkgForm.main_image" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900" placeholder="https://..." />
                                 </div>
                             </div>
@@ -523,8 +543,16 @@ const filteredDestinations = computed(() => {
                             </span>
                         </div>
 
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-200/80 pb-2">
+                            <label class="block text-xs font-bold text-slate-800 uppercase">Destination Cover Image</label>
+                            <span class="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2.5 py-0.5 rounded-full flex items-center space-x-1">
+                                <svg class="w-3 h-3 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></svg>
+                                <span>Rec: 1200×800 px | Max: 500 KB</span>
+                            </span>
+                        </div>
+
                         <div class="p-2.5 bg-amber-50 border border-amber-200/80 rounded-xl text-[11px] text-amber-900 font-medium flex items-start space-x-2">
-                            <span class="text-xs">⚠️</span>
+                            <svg class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
                             <span><strong>Compression Reminder:</strong> Compress images to under 500 KB (using TinyPNG or Squoosh) before uploading for fast site performance.</span>
                         </div>
                         
@@ -535,7 +563,10 @@ const filteredDestinations = computed(() => {
 
                             <div class="space-y-2.5 flex-grow w-full">
                                 <div>
-                                    <span class="text-[10px] font-bold text-slate-600 block mb-1">📁 Upload Image File from Device:</span>
+                                    <span class="text-[10px] font-bold text-slate-600 flex items-center space-x-1 mb-1">
+                                        <svg class="w-3.5 h-3.5 text-slate-500 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                        <span>Upload Image File from Device:</span>
+                                    </span>
                                     <input 
                                         type="file" 
                                         @change="onDestFileChange" 
@@ -545,7 +576,10 @@ const filteredDestinations = computed(() => {
                                 </div>
 
                                 <div>
-                                    <span class="text-[10px] font-bold text-slate-600 block mb-1">🔗 Or Enter Image Web URL:</span>
+                                    <span class="text-[10px] font-bold text-slate-600 flex items-center space-x-1 mb-1">
+                                        <svg class="w-3.5 h-3.5 text-slate-500 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                                        <span>Or Enter Image Web URL:</span>
+                                    </span>
                                     <input type="text" v-model="destForm.image" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold" placeholder="https://..." />
                                 </div>
                             </div>

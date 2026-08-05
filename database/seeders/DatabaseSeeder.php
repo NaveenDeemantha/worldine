@@ -348,5 +348,73 @@ class DatabaseSeeder extends Seeder
                 );
             }
         }
+
+        // 3. Seed Sample Package-Wise & Contact Form Inquiries
+        $sriLankaPkg = TourPackage::where('slug', 'srilanka-heritage-cultural-tour')->first();
+        $dubaiPkg = TourPackage::where('slug', 'dubai-luxury-desert-skyscraper-escape')->first();
+
+        \App\Models\Inquiry::updateOrCreate(
+            ['reference_id' => 'WRD-8021'],
+            [
+                'type' => 'package_inquiry',
+                'customer_name' => 'Alexander Wright',
+                'email' => 'alex.w@gmail.com',
+                'phone' => '+1 (555) 234-5678',
+                'tour_package_id' => $sriLankaPkg ? $sriLankaPkg->id : null,
+                'package_title' => $sriLankaPkg ? $sriLankaPkg->title : 'Heritage & Cultural Tour Sri Lanka',
+                'travel_date' => '2026-08-15',
+                'guests' => 2,
+                'inquiry_type' => 'Tour Package Booking',
+                'status' => 'Confirmed',
+                'message' => 'Interested in booking the 6-day heritage tour for 2 adults. Requesting hotel upgrades.',
+            ]
+        );
+
+        \App\Models\Inquiry::updateOrCreate(
+            ['reference_id' => 'WRD-8022'],
+            [
+                'type' => 'package_inquiry',
+                'customer_name' => 'Sophia Chen',
+                'email' => 'sophia.c@outlook.com',
+                'phone' => '+44 7700 900077',
+                'tour_package_id' => $dubaiPkg ? $dubaiPkg->id : null,
+                'package_title' => $dubaiPkg ? $dubaiPkg->title : 'Dubai Luxury Desert & Skyscraper Escape',
+                'travel_date' => '2026-09-02',
+                'guests' => 4,
+                'inquiry_type' => 'Luxury Escape Inquiry',
+                'status' => 'Pending',
+                'message' => 'Family travel inquiry for 4 guests including Burj Khalifa tickets.',
+            ]
+        );
+
+        \App\Models\Inquiry::updateOrCreate(
+            ['reference_id' => 'WRD-9105'],
+            [
+                'type' => 'general_contact',
+                'customer_name' => 'Michael Scott',
+                'email' => 'm.scott@dundermifflin.com',
+                'phone' => '+1 (555) 987-6543',
+                'destination_name' => 'Custom Sri Lanka & Maldives Combo',
+                'inquiry_type' => 'Custom Tour Package',
+                'travel_date' => '2026-10-10',
+                'guests' => 6,
+                'status' => 'Contacted',
+                'message' => 'Looking for a custom 10-day honeymoon package combining Sri Lanka tea highlands with Maldives overwater villa.',
+            ]
+        );
+
+        \App\Models\Inquiry::updateOrCreate(
+            ['reference_id' => 'WRD-9106'],
+            [
+                'type' => 'general_contact',
+                'customer_name' => 'Elena Rostova',
+                'email' => 'elena.rostova@travel.de',
+                'phone' => '+49 30 123456',
+                'destination_name' => 'Corporate Group Outbound',
+                'inquiry_type' => 'Corporate Travel',
+                'status' => 'Pending',
+                'message' => 'Requesting quote and itinerary for 15 executives traveling to Japan in November.',
+            ]
+        );
     }
 }
