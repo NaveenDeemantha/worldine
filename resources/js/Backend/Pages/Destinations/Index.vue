@@ -23,6 +23,10 @@ const isPackageModalOpen = ref(false);
 const editingDestination = ref(null);
 const editingPackage = ref(null);
 
+// Image Previews
+const destImagePreview = ref(null);
+const pkgImagePreview = ref(null);
+
 // Destination Form
 const destForm = useForm({
     id: null,
@@ -30,7 +34,7 @@ const destForm = useForm({
     type: 'outbound',
     subtitle: '',
     description: '',
-    image: '',
+    image: null,
     badge: '',
     is_glimpse: true,
     is_featured: true,
@@ -43,17 +47,35 @@ const pkgForm = useForm({
     destination_id: '',
     title: '',
     subtitle: '',
-    category: 'global-outbound',
-    price: 1500,
-    duration_days: 5,
-    duration_nights: 4,
+    category: 'srilanka-inbound',
+    price: null,
+    duration_days: 6,
+    duration_nights: 5,
     badge: 'Popular Choice',
-    main_image: '',
+    main_image: null,
     overview: '',
     is_featured: true,
     is_active: true,
     days: [],
 });
+
+// Destination Image File Handler
+const onDestFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        destForm.image = file;
+        destImagePreview.value = URL.createObjectURL(file);
+    }
+};
+
+// Package Image File Handler
+const onPkgFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        pkgForm.main_image = file;
+        pkgImagePreview.value = URL.createObjectURL(file);
+    }
+};
 
 // Add a Day to Package Itinerary
 const addItineraryDay = () => {
@@ -70,7 +92,6 @@ const addItineraryDay = () => {
 
 const removeItineraryDay = (index) => {
     pkgForm.days.splice(index, 1);
-    // Re-index day numbers
     pkgForm.days.forEach((day, idx) => {
         day.day_number = idx + 1;
     });
@@ -79,17 +100,19 @@ const removeItineraryDay = (index) => {
 // Open Destination Modal
 const openDestinationModal = (dest = null) => {
     editingDestination.value = dest;
+    destImagePreview.value = null;
     if (dest) {
         destForm.id = dest.id;
         destForm.name = dest.name;
         destForm.type = dest.type;
         destForm.subtitle = dest.subtitle || '';
         destForm.description = dest.description || '';
-        destForm.image = dest.image || '';
+        destForm.image = dest.image || null;
         destForm.badge = dest.badge || '';
         destForm.is_glimpse = dest.is_glimpse;
         destForm.is_featured = dest.is_featured;
         destForm.is_active = dest.is_active;
+        if (dest.image) destImagePreview.value = dest.image;
     } else {
         destForm.reset();
         destForm.id = null;
@@ -100,6 +123,7 @@ const openDestinationModal = (dest = null) => {
 // Open Package Modal
 const openPackageModal = (pkg = null) => {
     editingPackage.value = pkg;
+    pkgImagePreview.value = null;
     if (pkg) {
         pkgForm.id = pkg.id;
         pkgForm.destination_id = pkg.destination_id;
@@ -110,18 +134,18 @@ const openPackageModal = (pkg = null) => {
         pkgForm.duration_days = pkg.duration_days;
         pkgForm.duration_nights = pkg.duration_nights;
         pkgForm.badge = pkg.badge || '';
-        pkgForm.main_image = pkg.main_image || '';
+        pkgForm.main_image = pkg.main_image || null;
         pkgForm.overview = pkg.overview || '';
         pkgForm.is_featured = pkg.is_featured;
         pkgForm.is_active = pkg.is_active;
         pkgForm.days = pkg.itinerary_days ? pkg.itinerary_days.map(d => ({ ...d })) : [];
+        if (pkg.main_image) pkgImagePreview.value = pkg.main_image;
     } else {
         pkgForm.reset();
         pkgForm.id = null;
         if (props.destinations.length > 0) {
             pkgForm.destination_id = props.destinations[0].id;
         }
-        // Add 2 default itinerary days
         pkgForm.days = [
             { day_number: 1, title: 'Day 1: Arrival & Hotel Check-in', description: '', image: '', accommodation: '4-Star Resort', meals: 'Dinner Included' },
             { day_number: 2, title: 'Day 2: City Tour & Landmarks', description: '', image: '', accommodation: '4-Star Resort', meals: 'Breakfast & Dinner' },
@@ -132,7 +156,10 @@ const openPackageModal = (pkg = null) => {
 
 const saveDestination = () => {
     if (destForm.id) {
-        destForm.put(route('admin.destinations.update', destForm.id), {
+        router.post(route('admin.destinations.update', destForm.id), {
+            _method: 'put',
+            ...destForm.data()
+        }, {
             onSuccess: () => { isDestinationModalOpen.value = false; }
         });
     } else {
@@ -178,17 +205,12 @@ const filteredDestinations = computed(() => {
     <Head title="Destinations & Tour Packages - Admin Portal" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Destinations & Tour Packages</h1>
-                <p class="text-xs text-slate-500 mt-0.5 font-medium">Manage all Inbound & Outbound travel packages, Glimpse Carousel cards, and Day-by-Day itineraries live on Worldine Destinations.</p>
-            </div>
-        </template>
-
-        <div class="space-y-6 font-aptos">
-            <!-- TAB CONTROL, SEARCH FILTER & PAGE ACTION BUTTONS INSIDE PAGE -->
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
-                <div class="flex items-center space-x-2 bg-slate-100 p-1 rounded-xl w-fit">
+        <div class="space-y-6 font-spinnaker">
+            
+            <!-- HEADER TABS & ACTIONS BAR -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                
+                <div class="flex items-center space-x-2 bg-slate-100 p-1.5 rounded-xl self-start md:self-auto">
                     <button 
                         @click="activeTab = 'packages'"
                         :class="[
@@ -238,49 +260,52 @@ const filteredDestinations = computed(() => {
 
             <!-- TAB 1: TOUR PACKAGES TABLE VIEW -->
             <div v-if="activeTab === 'packages'" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs">
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full text-left text-xs whitespace-nowrap">
                         <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider font-extrabold border-b border-slate-200">
                             <tr>
-                                <th class="p-4">Package Name</th>
-                                <th class="p-4">Destination / Category</th>
-                                <th class="p-4">Price / Duration</th>
-                                <th class="p-4">Itinerary Days</th>
-                                <th class="p-4">Status</th>
-                                <th class="p-4 text-right">Actions</th>
+                                <th class="py-4 px-6">Package Name</th>
+                                <th class="py-4 px-4">Destination Region</th>
+                                <th class="py-4 px-4">Price & Duration</th>
+                                <th class="py-4 px-4">Itinerary</th>
+                                <th class="py-4 px-4 text-center">Status</th>
+                                <th class="py-4 px-6 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 font-semibold text-slate-700">
                             <tr v-for="pkg in filteredPackages" :key="pkg.id" class="hover:bg-slate-50/80 transition-colors">
-                                <td class="p-4 flex items-center space-x-3">
-                                    <img :src="pkg.main_image" :alt="pkg.title" class="w-12 h-12 rounded-xl object-cover border border-slate-200 flex-shrink-0" />
-                                    <div>
-                                        <div class="font-extrabold text-slate-900 text-sm">{{ pkg.title }}</div>
-                                        <div class="text-[11px] text-slate-400 line-clamp-1">{{ pkg.subtitle }}</div>
+                                <td class="py-4 px-6 flex items-center space-x-3">
+                                    <img :src="pkg.main_image || '/images/Logo/worldineback.png'" :alt="pkg.title" class="w-12 h-12 rounded-xl object-cover border border-slate-200 flex-shrink-0" />
+                                    <div class="max-w-xs">
+                                        <div class="font-extrabold text-slate-900 text-sm truncate">{{ pkg.title }}</div>
+                                        <div class="text-[11px] text-slate-400 truncate">{{ pkg.subtitle || pkg.category }}</div>
                                     </div>
                                 </td>
-                                <td class="p-4">
-                                    <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                                <td class="py-4 px-4">
+                                    <span class="inline-block px-3 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
                                         {{ pkg.destination ? pkg.destination.name : pkg.category }}
                                     </span>
                                 </td>
-                                <td class="p-4">
-                                    <div class="font-black text-slate-900">${{ pkg.price }}</div>
-                                    <div class="text-[11px] text-slate-500">{{ pkg.duration_days }} Days / {{ pkg.duration_nights }} Nights</div>
+                                <td class="py-4 px-4">
+                                    <div class="font-black text-slate-900 text-sm" v-if="pkg.price && Number(pkg.price) > 0">${{ pkg.price }}</div>
+                                    <div class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 inline-block mb-0.5" v-else>On Request</div>
+                                    <div class="text-[11px] text-slate-500 font-medium">{{ pkg.duration_days }} Days / {{ pkg.duration_nights }} Nights</div>
                                 </td>
-                                <td class="p-4">
-                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-blue-50 text-[#0D47A1] border border-blue-200">
+                                <td class="py-4 px-4">
+                                    <span class="px-3 py-1 rounded-full text-[11px] font-extrabold bg-blue-50 text-[#0D47A1] border border-blue-200 whitespace-nowrap inline-block">
                                         {{ pkg.itinerary_days ? pkg.itinerary_days.length : 0 }} Days Logged
                                     </span>
                                 </td>
-                                <td class="p-4">
-                                    <span :class="['px-2.5 py-1 rounded-full text-[11px] font-extrabold', pkg.is_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500']">
-                                        {{ pkg.is_active ? 'Active Live' : 'Draft' }}
+                                <td class="py-4 px-4 text-center">
+                                    <span :class="['px-3 py-1 rounded-full text-[11px] font-extrabold whitespace-nowrap inline-block', pkg.is_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200']">
+                                        {{ pkg.is_active ? 'Active' : 'Draft' }}
                                     </span>
                                 </td>
-                                <td class="p-4 text-right space-x-2">
-                                    <button @click="openPackageModal(pkg)" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all">Edit</button>
-                                    <button @click="deletePackage(pkg.id)" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 font-bold transition-all">Delete</button>
+                                <td class="py-4 px-6 text-right">
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <button @click="openPackageModal(pkg)" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all text-xs">Edit</button>
+                                        <button @click="deletePackage(pkg.id)" class="px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 font-bold transition-all text-xs">Delete</button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -296,8 +321,8 @@ const filteredDestinations = computed(() => {
                     class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all p-5 flex flex-col justify-between"
                 >
                     <div class="space-y-3">
-                        <div class="relative h-40 rounded-xl overflow-hidden">
-                            <img :src="dest.image" :alt="dest.name" class="w-full h-full object-cover" />
+                        <div class="relative h-40 rounded-xl overflow-hidden bg-slate-100">
+                            <img :src="dest.image || '/images/Logo/worldineback.png'" :alt="dest.name" class="w-full h-full object-cover" />
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
                             <span class="absolute top-3 left-3 bg-white/90 text-slate-900 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shadow">
                                 {{ dest.type }}
@@ -333,7 +358,7 @@ const filteredDestinations = computed(() => {
                         <h2 class="text-xl font-black text-[#0D47A1]">
                             {{ editingPackage ? 'Edit Tour Package & Itinerary' : 'Create New Tour Package' }}
                         </h2>
-                        <p class="text-xs text-slate-500 font-medium">Build complete day-by-day itineraries with photos, descriptions, and inclusions.</p>
+                        <p class="text-xs text-slate-500 font-medium">Upload image files or enter image URLs.</p>
                     </div>
                     <button @click="isPackageModalOpen = false" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold">✕</button>
                 </div>
@@ -364,8 +389,8 @@ const filteredDestinations = computed(() => {
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Price (USD $)</label>
-                            <input type="number" step="0.01" v-model="pkgForm.price" required class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-900" />
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Price (USD $) <span class="text-[10px] text-slate-400 font-normal">(Optional)</span></label>
+                            <input type="number" step="0.01" v-model="pkgForm.price" placeholder="Leave empty for 'Inquire for Quote'" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-900" />
                         </div>
 
                         <div>
@@ -379,9 +404,42 @@ const filteredDestinations = computed(() => {
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Main Cover Image URL</label>
-                        <input type="url" v-model="pkgForm.main_image" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-900" placeholder="https://images.unsplash.com/..." />
+                    <!-- IMAGE FILE UPLOAD + URL INPUT -->
+                    <div class="space-y-3 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-200/80 pb-2">
+                            <label class="block text-xs font-bold text-slate-800 uppercase">Main Cover Image (Upload File or Enter URL)</label>
+                            <span class="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2.5 py-0.5 rounded-full">
+                                📐 Rec: 1200×800 px | ⚡ Max: 500 KB
+                            </span>
+                        </div>
+                        
+                        <div class="p-2.5 bg-amber-50 border border-amber-200/80 rounded-xl text-[11px] text-amber-900 font-medium flex items-start space-x-2">
+                            <span class="text-xs">⚠️</span>
+                            <span><strong>Compression Reminder:</strong> Please compress image files (under 500 KB) using free tools like <strong>TinyPNG</strong> or <strong>Squoosh</strong> before uploading to ensure maximum web loading speed.</span>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-center gap-4 pt-1">
+                            <div v-if="pkgImagePreview" class="w-24 h-24 rounded-xl overflow-hidden border border-slate-200 bg-white flex-shrink-0 shadow-xs">
+                                <img :src="pkgImagePreview" class="w-full h-full object-cover" />
+                            </div>
+
+                            <div class="space-y-2.5 flex-grow w-full">
+                                <div>
+                                    <span class="text-[10px] font-bold text-slate-600 block mb-1">📁 Upload Image File from Device:</span>
+                                    <input 
+                                        type="file" 
+                                        @change="onPkgFileChange" 
+                                        accept="image/*" 
+                                        class="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-extrabold file:bg-[#0D47A1] file:text-white hover:file:bg-[#1565C0] cursor-pointer"
+                                    />
+                                </div>
+
+                                <div>
+                                    <span class="text-[10px] font-bold text-slate-600 block mb-1">🔗 Or Enter Image Web URL:</span>
+                                    <input type="text" v-model="pkgForm.main_image" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900" placeholder="https://..." />
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
@@ -412,7 +470,7 @@ const filteredDestinations = computed(() => {
                                     <textarea v-model="day.description" rows="2" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium" placeholder="Detailed itinerary narrative for this day..."></textarea>
                                 </div>
                                 <div>
-                                    <input type="url" v-model="day.image" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold" placeholder="Day Photo Image URL" />
+                                    <input type="text" v-model="day.image" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold" placeholder="Day Photo Image URL or path" />
                                 </div>
                                 <div>
                                     <input type="text" v-model="day.accommodation" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold" placeholder="Hotel e.g. Sigiriya Resort (5★)" />
@@ -456,9 +514,42 @@ const filteredDestinations = computed(() => {
                         <input type="text" v-model="destForm.subtitle" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-medium" placeholder="e.g. Kyoto Temples & Bullet Trains" />
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Cover Image URL</label>
-                        <input type="url" v-model="destForm.image" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-bold" placeholder="https://images.unsplash.com/..." />
+                    <!-- DESTINATION IMAGE FILE UPLOAD + URL INPUT -->
+                    <div class="space-y-3 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-200/80 pb-2">
+                            <label class="block text-xs font-bold text-slate-800 uppercase">Destination Cover Image</label>
+                            <span class="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2.5 py-0.5 rounded-full">
+                                📐 Rec: 1200×800 px | ⚡ Max: 500 KB
+                            </span>
+                        </div>
+
+                        <div class="p-2.5 bg-amber-50 border border-amber-200/80 rounded-xl text-[11px] text-amber-900 font-medium flex items-start space-x-2">
+                            <span class="text-xs">⚠️</span>
+                            <span><strong>Compression Reminder:</strong> Compress images to under 500 KB (using TinyPNG or Squoosh) before uploading for fast site performance.</span>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row items-center gap-3 pt-1">
+                            <div v-if="destImagePreview" class="w-20 h-20 rounded-xl overflow-hidden border border-slate-200 bg-white flex-shrink-0 shadow-xs">
+                                <img :src="destImagePreview" class="w-full h-full object-cover" />
+                            </div>
+
+                            <div class="space-y-2.5 flex-grow w-full">
+                                <div>
+                                    <span class="text-[10px] font-bold text-slate-600 block mb-1">📁 Upload Image File from Device:</span>
+                                    <input 
+                                        type="file" 
+                                        @change="onDestFileChange" 
+                                        accept="image/*" 
+                                        class="w-full text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-extrabold file:bg-[#0D47A1] file:text-white hover:file:bg-[#1565C0] cursor-pointer"
+                                    />
+                                </div>
+
+                                <div>
+                                    <span class="text-[10px] font-bold text-slate-600 block mb-1">🔗 Or Enter Image Web URL:</span>
+                                    <input type="text" v-model="destForm.image" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold" placeholder="https://..." />
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex items-center space-x-4 pt-2">

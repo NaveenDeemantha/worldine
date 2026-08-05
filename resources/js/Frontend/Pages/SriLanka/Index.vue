@@ -52,8 +52,8 @@ const openQuickDetail = (pkg) => {
         <section class="relative h-[65vh] min-h-[420px] flex items-center justify-center bg-slate-950 text-white overflow-hidden w-full">
             <div class="absolute inset-0 z-0">
                 <img 
-                    src="https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1600&q=80" 
-                    alt="Sri Lanka Inbound Expeditions" 
+                    :src="(destination && destination.image) ? destination.image : 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1600&q=80'" 
+                    :alt="destination ? destination.name : 'Sri Lanka Inbound Expeditions'" 
                     class="w-full h-full object-cover object-center"
                     fetchpriority="high"
                 />
@@ -62,13 +62,13 @@ const openQuickDetail = (pkg) => {
 
             <div class="relative z-10 text-center max-w-4xl px-6 space-y-4">
                 <span class="text-xs font-black uppercase tracking-[0.3em] text-[#2196F3] bg-[#E3F2FD] px-4 py-1.5 rounded-full border border-[#90CAF9]/40 inline-block shadow-md">
-                    SRI LANKA INBOUND TOURS
+                    {{ (destination && destination.badge) ? destination.badge : 'SRI LANKA INBOUND TOURS' }}
                 </span>
                 <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white uppercase leading-tight">
-                    The Pearl of the Indian Ocean
+                    {{ (destination && destination.name) ? destination.name : 'The Pearl of the Indian Ocean' }}
                 </h1>
                 <p class="text-slate-200 text-xs sm:text-base max-w-2xl mx-auto font-medium leading-relaxed">
-                    Explore ancient UNESCO fortresses, misty Ceylon tea hills, wild elephant safaris, and pristine golden coastlines with 20+ years of local Sri Lankan travel expertise.
+                    {{ (destination && (destination.subtitle || destination.description)) ? (destination.subtitle || destination.description) : 'Explore ancient UNESCO fortresses, misty Ceylon tea hills, wild elephant safaris, and pristine golden coastlines with 20+ years of local Sri Lankan travel expertise.' }}
                 </p>
             </div>
         </section>
@@ -92,7 +92,7 @@ const openQuickDetail = (pkg) => {
                     class="group bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col transform hover:-translate-y-1"
                 >
                     <div class="relative h-56 sm:h-64 overflow-hidden">
-                        <img :src="pkg.main_image" :alt="pkg.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <img :src="pkg.main_image || '/images/Logo/worldineback.png'" :alt="pkg.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
                         <span class="absolute top-4 left-4 bg-white/95 text-slate-900 border border-slate-200 font-extrabold text-[11px] px-3 py-1 rounded-full shadow">
                             {{ pkg.badge || 'Sri Lanka Inbound' }}

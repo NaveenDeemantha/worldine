@@ -199,6 +199,15 @@ onMounted(() => {
     destCarouselTimer = setInterval(nextDestSlide, 3500);
     aboutSlideTimer = setInterval(nextAboutSlide, 3500);
     loadAirlineLogos();
+
+    if (window.location.hash === '#about') {
+        setTimeout(() => {
+            const aboutEl = document.getElementById('about');
+            if (aboutEl) {
+                aboutEl.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 300);
+    }
 });
 
 onUnmounted(() => {
@@ -717,18 +726,18 @@ const features = [
             <div class="relative z-20 my-auto py-12 sm:py-16 md:py-24 px-6 sm:px-12 lg:px-20 text-left w-full max-w-3xl lg:max-w-4xl min-h-[320px] flex flex-col justify-center items-start">
                 
                 <!-- Typed Tagline -->
-                <p class="text-xs sm:text-sm font-extrabold uppercase tracking-[0.25em] text-[#1565C0] mb-2 min-h-[20px]">
-                    <span>{{ typedTagline }}</span>
+                <p class="text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-[#0D47A1] mb-2 min-h-[20px]">
+                    <span class="font-black">{{ typedTagline }}</span>
                 </p>
 
                 <!-- Typed H1 Title with Blinking Cursor -->
-                <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-tight drop-shadow-sm min-h-[60px] sm:min-h-[90px] flex items-center justify-start">
-                    <span>{{ typedTitle }}</span>
-                    <span class="inline-block w-1 sm:w-1.5 h-7 sm:h-12 bg-[#2B70B4] ml-1.5 animate-pulse rounded-full"></span>
+                <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-tight drop-shadow-md min-h-[60px] sm:min-h-[90px] flex items-center justify-start font-sans">
+                    <span class="font-black tracking-tight">{{ typedTitle }}</span>
+                    <span class="inline-block w-1.5 sm:w-2 h-7 sm:h-12 bg-[#2B70B4] ml-2 animate-pulse rounded-full"></span>
                 </h1>
 
                 <!-- Subtitle Paragraph with Accent Left Line -->
-                <p class="mt-4 text-xs sm:text-sm md:text-base text-slate-800 max-w-xl font-semibold leading-relaxed border-l-3 border-[#2B70B4] pl-4 py-1">
+                <p class="mt-4 text-xs sm:text-sm md:text-base text-slate-950 max-w-xl font-black leading-relaxed border-l-4 border-[#2B70B4] pl-4 py-1">
                     {{ heroSlides[currentHeroSlide].subtitle }}
                 </p>
 

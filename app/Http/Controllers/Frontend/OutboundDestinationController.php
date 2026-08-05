@@ -17,13 +17,18 @@ class OutboundDestinationController extends Controller
             ->with(['packages' => function ($q) {
                 $q->where('is_active', true)->with('itineraryDays');
             }])
-            ->orderBy('sort_order')
+            ->orderBy('name', 'asc')
             ->get();
 
         $outboundPackages = TourPackage::with(['destination', 'itineraryDays'])
             ->where('is_active', true)
-            ->where('category', '!=', 'srilanka-inbound')
-            ->orderBy('sort_order')
+            ->where(function ($q) {
+                $q->where('category', '!=', 'srilanka-inbound')
+                  ->orWhereHas('destination', function ($dq) {
+                      $dq->where('type', 'outbound');
+                  });
+            })
+            ->orderBy('title', 'asc')
             ->get();
 
         return Inertia::render('Frontend/Pages/Destinations/Index', [
