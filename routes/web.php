@@ -5,7 +5,11 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\SriLankaController;
 use App\Http\Controllers\Frontend\OutboundDestinationController;
 use App\Http\Controllers\Frontend\TourDetailController;
+use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\ServicesController;
 use App\Http\Controllers\Backend\DestinationController;
+use App\Http\Controllers\Backend\ContactAdminController;
+use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,11 +18,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/srilanka', [SriLankaController::class, 'index'])->name('srilanka');
 Route::get('/destinations', [OutboundDestinationController::class, 'index'])->name('outbound.destinations');
 Route::get('/tours/{slug}', [TourDetailController::class, 'show'])->name('tours.show');
+Route::get('/services', [ServicesController::class, 'index'])->name('services');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'sendInquiry'])->name('contact.send');
+Route::post('/tours/inquire', [TourDetailController::class, 'sendPackageInquiry'])->name('tours.inquire');
 
 // Admin Dashboard & Auth Protected Routes
-Route::get('/dashboard', function () {
-    return Inertia::render('Backend/Pages/Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,6 +43,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/itineraries', [DestinationController::class, 'indexItineraries'])->name('admin.itineraries.index');
     Route::get('/admin/bookings', [DestinationController::class, 'indexBookings'])->name('admin.bookings.index');
+    Route::get('/admin/contact', [ContactAdminController::class, 'index'])->name('admin.contact.index');
+    Route::put('/admin/contact', [ContactAdminController::class, 'update'])->name('admin.contact.update');
 });
 
 require __DIR__.'/auth.php';

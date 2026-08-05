@@ -52,8 +52,8 @@ const openQuickDetail = (pkg) => {
         <section class="relative h-[65vh] min-h-[420px] flex items-center justify-center bg-slate-950 text-white overflow-hidden w-full">
             <div class="absolute inset-0 z-0">
                 <img 
-                    src="https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1600&q=80" 
-                    alt="Sri Lanka Inbound Expeditions" 
+                    :src="(destination && destination.image) ? destination.image : 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1600&q=80'" 
+                    :alt="destination ? destination.name : 'Sri Lanka Inbound Expeditions'" 
                     class="w-full h-full object-cover object-center"
                     fetchpriority="high"
                 />
@@ -62,13 +62,13 @@ const openQuickDetail = (pkg) => {
 
             <div class="relative z-10 text-center max-w-4xl px-6 space-y-4">
                 <span class="text-xs font-black uppercase tracking-[0.3em] text-[#2196F3] bg-[#E3F2FD] px-4 py-1.5 rounded-full border border-[#90CAF9]/40 inline-block shadow-md">
-                    SRI LANKA INBOUND TOURS
+                    {{ (destination && destination.badge) ? destination.badge : 'SRI LANKA INBOUND TOURS' }}
                 </span>
                 <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white uppercase leading-tight">
-                    The Pearl of the Indian Ocean
+                    {{ (destination && destination.name) ? destination.name : 'The Pearl of the Indian Ocean' }}
                 </h1>
                 <p class="text-slate-200 text-xs sm:text-base max-w-2xl mx-auto font-medium leading-relaxed">
-                    Explore ancient UNESCO fortresses, misty Ceylon tea hills, wild elephant safaris, and pristine golden coastlines with 20+ years of local Sri Lankan travel expertise.
+                    {{ (destination && (destination.subtitle || destination.description)) ? (destination.subtitle || destination.description) : 'Explore ancient UNESCO fortresses, misty Ceylon tea hills, wild elephant safaris, and pristine golden coastlines with 20+ years of local Sri Lankan travel expertise.' }}
                 </p>
             </div>
         </section>
@@ -92,7 +92,7 @@ const openQuickDetail = (pkg) => {
                     class="group bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col transform hover:-translate-y-1"
                 >
                     <div class="relative h-56 sm:h-64 overflow-hidden">
-                        <img :src="pkg.main_image" :alt="pkg.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <img :src="pkg.main_image || '/images/Logo/worldineback.png'" :alt="pkg.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
                         <span class="absolute top-4 left-4 bg-white/95 text-slate-900 border border-slate-200 font-extrabold text-[11px] px-3 py-1 rounded-full shadow">
                             {{ pkg.badge || 'Sri Lanka Inbound' }}
@@ -100,7 +100,7 @@ const openQuickDetail = (pkg) => {
                         <div class="absolute bottom-4 left-4 right-4 text-white flex justify-between items-end">
                             <span v-if="pkg.price && Number(pkg.price) > 0" class="text-2xl font-black">${{ Number(pkg.price).toLocaleString() }}</span>
                             <span v-else class="text-xs font-extrabold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/30">Inquire for Quote</span>
-                            <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ pkg.duration_days }} Days</span>
+                            <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ (pkg.itinerary_days && pkg.itinerary_days.length > 0) ? pkg.itinerary_days.length : pkg.duration_days }} Days</span>
                         </div>
                     </div>
 
@@ -136,7 +136,7 @@ const openQuickDetail = (pkg) => {
             <div class="bg-white w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 max-h-[85vh] overflow-y-auto">
                 <div class="flex justify-between items-start border-b border-slate-100 pb-4">
                     <div>
-                        <span class="text-xs font-extrabold uppercase text-[#2196F3]">{{ selectedPackage.duration_days }} Days Expedition</span>
+                        <span class="text-xs font-extrabold uppercase text-[#2196F3]">{{ (selectedPackage.itinerary_days && selectedPackage.itinerary_days.length > 0) ? selectedPackage.itinerary_days.length : selectedPackage.duration_days }} Days Expedition</span>
                         <h2 class="text-2xl font-black text-slate-900 mt-0.5">{{ selectedPackage.title }}</h2>
                     </div>
                     <button @click="isDetailModalOpen = false" class="text-slate-400 font-bold text-lg">✕</button>
@@ -148,7 +148,7 @@ const openQuickDetail = (pkg) => {
                 <div v-if="selectedPackage.itinerary_days && selectedPackage.itinerary_days.length" class="space-y-3">
                     <h3 class="text-xs font-black uppercase tracking-wider text-slate-900">Day-by-Day Highlights</h3>
                     <div v-for="day in selectedPackage.itinerary_days" :key="day.id" class="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-start space-x-3">
-                        <span class="text-xs font-black bg-[#0D47A1] text-white px-2.5 py-1 rounded-full flex-shrink-0">Day {{ day.day_number }}</span>
+                        <span class="text-[11px] font-black uppercase tracking-wider bg-[#0D47A1] text-white px-3 py-1 rounded-full flex-shrink-0 whitespace-nowrap">Day-{{ String(day.day_number).padStart(2, '0') }}</span>
                         <div>
                             <div class="text-xs font-bold text-slate-900">{{ day.title }}</div>
                             <div class="text-[11px] text-slate-600 mt-0.5">{{ day.description }}</div>

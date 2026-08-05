@@ -18,10 +18,12 @@ class DestinationController extends Controller
      */
     public function index(): Response
     {
-        $destinations = Destination::with(['packages'])->orderBy('sort_order')->get();
+        $destinations = Destination::with(['packages'])->orderBy('name', 'asc')->get();
+        $packages = TourPackage::with(['destination', 'itineraryDays'])->orderBy('sort_order')->get();
 
         return Inertia::render('Backend/Pages/Destinations/Index', [
             'destinations' => $destinations,
+            'packages' => $packages,
         ]);
     }
 
@@ -30,7 +32,7 @@ class DestinationController extends Controller
      */
     public function indexPackages(): Response
     {
-        $destinations = Destination::orderBy('sort_order')->get();
+        $destinations = Destination::orderBy('name', 'asc')->get();
         $packages = TourPackage::with(['destination', 'itineraryDays'])->orderBy('sort_order')->get();
 
         return Inertia::render('Backend/Pages/Packages/Index', [
@@ -56,42 +58,23 @@ class DestinationController extends Controller
      */
     public function indexBookings(): Response
     {
-        // Sample dynamic bookings data for inquiries
-        $bookings = [
-            [
-                'id' => 'WRD-8021',
-                'customer_name' => 'Alexander Wright',
-                'email' => 'alex.w@gmail.com',
-                'phone' => '+1 (555) 234-5678',
-                'package_title' => 'Heritage & Cultural Tour Sri Lanka',
-                'travel_date' => '2026-08-15',
-                'guests' => 2,
-                'status' => 'Confirmed',
-                'created_at' => '2 hours ago',
-            ],
-            [
-                'id' => 'WRD-8022',
-                'customer_name' => 'Sophia Chen',
-                'email' => 'sophia.c@outlook.com',
-                'phone' => '+44 7700 900077',
-                'package_title' => 'Maldives Luxury Overwater Escape',
-                'travel_date' => '2026-09-02',
-                'guests' => 2,
-                'status' => 'Pending Quote',
-                'created_at' => '5 hours ago',
-            ],
-            [
-                'id' => 'WRD-8023',
-                'customer_name' => 'Marcus Vance',
-                'email' => 'marcus.v@yahoo.com',
-                'phone' => '+61 491 570 156',
-                'package_title' => 'East Asia Cultural Discovery - Japan',
-                'travel_date' => '2026-08-20',
-                'guests' => 4,
-                'status' => 'Confirmed',
-                'created_at' => '1 day ago',
-            ],
-        ];
+        $bookings = \App\Models\Inquiry::latest()->get()->map(function ($inq) {
+            return [
+                'id' => $inq->reference_id,
+                'db_id' => $inq->id,
+                'type' => $inq->type === 'package_inquiry' ? 'Tour Package Booking' : 'Contact Form Lead',
+                'customer_name' => $inq->customer_name,
+                'email' => $inq->email,
+                'phone' => $inq->phone,
+                'package_title' => $inq->package_title ?: ($inq->destination_name ?: 'General Inquiry'),
+                'inquiry_type' => $inq->inquiry_type ?: 'General Lead',
+                'travel_date' => $inq->travel_date ?: 'Flexible',
+                'guests' => $inq->guests,
+                'message' => $inq->message,
+                'status' => $inq->status,
+                'created_at' => $inq->created_at ? $inq->created_at->diffForHumans() : 'Recent',
+            ];
+        });
 
         return Inertia::render('Backend/Pages/Bookings/Index', [
             'bookings' => $bookings,
@@ -108,12 +91,23 @@ class DestinationController extends Controller
             'type' => 'required|in:inbound,outbound',
             'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable',
             'badge' => 'nullable|string|max:255',
             'is_glimpse' => 'boolean',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
         ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . Str::slug($validated['name']) . '.' . $file->getClientOriginalExtension();
+            $destPath = public_path('images/destinations');
+            if (!file_exists($destPath)) {
+                mkdir($destPath, 0755, true);
+            }
+            $file->move($destPath, $filename);
+            $validated['image'] = '/images/destinations/' . $filename;
+        }
 
         $validated['slug'] = Str::slug($validated['name']);
 
@@ -132,12 +126,23 @@ class DestinationController extends Controller
             'type' => 'required|in:inbound,outbound',
             'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable',
             'badge' => 'nullable|string|max:255',
             'is_glimpse' => 'boolean',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
         ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . Str::slug($validated['name']) . '.' . $file->getClientOriginalExtension();
+            $destPath = public_path('images/destinations');
+            if (!file_exists($destPath)) {
+                mkdir($destPath, 0755, true);
+            }
+            $file->move($destPath, $filename);
+            $validated['image'] = '/images/destinations/' . $filename;
+        }
 
         $validated['slug'] = Str::slug($validated['name']);
 
@@ -170,7 +175,7 @@ class DestinationController extends Controller
             'duration_days' => 'required|integer|min:1',
             'duration_nights' => 'nullable|integer|min:0',
             'badge' => 'nullable|string|max:255',
-            'main_image' => 'nullable|string',
+            'main_image' => 'nullable',
             'overview' => 'nullable|string',
             'inclusions' => 'nullable|array',
             'is_featured' => 'boolean',
@@ -179,10 +184,21 @@ class DestinationController extends Controller
             'days.*.day_number' => 'required|integer',
             'days.*.title' => 'required|string|max:255',
             'days.*.description' => 'nullable|string',
-            'days.*.image' => 'nullable|string',
+            'days.*.image' => 'nullable',
             'days.*.accommodation' => 'nullable|string',
             'days.*.meals' => 'nullable|string',
         ]);
+
+        if ($request->hasFile('main_image')) {
+            $file = $request->file('main_image');
+            $filename = time() . '_' . Str::slug($validated['title']) . '.' . $file->getClientOriginalExtension();
+            $pkgPath = public_path('images/packages');
+            if (!file_exists($pkgPath)) {
+                mkdir($pkgPath, 0755, true);
+            }
+            $file->move($pkgPath, $filename);
+            $validated['main_image'] = '/images/packages/' . $filename;
+        }
 
         $validated['slug'] = Str::slug($validated['title']);
 
@@ -199,7 +215,17 @@ class DestinationController extends Controller
         // Sync itinerary days if provided
         if ($request->has('days')) {
             $package->itineraryDays()->delete();
-            foreach ($days as $dayData) {
+            foreach ($days as $index => $dayData) {
+                if ($request->hasFile("days.{$index}.image")) {
+                    $dayFile = $request->file("days.{$index}.image");
+                    $dayFilename = time() . "_day_" . ($index + 1) . '_' . Str::slug($validated['title']) . '.' . $dayFile->getClientOriginalExtension();
+                    $dayPath = public_path('images/packages');
+                    if (!file_exists($dayPath)) {
+                        mkdir($dayPath, 0755, true);
+                    }
+                    $dayFile->move($dayPath, $dayFilename);
+                    $dayData['image'] = '/images/packages/' . $dayFilename;
+                }
                 $package->itineraryDays()->create($dayData);
             }
         }

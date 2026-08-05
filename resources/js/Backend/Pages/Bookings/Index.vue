@@ -37,7 +37,8 @@ const viewBooking = (b) => {
                             <tr>
                                 <th class="p-4">Reference ID</th>
                                 <th class="p-4">Customer Name & Contact</th>
-                                <th class="p-4">Requested Tour Package</th>
+                                <th class="p-4">Inquiry Source</th>
+                                <th class="p-4">Requested Package / Subject</th>
                                 <th class="p-4">Travel Date & Guests</th>
                                 <th class="p-4">Status</th>
                                 <th class="p-4 text-right">Actions</th>
@@ -50,14 +51,21 @@ const viewBooking = (b) => {
                                     <div class="font-extrabold text-slate-900">{{ b.customer_name }}</div>
                                     <div class="text-[11px] text-slate-500">{{ b.email }} • {{ b.phone }}</div>
                                 </td>
+                                <td class="p-4">
+                                    <span class="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-700">
+                                        <span :class="['w-2 h-2 rounded-full', b.type === 'Contact Form Lead' ? 'bg-sky-500' : 'bg-[#0D47A1]']"></span>
+                                        <span>{{ b.type === 'Contact Form Lead' ? 'Web Contact Form' : 'Tour Package' }}</span>
+                                    </span>
+                                </td>
                                 <td class="p-4 font-bold text-slate-800">{{ b.package_title }}</td>
                                 <td class="p-4">
                                     <div>{{ b.travel_date }}</div>
                                     <div class="text-[11px] text-slate-500">{{ b.guests }} Traveler(s)</div>
                                 </td>
                                 <td class="p-4">
-                                    <span :class="['px-2.5 py-1 rounded-full text-[11px] font-extrabold', b.status === 'Confirmed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200']">
-                                        {{ b.status }}
+                                    <span class="inline-flex items-center space-x-1.5 text-xs font-extrabold">
+                                        <span :class="['w-2 h-2 rounded-full', b.status === 'Confirmed' ? 'bg-emerald-500' : (b.status === 'Contacted' ? 'bg-blue-500' : 'bg-amber-500')]"></span>
+                                        <span :class="b.status === 'Confirmed' ? 'text-emerald-700' : (b.status === 'Contacted' ? 'text-blue-700' : 'text-amber-700')">{{ b.status }}</span>
                                     </span>
                                 </td>
                                 <td class="p-4 text-right">

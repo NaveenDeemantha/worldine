@@ -199,6 +199,15 @@ onMounted(() => {
     destCarouselTimer = setInterval(nextDestSlide, 3500);
     aboutSlideTimer = setInterval(nextAboutSlide, 3500);
     loadAirlineLogos();
+
+    if (window.location.hash === '#about') {
+        setTimeout(() => {
+            const aboutEl = document.getElementById('about');
+            if (aboutEl) {
+                aboutEl.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 300);
+    }
 });
 
 onUnmounted(() => {
@@ -701,34 +710,34 @@ const features = [
                 <img 
                     src="/images/Logo/worldineback.png" 
                     alt="Worldine Hero" 
-                    class="w-full h-full object-cover object-center"
+                    class="w-full h-full object-cover object-top"
                     fetchpriority="high"
                     decoding="async"
                 />
                 <!-- Mobile-Only Soft Contrast Mask directly on Background Image for Legibility (Subtle bg-white/20) -->
                 <div class="block sm:hidden absolute inset-0 bg-white/20 pointer-events-none z-10"></div>
                 <!-- Ultra-Smooth Top Fade Gradient (No Hard Horizontal Seams/Cutoffs Under Navbar) -->
-                <div class="absolute top-0 left-0 right-0 h-44 sm:h-60 bg-gradient-to-b from-white via-white/35 via-40% to-transparent pointer-events-none z-10"></div>
+                <div class="absolute top-0 left-0 right-0 h-20 sm:h-28 bg-gradient-to-b from-white via-white/25 to-transparent pointer-events-none z-10"></div>
                 <!-- Subtle Soft Protection Overlay Gradient for Text Contrast -->
-                <div class="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-transparent to-slate-950/30 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-slate-950/15 via-transparent to-slate-950/30 pointer-events-none"></div>
             </div>
 
             <!-- HERO LEFT-ALIGNED CONTENT WITH LIVE TYPEWRITER & ERASER EFFECT -->
             <div class="relative z-20 my-auto py-12 sm:py-16 md:py-24 px-6 sm:px-12 lg:px-20 text-left w-full max-w-3xl lg:max-w-4xl min-h-[320px] flex flex-col justify-center items-start">
                 
                 <!-- Typed Tagline -->
-                <p class="text-xs sm:text-sm font-extrabold uppercase tracking-[0.25em] text-[#1565C0] mb-2 min-h-[20px]">
-                    <span>{{ typedTagline }}</span>
+                <p class="text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-[#0D47A1] mb-2 min-h-[20px]">
+                    <span class="font-black">{{ typedTagline }}</span>
                 </p>
 
                 <!-- Typed H1 Title with Blinking Cursor -->
-                <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-tight drop-shadow-sm min-h-[60px] sm:min-h-[90px] flex items-center justify-start">
-                    <span>{{ typedTitle }}</span>
-                    <span class="inline-block w-1 sm:w-1.5 h-7 sm:h-12 bg-[#2B70B4] ml-1.5 animate-pulse rounded-full"></span>
+                <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 uppercase leading-tight drop-shadow-md min-h-[60px] sm:min-h-[90px] flex items-center justify-start font-sans">
+                    <span class="font-black tracking-tight">{{ typedTitle }}</span>
+                    <span class="inline-block w-1.5 sm:w-2 h-7 sm:h-12 bg-[#2B70B4] ml-2 animate-pulse rounded-full"></span>
                 </h1>
 
                 <!-- Subtitle Paragraph with Accent Left Line -->
-                <p class="mt-4 text-xs sm:text-sm md:text-base text-slate-800 max-w-xl font-semibold leading-relaxed border-l-3 border-[#2B70B4] pl-4 py-1">
+                <p class="mt-4 text-xs sm:text-sm md:text-base text-slate-950 max-w-xl font-black leading-relaxed border-l-4 border-[#2B70B4] pl-4 py-1">
                     {{ heroSlides[currentHeroSlide].subtitle }}
                 </p>
 
@@ -1585,7 +1594,7 @@ const features = [
                             <li><a href="#hero" class="hover:text-[#90CAF9] transition-colors">Home</a></li>
                             <li><a href="#about" class="hover:text-[#90CAF9] transition-colors">About Us</a></li>
                             <li><a href="#glimpse-destinations" class="hover:text-[#90CAF9] transition-colors">Destinations</a></li>
-                            <li><a href="#estimator" class="hover:text-[#90CAF9] transition-colors">Worldine Education</a></li>
+                            <li><Link href="/contact" class="hover:text-[#90CAF9] transition-colors">Contact Us</Link></li>
                             <li><a href="#testimonials" class="hover:text-[#90CAF9] transition-colors">Traveler Stories</a></li>
                         </ul>
                     </div>

@@ -15,7 +15,7 @@ class HomeController extends Controller
         // Glimpse Carousel destinations
         $glimpseDestinations = Destination::where('is_active', true)
             ->where('is_glimpse', true)
-            ->orderBy('sort_order')
+            ->orderBy('name', 'asc')
             ->get()
             ->map(function ($dest) {
                 return [

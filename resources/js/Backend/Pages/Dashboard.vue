@@ -3,234 +3,410 @@ import AuthenticatedLayout from '@/Backend/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
-// Executive Light Theme Analytics Data (Zero Emojis, Pure Professional Vector SVG Icons)
-const stats = ref([
-    { 
-        title: 'Total Revenue', 
-        value: '$148,500', 
-        change: '+18.4%', 
-        isPositive: true, 
-        iconPath: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 
-        iconBg: 'bg-emerald-50 text-emerald-600 border-emerald-200',
-        sub: 'vs $125.4k last month' 
+const props = defineProps({
+    stats: {
+        type: Object,
+        default: () => ({
+            totalDestinations: 0,
+            inboundCount: 0,
+            outboundCount: 0,
+            totalPackages: 0,
+            activePackages: 0,
+            featuredPackages: 0,
+            avgPackagePrice: '$0',
+            totalItineraryDays: 0,
+            totalPackageInquiries: 0,
+            totalContactInquiries: 0,
+            pendingInquiriesCount: 0,
+        })
     },
-    { 
-        title: 'Active Bookings', 
-        value: '342', 
-        change: '+12.5%', 
-        isPositive: true, 
-        iconPath: 'M15 5v2m-6-2v2M5 11h14M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', 
-        iconBg: 'bg-blue-50 text-blue-600 border-blue-200',
-        sub: '24 pending approval' 
+    packageInquiries: {
+        type: Array,
+        default: () => []
     },
-    { 
-        title: 'Popular Destination', 
-        value: 'Sri Lanka', 
-        change: '145 Tours', 
-        isPositive: true, 
-        iconPath: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V7a2 2 0 00-2-2h-1.5A2.5 2.5 0 0113 2.5V2M12 21a9 9 0 100-18 9 9 0 000 18z', 
-        iconBg: 'bg-sky-50 text-sky-600 border-sky-200',
-        sub: 'Inbound #1 Choice' 
+    contactInquiries: {
+        type: Array,
+        default: () => []
     },
-    { 
-        title: 'Total Travelers', 
-        value: '1,280', 
-        change: '+8.2%', 
-        isPositive: true, 
-        iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', 
-        iconBg: 'bg-indigo-50 text-indigo-600 border-indigo-200',
-        sub: 'Active explorers' 
+    recentPackages: {
+        type: Array,
+        default: () => []
+    },
+    destinationsSummary: {
+        type: Array,
+        default: () => []
     }
-]);
+});
 
-const recentBookings = ref([
-    { id: 'WRD-8021', customer: 'Alexander Wright', email: 'alex.w@gmail.com', destination: 'Heritage & Cultural Tour Sri Lanka', date: 'Aug 12 - Aug 17', price: '$1,700', status: 'Confirmed', badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-    { id: 'WRD-8022', customer: 'Sophia Chen', email: 'sophia.c@outlook.com', destination: 'Maldives Luxury Overwater Escape', date: 'Sep 02 - Sep 07', price: '$3,700', status: 'Pending', badgeClass: 'bg-amber-50 text-amber-700 border-amber-200' },
-    { id: 'WRD-8023', customer: 'Marcus Vance', email: 'marcus.v@yahoo.com', destination: 'East Asia Cultural Discovery - Japan', date: 'Aug 20 - Aug 27', price: '$4,200', status: 'Confirmed', badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-    { id: 'WRD-8024', customer: 'Elena Rostova', email: 'elena.r@hotmail.com', destination: 'Sri Lanka Wildlife & Nature Safari', date: 'Aug 25 - Aug 31', price: '$1,980', status: 'In Progress', badgeClass: 'bg-blue-50 text-blue-700 border-blue-200' },
-    { id: 'WRD-8025', customer: 'Liam O’Connor', email: 'liam.oc@gmail.com', destination: 'Europe Schengen Grand Expedition', date: 'Oct 05 - Oct 14', price: '$4,900', status: 'Confirmed', badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' }
-]);
+const activeInquiryTab = ref('package'); // 'package' or 'contact'
+const selectedInquiry = ref(null);
+const isInquiryModalOpen = ref(false);
 
-const topDestinations = ref([
-    { name: 'Sri Lanka Inbound Tours', count: '145 Bookings', share: 45, color: 'bg-[#0D47A1]' },
-    { name: 'Maldives Overwater Escapes', count: '82 Bookings', share: 26, color: 'bg-[#2196F3]' },
-    { name: 'Japan & East Asia Tours', count: '64 Bookings', share: 18, color: 'bg-indigo-600' },
-    { name: 'Dubai Sky Towers & Desert', count: '36 Bookings', share: 11, color: 'bg-slate-600' }
-]);
+const viewInquiryDetails = (inq) => {
+    selectedInquiry.value = inq;
+    isInquiryModalOpen.value = true;
+};
 </script>
 
 <template>
-    <Head title="Admin Dashboard - Worldine Destinations" />
+    <Head title="Executive Admin Dashboard - Worldine Destinations" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                <div>
-                    <h1 class="text-2xl font-black text-slate-900 tracking-tight">Executive Dashboard</h1>
-                    <p class="text-xs text-slate-500 mt-0.5 font-medium">Performance metrics and tour reservation overview for Worldine Destinations.</p>
-                </div>
-                
-                <div class="flex items-center space-x-3">
-                    <button class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 transition-colors shadow-xs flex items-center space-x-2">
-                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <span>Export Analytics</span>
-                    </button>
-
-                    <button class="px-4 py-2 rounded-xl bg-[#0D47A1] hover:bg-[#1565C0] text-white text-xs font-bold transition-all shadow-md flex items-center space-x-1.5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        <span>Create Tour Package</span>
-                    </button>
-                </div>
-            </div>
-        </template>
-
         <div class="space-y-8 font-aptos">
             
-            <!-- STATS CARDS GRID (LIGHT EXECUTIVE THEME) -->
+            <!-- 1. METRICS GRID -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div 
-                    v-for="(s, idx) in stats" 
-                    :key="idx" 
-                    class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs relative overflow-hidden group hover:border-slate-300 transition-all duration-200"
-                >
+                
+                <!-- Card 1: Package Inquiries (NEW) -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">{{ s.title }}</span>
-                        <div :class="['w-10 h-10 rounded-xl border flex items-center justify-center shadow-xs', s.iconBg]">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" :d="s.iconPath" />
-                            </svg>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Package Inquiries</span>
+                        <div class="w-9 h-9 rounded-lg bg-blue-50 text-[#0D47A1] flex items-center justify-center border border-blue-100">
+                            <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                         </div>
                     </div>
-
-                    <div class="mt-4 flex items-baseline justify-between">
-                        <span class="text-3xl font-black text-slate-900 tracking-tight">{{ s.value }}</span>
-                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            {{ s.change }}
-                        </span>
-                    </div>
-
-                    <div class="mt-2 text-[11px] font-medium text-slate-500">
-                        {{ s.sub }}
+                    <div>
+                        <h3 class="text-3xl font-black text-slate-900 tracking-tight">{{ stats.totalPackageInquiries }}</h3>
+                        <p class="text-xs text-slate-500 font-medium mt-1">Tour package bookings</p>
                     </div>
                 </div>
+
+                <!-- Card 2: Contact Form Leads (NEW) -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Contact Form Leads</span>
+                        <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+                            <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-black text-slate-900 tracking-tight">{{ stats.totalContactInquiries }}</h3>
+                        <p class="text-xs text-slate-500 font-medium mt-1">General web submissions</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Pending Leads -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Pending Action</span>
+                        <div class="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
+                            <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-black text-amber-600 tracking-tight">{{ stats.pendingInquiriesCount }}</h3>
+                        <p class="text-xs text-slate-500 font-medium mt-1">Awaiting concierge reply</p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Total Destinations -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Destinations</span>
+                        <div class="w-9 h-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-100">
+                            <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-black text-slate-900 tracking-tight">{{ stats.totalDestinations }}</h3>
+                        <p class="text-xs text-slate-500 font-medium mt-1">
+                            <span class="text-blue-700 font-bold">{{ stats.inboundCount }} Inbound</span> • <span class="text-indigo-700 font-bold">{{ stats.outboundCount }} Outbound</span>
+                        </p>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- TWO COLUMN MAIN SECTION: RECENT BOOKINGS & TOP DESTINATIONS -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- 2. DEDICATED INQUIRIES & LEADS SECTION -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
                 
-                <!-- LEFT: RECENT BOOKINGS TABLE (8 COLUMNS) -->
-                <div class="lg:col-span-8 bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden flex flex-col">
-                    <div class="p-6 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
-                        <div>
-                            <h3 class="text-base font-black text-slate-900">Recent Tour Reservations</h3>
-                            <p class="text-xs text-slate-500 mt-0.5 font-medium">Latest inbound and outbound traveler requests</p>
+                <!-- HEADER & TAB SWITCHER -->
+                <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h2 class="text-lg font-black text-slate-900">Customer Inquiries & Leads</h2>
+                            <span class="text-xs bg-[#0D47A1] text-white px-2 py-0.5 rounded-full font-black">LIVE</span>
                         </div>
-                        <button class="text-xs font-bold text-[#0D47A1] hover:text-[#2196F3] flex items-center space-x-1">
-                            <span>View All Reservations</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </button>
+                        <p class="text-xs text-slate-500 font-medium mt-0.5">Real-time inquiries submitted via Contact Us form and Tour Package inquiry modals.</p>
                     </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-100/70 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                                    <th class="py-3.5 px-6">Booking ID</th>
-                                    <th class="py-3.5 px-6">Customer</th>
-                                    <th class="py-3.5 px-6">Destination</th>
-                                    <th class="py-3.5 px-6">Dates</th>
-                                    <th class="py-3.5 px-6">Amount</th>
-                                    <th class="py-3.5 px-6">Status</th>
+                    <!-- Tabs -->
+                    <div class="flex items-center p-1 bg-slate-100 rounded-xl">
+                        <button 
+                            @click="activeInquiryTab = 'package'"
+                            :class="[
+                                'px-4 py-1.5 rounded-lg text-xs font-extrabold transition-all',
+                                activeInquiryTab === 'package' 
+                                    ? 'bg-white text-[#0D47A1] shadow-xs' 
+                                    : 'text-slate-600 hover:text-slate-900'
+                            ]"
+                        >
+                            Package Inquiries ({{ packageInquiries.length }})
+                        </button>
+                        <button 
+                            @click="activeInquiryTab = 'contact'"
+                            :class="[
+                                'px-4 py-1.5 rounded-lg text-xs font-extrabold transition-all',
+                                activeInquiryTab === 'contact' 
+                                    ? 'bg-white text-[#0D47A1] shadow-xs' 
+                                    : 'text-slate-600 hover:text-slate-900'
+                            ]"
+                        >
+                            Contact Form Inquiries ({{ contactInquiries.length }})
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TABLE 1: PACKAGE-WISE INQUIRIES -->
+                <div v-if="activeInquiryTab === 'package'" class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-medium text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider text-[11px] border-b border-slate-100">
+                            <tr>
+                                <th class="py-4 px-6">Ref ID</th>
+                                <th class="py-4 px-4">Traveler & Contact</th>
+                                <th class="py-4 px-4">Requested Tour Package</th>
+                                <th class="py-4 px-4">Travel Date & Guests</th>
+                                <th class="py-4 px-4">Status</th>
+                                <th class="py-4 px-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr v-for="inq in packageInquiries" :key="inq.db_id" class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-4 px-6 font-mono font-bold text-[#0D47A1] whitespace-nowrap">{{ inq.id }}</td>
+                                <td class="py-4 px-4">
+                                    <div class="font-extrabold text-slate-900">{{ inq.customer_name }}</div>
+                                    <div class="text-[11px] text-slate-500">{{ inq.email }} • {{ inq.phone }}</div>
+                                </td>
+                                <td class="py-4 px-4 font-bold text-slate-800">{{ inq.package_title }}</td>
+                                <td class="py-4 px-4 whitespace-nowrap">
+                                    <div class="font-bold text-slate-800">{{ inq.travel_date }}</div>
+                                    <div class="text-[11px] text-slate-500">{{ inq.guests }} Traveler(s)</div>
+                                </td>
+                                <td class="py-4 px-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center space-x-1.5 text-xs font-extrabold">
+                                        <span :class="['w-2 h-2 rounded-full', inq.status === 'Confirmed' ? 'bg-emerald-500' : (inq.status === 'Contacted' ? 'bg-blue-500' : 'bg-amber-500')]"></span>
+                                        <span :class="inq.status === 'Confirmed' ? 'text-emerald-700' : (inq.status === 'Contacted' ? 'text-blue-700' : 'text-amber-700')">{{ inq.status }}</span>
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-right whitespace-nowrap">
+                                    <button 
+                                        @click="viewInquiryDetails(inq)"
+                                        class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all"
+                                    >
+                                        View Details
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr v-if="!packageInquiries.length">
+                                <td colspan="6" class="py-8 text-center text-slate-400 font-medium">No tour package inquiries submitted yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABLE 2: CONTACT FORM INQUIRIES -->
+                <div v-if="activeInquiryTab === 'contact'" class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-medium text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider text-[11px] border-b border-slate-100">
+                            <tr>
+                                <th class="py-4 px-6">Ref ID</th>
+                                <th class="py-4 px-4">Traveler & Contact</th>
+                                <th class="py-4 px-4">Inquiry Category / Destination</th>
+                                <th class="py-4 px-4">Travel Date & Guests</th>
+                                <th class="py-4 px-4">Status</th>
+                                <th class="py-4 px-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr v-for="inq in contactInquiries" :key="inq.db_id" class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-4 px-6 font-mono font-bold text-[#0D47A1] whitespace-nowrap">{{ inq.id }}</td>
+                                <td class="py-4 px-4">
+                                    <div class="font-extrabold text-slate-900">{{ inq.customer_name }}</div>
+                                    <div class="text-[11px] text-slate-500">{{ inq.email }} • {{ inq.phone }}</div>
+                                </td>
+                                <td class="py-4 px-4 font-bold text-slate-800">
+                                    <div>{{ inq.inquiry_type }}</div>
+                                    <div v-if="inq.destination" class="text-[11px] text-slate-500 font-medium">{{ inq.destination }}</div>
+                                </td>
+                                <td class="py-4 px-4 whitespace-nowrap">
+                                    <div class="font-bold text-slate-800">{{ inq.travel_date }}</div>
+                                    <div class="text-[11px] text-slate-500">{{ inq.guests }} Traveler(s)</div>
+                                </td>
+                                <td class="py-4 px-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center space-x-1.5 text-xs font-extrabold">
+                                        <span :class="['w-2 h-2 rounded-full', inq.status === 'Confirmed' ? 'bg-emerald-500' : (inq.status === 'Contacted' ? 'bg-blue-500' : 'bg-amber-500')]"></span>
+                                        <span :class="inq.status === 'Confirmed' ? 'text-emerald-700' : (inq.status === 'Contacted' ? 'text-blue-700' : 'text-amber-700')">{{ inq.status }}</span>
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-right whitespace-nowrap">
+                                    <button 
+                                        @click="viewInquiryDetails(inq)"
+                                        class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all"
+                                    >
+                                        View Details
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr v-if="!contactInquiries.length">
+                                <td colspan="6" class="py-8 text-center text-slate-400 font-medium">No contact form inquiries submitted yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- 3. RECENT PACKAGES TABLE & DESTINATIONS LIST (RESPONSIVE GRID) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left: Recent Tour Packages (8 cols) -->
+                <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-black text-slate-900">Recent Tour Packages</h2>
+                            <p class="text-xs text-slate-500 font-medium mt-0.5">List of live tour packages published in the database.</p>
+                        </div>
+                        <Link 
+                            :href="route('admin.packages.index')"
+                            class="text-xs font-extrabold text-[#0D47A1] hover:underline"
+                        >
+                            View All →
+                        </Link>
+                    </div>
+
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left text-xs font-medium text-slate-600 whitespace-nowrap">
+                            <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider text-[11px] border-b border-slate-100">
+                                <tr>
+                                    <th class="py-4 px-6">Package Title</th>
+                                    <th class="py-4 px-4">Destination</th>
+                                    <th class="py-4 px-4">Duration</th>
+                                    <th class="py-4 px-4">Price</th>
+                                    <th class="py-4 px-6 text-center">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100 text-xs">
-                                <tr 
-                                    v-for="b in recentBookings" 
-                                    :key="b.id"
-                                    class="hover:bg-slate-50 transition-colors"
-                                >
-                                    <td class="py-4 px-6 font-mono font-bold text-[#0D47A1]">{{ b.id }}</td>
-                                    <td class="py-4 px-6">
-                                        <div class="font-bold text-slate-900">{{ b.customer }}</div>
-                                        <div class="text-[11px] text-slate-500">{{ b.email }}</div>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr v-for="pkg in recentPackages" :key="pkg.id" class="hover:bg-slate-50/70 transition-colors">
+                                    <td class="py-4 px-6 font-bold text-slate-900">
+                                        <div class="flex items-center space-x-2">
+                                            <span>{{ pkg.title }}</span>
+                                            <span v-if="pkg.is_featured" class="text-[9px] bg-amber-100 text-amber-800 font-black px-1.5 py-0.5 rounded uppercase">Featured</span>
+                                        </div>
                                     </td>
-                                    <td class="py-4 px-6 font-medium text-slate-700 max-w-[200px] truncate">{{ b.destination }}</td>
-                                    <td class="py-4 px-6 text-slate-500 font-medium">{{ b.date }}</td>
-                                    <td class="py-4 px-6 font-bold text-slate-900">{{ b.price }}</td>
-                                    <td class="py-4 px-6">
-                                        <span :class="['px-2.5 py-1 rounded-full text-[10px] font-bold border uppercase tracking-wider', b.badgeClass]">
-                                            {{ b.status }}
+                                    <td class="py-4 px-4 text-slate-700 font-semibold">{{ pkg.destination }}</td>
+                                    <td class="py-4 px-4 text-slate-600">{{ pkg.duration }}</td>
+                                    <td class="py-4 px-4">
+                                        <span v-if="pkg.price && pkg.price !== 'On Request' && pkg.price !== '$0'" class="font-black text-slate-900">{{ pkg.price }}</span>
+                                        <span v-else class="text-xs font-bold text-amber-700 inline-flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>On Request</span></span>
+                                    </td>
+                                    <td class="py-4 px-6 text-center">
+                                        <span class="inline-flex items-center space-x-1.5 text-xs font-bold">
+                                            <span :class="['w-2 h-2 rounded-full', pkg.is_active ? 'bg-emerald-500' : 'bg-slate-400']"></span>
+                                            <span :class="pkg.is_active ? 'text-emerald-700' : 'text-slate-500'">{{ pkg.is_active ? 'Active' : 'Draft' }}</span>
                                         </span>
                                     </td>
+                                </tr>
+                                <tr v-if="!recentPackages.length">
+                                    <td colspan="5" class="py-10 text-center text-slate-400 font-medium">No tour packages created yet.</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- RIGHT: TOP DESTINATIONS PERFORMANCE & QUICK ACTIONS (4 COLUMNS) -->
-                <div class="lg:col-span-4 space-y-6">
-                    
-                    <!-- TOP DESTINATIONS CHART / PROGRESS -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-5">
+                <!-- Right: Destinations Inventory List (4 cols) -->
+                <div class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div>
-                            <h3 class="text-base font-black text-slate-900">Destination Performance</h3>
-                            <p class="text-xs text-slate-500 mt-0.5 font-medium">Most requested regions this quarter</p>
+                            <h3 class="text-base font-black text-slate-900">Destinations</h3>
+                            <p class="text-xs text-slate-500 font-medium mt-0.5">Catalog overview</p>
                         </div>
-
-                        <div class="space-y-4 pt-2">
-                            <div v-for="(dest, i) in topDestinations" :key="i" class="space-y-1.5">
-                                <div class="flex items-center justify-between text-xs font-bold">
-                                    <span class="text-slate-800">{{ dest.name }}</span>
-                                    <span class="text-slate-500 font-semibold">{{ dest.count }}</span>
-                                </div>
-                                <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                                    <div :class="['h-full rounded-full', dest.color]" :style="{ width: dest.share + '%' }"></div>
-                                </div>
-                            </div>
-                        </div>
+                        <Link :href="route('admin.destinations.index')" class="text-xs font-extrabold text-[#0D47A1] hover:underline">Manage →</Link>
                     </div>
 
-                    <!-- QUICK CONCIERGE ACTIONS -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
-                            </div>
+                    <div class="space-y-3">
+                        <div 
+                            v-for="dest in destinationsSummary" 
+                            :key="dest.id"
+                            class="p-3.5 rounded-xl bg-slate-50 flex items-center justify-between border border-slate-100/80"
+                        >
                             <div>
-                                <h4 class="text-sm font-black text-slate-900">Concierge Quick Actions</h4>
-                                <p class="text-[11px] text-slate-500 font-medium">Direct management shortcuts</p>
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-bold text-xs text-slate-900">{{ dest.name }}</span>
+                                    <span class="text-[9px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-bold uppercase">{{ dest.type }}</span>
+                                </div>
+                                <span class="text-[11px] text-slate-500 font-medium block mt-0.5">{{ dest.badge }}</span>
                             </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2.5 pt-2">
-                            <a href="/" target="_blank" class="p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 hover:text-slate-900 flex flex-col items-center justify-center text-center space-y-1.5 transition-all">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                                </svg>
-                                <span>Live Website</span>
-                            </a>
-                            <Link href="/profile" class="p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 hover:text-slate-900 flex flex-col items-center justify-center text-center space-y-1.5 transition-all">
-                                <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                </svg>
-                                <span>Settings</span>
-                            </Link>
+                            <span class="text-xs font-black text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
+                                {{ dest.packages_count }} Tours
+                            </span>
                         </div>
                     </div>
 
+                    <!-- Quick Link: Contact CMS -->
+                    <div class="pt-2 border-t border-slate-100">
+                        <Link 
+                            :href="route('admin.contact.index')"
+                            class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center justify-between transition-colors"
+                        >
+                            <span>Contact Page CMS Settings</span>
+                            <span>→</span>
+                        </Link>
+                    </div>
                 </div>
 
             </div>
 
         </div>
+
+        <!-- MODAL: INQUIRY DETAILS VIEW -->
+        <div v-if="isInquiryModalOpen && selectedInquiry" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs font-aptos">
+            <div class="bg-white w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <div>
+                        <span class="text-xs font-mono font-extrabold text-[#0D47A1]">{{ selectedInquiry.id }}</span>
+                        <h3 class="text-lg font-black text-slate-900 mt-0.5">Traveler Inquiry Details</h3>
+                    </div>
+                    <button @click="isInquiryModalOpen = false" class="text-slate-400 hover:text-slate-700 font-bold p-1">✕</button>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="grid grid-cols-2 gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block">Customer Name</span>
+                            <span class="font-extrabold text-slate-900 text-sm">{{ selectedInquiry.customer_name }}</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block">Status</span>
+                            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 mt-0.5">{{ selectedInquiry.status }}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <div class="flex justify-between"><span class="text-slate-500 font-bold">Email:</span> <span class="font-bold text-slate-900">{{ selectedInquiry.email }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500 font-bold">Phone Hotline:</span> <span class="font-bold text-slate-900">{{ selectedInquiry.phone }}</span></div>
+                        <div v-if="selectedInquiry.package_title" class="flex justify-between"><span class="text-slate-500 font-bold">Tour Package:</span> <span class="font-black text-[#0D47A1]">{{ selectedInquiry.package_title }}</span></div>
+                        <div v-if="selectedInquiry.inquiry_type" class="flex justify-between"><span class="text-slate-500 font-bold">Category:</span> <span class="font-bold text-slate-900">{{ selectedInquiry.inquiry_type }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500 font-bold">Travel Date:</span> <span class="font-bold text-slate-900">{{ selectedInquiry.travel_date }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500 font-bold">Travelers:</span> <span class="font-bold text-slate-900">{{ selectedInquiry.guests }} Guest(s)</span></div>
+                    </div>
+
+                    <div v-if="selectedInquiry.message" class="p-3 rounded-xl bg-blue-50/60 border border-blue-100 space-y-1">
+                        <span class="text-[10px] uppercase font-bold text-[#0D47A1] block">Customer Message / Special Requirements</span>
+                        <p class="text-slate-700 font-medium leading-relaxed">{{ selectedInquiry.message }}</p>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex justify-end">
+                    <button 
+                        @click="isInquiryModalOpen = false" 
+                        class="px-5 py-2 rounded-xl bg-[#0D47A1] hover:bg-blue-800 text-white text-xs font-bold transition-all shadow-sm"
+                    >
+                        Close Window
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </AuthenticatedLayout>
 </template>

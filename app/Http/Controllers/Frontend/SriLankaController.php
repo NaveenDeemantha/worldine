@@ -16,10 +16,16 @@ class SriLankaController extends Controller
             ->where('is_active', true)
             ->first();
 
+        // Fetch all active Sri Lanka Inbound packages directly from database
         $inboundPackages = TourPackage::with(['destination', 'itineraryDays'])
             ->where('is_active', true)
-            ->where('category', 'srilanka-inbound')
-            ->orderBy('sort_order')
+            ->where(function ($q) {
+                $q->where('category', 'srilanka-inbound')
+                  ->orWhereHas('destination', function ($dq) {
+                      $dq->where('type', 'inbound');
+                  });
+            })
+            ->orderBy('title', 'asc')
             ->get();
 
         return Inertia::render('Frontend/Pages/SriLanka/Index', [

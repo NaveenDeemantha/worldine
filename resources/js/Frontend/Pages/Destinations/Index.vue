@@ -1,13 +1,14 @@
 <script setup>
-import Navbar from '@/Frontend/Components/Navbar.vue';
-import { Head, Link } from '@inertiajs/vue3';
 import { ref, computed, onMounted, watch } from 'vue';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import Navbar from '@/Frontend/Components/Navbar.vue';
 
 const props = defineProps({
     destinations: Array,
     packages: Array,
 });
 
+const page = usePage();
 const selectedRegion = ref('all');
 
 const updateRegionFromUrl = () => {
@@ -24,13 +25,27 @@ onMounted(() => {
     updateRegionFromUrl();
 });
 
-watch(() => window.location.search, () => {
+watch(() => page.url, () => {
     updateRegionFromUrl();
 });
 
 const filteredOutboundPackages = computed(() => {
     if (selectedRegion.value === 'all') return props.packages;
     return props.packages.filter(p => p.destination && (p.destination.slug.toLowerCase() === selectedRegion.value.toLowerCase() || p.destination.slug.toLowerCase().includes(selectedRegion.value.toLowerCase())));
+});
+
+const activeDestination = computed(() => {
+    if (selectedRegion.value !== 'all' && props.destinations) {
+        return props.destinations.find(d => d.slug.toLowerCase() === selectedRegion.value.toLowerCase() || d.slug.toLowerCase().includes(selectedRegion.value.toLowerCase())) || null;
+    }
+    return null;
+});
+
+const activeHeroImage = computed(() => {
+    if (activeDestination.value && activeDestination.value.image) {
+        return activeDestination.value.image;
+    }
+    return 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1600&q=80';
 });
 </script>
 
@@ -44,9 +59,9 @@ const filteredOutboundPackages = computed(() => {
         <section class="relative h-[65vh] min-h-[420px] flex items-center justify-center bg-slate-950 text-white overflow-hidden w-full">
             <div class="absolute inset-0 z-0">
                 <img 
-                    src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1600&q=80" 
-                    alt="Global Outbound Destinations" 
-                    class="w-full h-full object-cover object-center"
+                    :src="activeHeroImage" 
+                    :alt="activeDestination ? activeDestination.name : 'Global Outbound Destinations'" 
+                    class="w-full h-full object-cover object-center transition-all duration-700"
                     fetchpriority="high"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/70"></div>
@@ -54,13 +69,13 @@ const filteredOutboundPackages = computed(() => {
 
             <div class="relative z-10 text-center max-w-4xl px-6 space-y-4">
                 <span class="text-xs font-black uppercase tracking-[0.3em] text-[#2196F3] bg-[#E3F2FD] px-4 py-1.5 rounded-full border border-[#90CAF9]/40 inline-block shadow-md">
-                    GLOBAL OUTBOUND EXPEDITIONS
+                    {{ activeDestination ? (activeDestination.badge || activeDestination.name) : 'GLOBAL OUTBOUND EXPEDITIONS' }}
                 </span>
                 <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white uppercase leading-tight">
-                    Explore The World With Worldine
+                    {{ activeDestination ? activeDestination.name : 'Explore The World With Worldine' }}
                 </h1>
                 <p class="text-slate-200 text-xs sm:text-base max-w-2xl mx-auto font-medium leading-relaxed">
-                    Tailored international holiday packages across Europe, Japan, Dubai, Australia, and the Maldives with VIP flights, luxury resort stays, and hassle-free visa processing.
+                    {{ activeDestination ? (activeDestination.subtitle || activeDestination.description) : 'Tailored international holiday packages across Australia, Bali, China, Dubai, Egypt, Japan, and Thailand with VIP flights, luxury resort stays, and hassle-free visa processing.' }}
                 </p>
             </div>
         </section>
@@ -100,7 +115,7 @@ const filteredOutboundPackages = computed(() => {
                     class="group bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col transform hover:-translate-y-1"
                 >
                     <div class="relative h-56 sm:h-64 overflow-hidden">
-                        <img :src="pkg.main_image" :alt="pkg.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <img :src="pkg.main_image || '/images/Logo/worldineback.png'" :alt="pkg.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
                         <span class="absolute top-4 left-4 bg-white/95 text-slate-900 border border-slate-200 font-extrabold text-[11px] px-3 py-1 rounded-full shadow">
                             {{ pkg.badge || (pkg.destination ? pkg.destination.name : 'Global Tour') }}
@@ -108,7 +123,7 @@ const filteredOutboundPackages = computed(() => {
                         <div class="absolute bottom-4 left-4 right-4 text-white flex justify-between items-end">
                             <span v-if="pkg.price && Number(pkg.price) > 0" class="text-2xl font-black">${{ Number(pkg.price).toLocaleString() }}</span>
                             <span v-else class="text-xs font-extrabold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/30">Inquire for Quote</span>
-                            <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ pkg.duration_days }} Days</span>
+                            <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ (pkg.itinerary_days && pkg.itinerary_days.length > 0) ? pkg.itinerary_days.length : pkg.duration_days }} Days</span>
                         </div>
                     </div>
 
