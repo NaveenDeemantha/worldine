@@ -21,44 +21,55 @@ const handleScroll = () => {
     isScrolled.value = window.scrollY > 40;
 };
 
-// Hero Multi-Image Carousel Slides Data
-const heroSlides = ref([
+// Hero Multi-Image Carousel Slides Data (Concise Outbound Tour Names)
+const defaultHeroSlides = [
     {
         id: 1,
-        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'DISCOVER PARADISE ISLAND',
-        title: 'VISIT SRI LANKA',
-        subtitle: 'Experience over 20 years of travel expertise. From ancient rock fortresses to golden palm-fringed beaches, embark on the journey of your lifetime.'
+        image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'SYDNEY & GREAT BARRIER REEF',
+        title: 'AUSTRALIA TOUR',
+        subtitle: 'Explore Sydney Opera House, Gold Coast beaches, and Barrier Reef coral diving.'
     },
     {
         id: 2,
-        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'TROPICAL OVERWATER VILLAS & CORAL REEFS',
-        title: 'MALDIVES LUXURY ESCAPES',
-        subtitle: 'Submerge into crystal turquoise lagoons, private luxury water villas, seaplane transfers, and world-renowned undersea dining.'
+        image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'PARIS, SWISS ALPS & ROME',
+        title: 'EUROPE SCHENGEN TOUR',
+        subtitle: 'Discover Paris Eiffel cruises, snow-capped Swiss Alps, and hassle-free Schengen visas.'
     },
     {
         id: 3,
-        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'ANCIENT TEMPLES & CHERRY BLOSSOMS',
-        title: 'JAPAN & EAST ASIA TOURS',
-        subtitle: 'Explore Kyoto Zen temples, Mount Fuji panoramic views, Shibuya Tokyo lights, and high-speed bullet train expeditions across Japan.'
+        image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'UBUD VILLAS & TROPICAL BEACHES',
+        title: 'BALI ISLAND ESCAPE',
+        subtitle: 'Unwind in luxury jungle pool villas, sunset ocean temples, and coral reefs.'
     },
     {
         id: 4,
-        image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'SWISS ALPS & MEDITERRANEAN COASTS',
-        title: 'EUROPE SCHENGEN EXPEDITIONS',
-        subtitle: 'Journey across iconic European capitals, Eiffel Tower Seine cruises, snow-capped Swiss mountains, and historical UNESCO landmarks.'
+        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'TOKYO & MOUNT FUJI',
+        title: 'JAPAN DISCOVERY TOUR',
+        subtitle: 'Experience Tokyo city lights, Mount Fuji views, and Kyoto cherry blossom temples.'
     },
     {
         id: 5,
         image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2400&q=85',
-        tagline: 'FUTURISTIC SKYLINE & DESERT SAFARIS',
-        title: 'DUBAI & UAE LUXURY HOLIDAYS',
-        subtitle: 'Experience world-class luxury skyscrapers, 4x4 dune bashing safaris, luxury marina cruises, and vibrant oriental souk markets.'
+        tagline: 'BURJ KHALIFA & DESERT SAFARI',
+        title: 'DUBAI LUXURY HOLIDAY',
+        subtitle: 'Witness Burj Khalifa skyscrapers, 4x4 dune bashing, and luxury marina cruises.'
+    },
+    {
+        id: 6,
+        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=2400&q=85',
+        tagline: 'OVERWATER VILLAS & CORAL REEFS',
+        title: 'MALDIVES LUXURY ESCAPE',
+        subtitle: 'Indulge in private water villa suites, seaplane lagoon flights, and sunset cruises.'
     }
-]);
+];
+
+const heroSlides = computed(() => {
+    return defaultHeroSlides;
+});
 
 const currentHeroSlide = ref(0);
 
