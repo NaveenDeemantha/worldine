@@ -200,7 +200,7 @@ class DestinationController extends Controller
             $validated['main_image'] = '/images/packages/' . $filename;
         }
 
-        $validated['slug'] = Str::slug($validated['title']);
+        $validated['slug'] = Str::slug($validated['title']) ?: ('package-' . time());
 
         $days = $validated['days'] ?? [];
         unset($validated['days']);
