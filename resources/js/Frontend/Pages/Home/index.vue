@@ -242,54 +242,60 @@ const toggleWishlist = (id) => {
     }
 };
 
-// Categories
-const categories = [
-    { id: 'all', label: 'All Featured Tours', count: 8 },
-    { id: 'inbound', label: 'Sri Lanka Inbound Tours', count: 4 },
-    { id: 'outbound', label: 'Global Outbound Tours', count: 4 }
-];
+// Dynamic Categories Computed from Backend Database Packages
+const categories = computed(() => {
+    const list = props.dbFeaturedPackages || [];
+    const inboundCount = list.filter(p => p.category === 'srilanka-inbound' || p.category === 'inbound' || (p.destination && p.destination.type === 'inbound')).length;
+    const outboundCount = list.filter(p => p.category === 'global-outbound' || p.category === 'outbound' || (p.destination && p.destination.type === 'outbound') || p.category !== 'srilanka-inbound').length;
+    
+    return [
+        { id: 'all', label: 'All Tour Packages', count: list.length },
+        { id: 'inbound', label: 'Sri Lanka Inbound Tours', count: inboundCount },
+        { id: 'outbound', label: 'Global Outbound Tours', count: outboundCount }
+    ];
+});
 
 // Authentic Worldine Destinations Packages Data
 const defaultGlimpseDestinations = [
     {
         name: 'Sri Lanka',
         subtitle: 'Pearl of the Indian Ocean & UNESCO Heritage',
-        packagesCount: '15+ Packages',
+        packagesCount: 'Inbound Specialist',
         image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80',
         badge: 'Inbound Specialist'
     },
     {
         name: 'Maldives',
         subtitle: 'Overwater Tropical Coral Lagoon & Water Villas',
-        packagesCount: '8 Packages',
+        packagesCount: 'Outbound Escape',
         image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80',
         badge: 'Outbound Escape'
     },
     {
         name: 'Switzerland & Europe',
         subtitle: 'Alpine Snow Peaks & Schengen Grand Expeditions',
-        packagesCount: '12 Packages',
+        packagesCount: 'European Grand Tour',
         image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80',
         badge: 'European Grand Tour'
     },
     {
         name: 'Japan & East Asia',
         subtitle: 'Kyoto Temples, Mount Fuji & Shinkansen Bullet Trains',
-        packagesCount: '9 Packages',
+        packagesCount: 'East Asia Discovery',
         image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
         badge: 'Heritage & Culture'
     },
     {
         name: 'Dubai & UAE',
         subtitle: 'Burj Khalifa, Desert Dunes & Marina Luxury Cruises',
-        packagesCount: '7 Packages',
+        packagesCount: 'Luxury City Escape',
         image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
         badge: 'Luxury City Escape'
     },
     {
         name: 'Australia & Pacific',
         subtitle: 'Great Barrier Reef & Sydney Opera House',
-        packagesCount: '10 Packages',
+        packagesCount: 'Pacific Ocean Escape',
         image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80',
         badge: 'Pacific Ocean Escape'
     }
@@ -384,132 +390,6 @@ const prevDestSlide = () => {
     }
 };
 
-const destinations = ref([
-    // INBOUND TOURS (SRI LANKA)
-    {
-        id: 1,
-        title: 'Heritage & Cultural Tour Sri Lanka',
-        location: 'Anuradhapura • Polonnaruwa • Sigiriya • Kandy',
-        category: 'inbound',
-        price: 850,
-        originalPrice: 1050,
-        rating: 4.98,
-        reviewsCount: 240,
-        duration: '5 Days / 4 Nights',
-        badge: 'Inbound Tour',
-        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Sigiriya Lion Rock Citadel', 'Dambulla Golden Cave Temple', 'Sacred Tooth Relic Temple', 'Colombo City Sightseeing'],
-        description: 'Explore the heart of Sri Lanka’s ancient kingdoms, sacred UNESCO World Heritage sites, and vibrant royal city of Kandy with expert local guides.'
-    },
-    {
-        id: 2,
-        title: 'Grand Sri Lanka Heritage Expedition',
-        location: 'Negombo • Pinnawala • Sigiriya • Nuwara Eliya',
-        category: 'inbound',
-        price: 1280,
-        originalPrice: 1500,
-        rating: 4.96,
-        reviewsCount: 310,
-        duration: '8 Days / 7 Nights',
-        badge: 'Inbound Tour',
-        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Pinnawala Elephant Sanctuary', 'Minneriya Elephant Gathering', 'Tea Plantation & Factory', 'Nuwara Eliya Little England'],
-        description: 'An all-inclusive 8-day island journey spanning lush mist-covered tea hills, ancient ruins, elephant gatherings, and coastal Negombo.'
-    },
-    {
-        id: 3,
-        title: 'Sri Lanka Coastal Beach Adventure',
-        location: 'Negombo • Kalpitiya • Hikkaduwa • Mirissa',
-        category: 'inbound',
-        price: 1150,
-        originalPrice: 1350,
-        rating: 4.92,
-        reviewsCount: 185,
-        duration: '8 Days / 7 Nights',
-        badge: 'Inbound Tour',
-        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Blue Whale Watching Mirissa', 'Kalpitiya Lagoon Kitesurfing', 'Hikkaduwa Coral Snorkeling', 'Beachfront Luxury Resort'],
-        description: 'Experience Sri Lanka’s finest coastal waters—from dolphin & whale watching to coral reef diving, seafood banquets, and sunset beach lounges.'
-    },
-    {
-        id: 4,
-        title: 'Sri Lanka Wildlife & Nature Safari',
-        location: 'Yala National Park • Minneriya • Sinharaja',
-        category: 'inbound',
-        price: 990,
-        originalPrice: 1200,
-        rating: 4.97,
-        reviewsCount: 195,
-        duration: '6 Days / 5 Nights',
-        badge: 'Inbound Tour',
-        image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Yala Leopard Safari 4x4', 'Minneriya Elephant Gathering', 'Sinharaja Rainforest Trek', 'Eco Luxury Jungle Glamping'],
-        description: 'Witness wild leopards, Asian elephants, sloth bears, and endemic tropical flora across Sri Lanka’s world-famous wildlife reserves.'
-    },
-
-    // OUTBOUND TOURS (GLOBAL)
-    {
-        id: 5,
-        title: 'Maldives Luxury Overwater Escape',
-        location: 'Malé Atoll • Maldives',
-        category: 'outbound',
-        price: 1850,
-        originalPrice: 2200,
-        rating: 4.99,
-        reviewsCount: 215,
-        duration: '5 Days / 4 Nights',
-        badge: 'Outbound Tour',
-        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Overwater Villa Stay', 'Seaplane Airport Transfer', 'Undersea Dining Experience', 'Sunset Dolphin Cruise'],
-        description: 'Submerge into crystal turquoise lagoons, private luxury water villas, and world-renowned undersea dining in the Maldives.'
-    },
-    {
-        id: 6,
-        title: 'Dubai Sky Towers & Desert Safari',
-        location: 'Dubai • United Arab Emirates',
-        category: 'outbound',
-        price: 1280,
-        originalPrice: 1550,
-        rating: 4.94,
-        reviewsCount: 178,
-        duration: '5 Days / 4 Nights',
-        badge: 'Outbound Tour',
-        image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Burj Khalifa Observation Deck', '4x4 Dune Bashing & BBQ', 'Dubai Marina Dinner Cruise', 'Gold & Spice Souk Guided Tour'],
-        description: 'Experience futuristic luxury skyscrapers, golden sand dunes, luxury marina cruises, and world-class shopping in Dubai.'
-    },
-    {
-        id: 7,
-        title: 'Europe Schengen Grand Expedition',
-        location: 'Paris • Swiss Alps • Rome • Europe',
-        category: 'outbound',
-        price: 2450,
-        originalPrice: 2890,
-        rating: 4.98,
-        reviewsCount: 162,
-        duration: '10 Days / 9 Nights',
-        badge: 'Outbound Tour',
-        image: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Eiffel Tower & Seine Cruise', 'Swiss Alps Cable Car Peak', 'Colosseum & Vatican Tour', 'Full Schengen Visa Support'],
-        description: 'Journey across iconic European capitals, snow-capped Swiss mountains, and historical UNESCO landmarks with complete visa assistance.'
-    },
-    {
-        id: 8,
-        title: 'East Asia Cultural Discovery - Japan',
-        location: 'Tokyo • Mount Fuji • Kyoto • Japan',
-        category: 'outbound',
-        price: 2100,
-        originalPrice: 2500,
-        rating: 4.97,
-        reviewsCount: 145,
-        duration: '7 Days / 6 Nights',
-        badge: 'Outbound Tour',
-        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
-        highlights: ['Shinkansen Bullet Train Experience', 'Mount Fuji Panoramic View', 'Kyoto Fushimi Inari Shrine', 'Tokyo Skytree & Shibuya'],
-        description: 'Discover the perfect harmony of futuristic metropolis and ancient Zen temples with high-speed bullet trains across Japan.'
-    }
-]);
-
 // Airline Partners Brand Data — logos auto-discovered via Wikipedia Commons search API
 const airlinePartners = ref([
     { name: 'Emirates',          searchQuery: 'Emirates airline logo',          accent: '#D71921', img: null },
@@ -539,13 +419,11 @@ const loadAirlineLogos = async () => {
     await Promise.allSettled(
         airlinePartners.value.map(async (airline, index) => {
             try {
-                // Step 1: Search for the SVG logo file by airline name
                 const searchUrl = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(airline.searchQuery + ' filetype:svg')}&srnamespace=6&srlimit=5&format=json&origin=*`;
                 const searchRes = await fetch(searchUrl);
                 const searchData = await searchRes.json();
                 const results = searchData?.query?.search || [];
 
-                // Pick first SVG result whose title contains 'logo' or 'Logo'
                 const match = results.find(r => 
                     r.title.toLowerCase().includes('logo') && 
                     r.title.toLowerCase().endsWith('.svg')
@@ -553,7 +431,6 @@ const loadAirlineLogos = async () => {
 
                 if (!match) return;
 
-                // Step 2: Get the thumbnail URL for that file
                 const fileTitle = match.title;
                 const infoUrl = `https://commons.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(fileTitle)}&prop=imageinfo&iiprop=url&iiurlwidth=240&format=json&origin=*`;
                 const infoRes = await fetch(infoUrl);
@@ -576,25 +453,23 @@ const loopedAirlinePartners = computed(() => {
     return [...airlinePartners.value, ...airlinePartners.value, ...airlinePartners.value];
 });
 
-// Computed Filtered Destinations (Limited to Max 5 Cards on Mobile View)
+// Computed Filtered Destinations (100% Exact Actual Data from Backend)
 const filteredDestinations = computed(() => {
-    const list = (props.dbFeaturedPackages && Array.isArray(props.dbFeaturedPackages) && props.dbFeaturedPackages.length > 0) 
+    const list = (props.dbFeaturedPackages && Array.isArray(props.dbFeaturedPackages)) 
         ? props.dbFeaturedPackages 
-        : (destinations.value || []);
-
-    if (!Array.isArray(list)) return [];
+        : [];
 
     return list.filter(dest => {
         if (!dest) return false;
         const destCat = dest.category || '';
+        const destType = dest.destination ? dest.destination.type : '';
+
         const matchesCategory = searchCategory.value === 'all' 
             || destCat === searchCategory.value 
-            || (searchCategory.value === 'inbound' && (destCat === 'inbound' || destCat.includes('inbound')))
-            || (searchCategory.value === 'outbound' && (destCat === 'outbound' || destCat.includes('outbound') || destCat === 'europe-schengen' || destCat === 'east-asia' || destCat === 'luxury-escapes'));
+            || (searchCategory.value === 'inbound' && (destCat === 'srilanka-inbound' || destCat === 'inbound' || destType === 'inbound'))
+            || (searchCategory.value === 'outbound' && (destCat === 'global-outbound' || destCat === 'outbound' || destType === 'outbound' || destCat !== 'srilanka-inbound'));
         
-        const price = dest.price ? Number(dest.price) : 0;
-        const matchesBudget = price <= searchBudget.value;
-        return matchesCategory && matchesBudget;
+        return matchesCategory;
     });
 });
 
@@ -994,100 +869,92 @@ const features = [
                 </button>
             </div>
 
-            <!-- Destinations Cards Grid (Limited to Max 5 Cards on Mobile View) -->
-            <div v-if="filteredDestinations.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 gap-6 lg:gap-8 w-full">
+            <!-- Destinations Cards Grid (100% Exact Actual Data from Backend) -->
+            <div v-if="filteredDestinations && filteredDestinations.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 gap-6 lg:gap-8 w-full">
                 <div 
                     v-for="dest in displayedFilteredDestinations" 
                     :key="dest.id"
-                    class="group bg-white border border-slate-200/80 hover:border-teal-500/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col transform hover:-translate-y-1 w-full"
+                    class="group bg-white border border-slate-200/80 hover:border-[#2196F3]/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col transform hover:-translate-y-1 w-full"
                 >
-                    <!-- Image Banner & Badges -->
-                    <div class="relative h-48 sm:h-56 lg:h-60 overflow-hidden">
+                    <!-- Image Banner & Badges (Clickable -> Opens Quick View) -->
+                    <div @click="openQuickView(dest)" class="relative h-48 sm:h-56 lg:h-60 overflow-hidden bg-slate-100 cursor-pointer">
                         <img 
-                            :src="dest.image" 
+                            :src="dest.image || dest.main_image || '/images/Logo/worldineback.png'" 
                             :alt="dest.title" 
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent"></div>
                         
                         <!-- Badge Top Left -->
                         <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-md text-slate-900 border border-slate-200 font-extrabold text-[11px] px-2.5 py-0.5 rounded-full shadow">
-                            {{ dest.badge }}
+                            {{ dest.badge || (dest.destination ? dest.destination.name : 'Worldine Tour') }}
                         </span>
 
-                        <!-- Wishlist Toggle Top Right -->
-                        <button 
-                            @click.stop="toggleWishlist(dest.id)" 
-                            class="absolute top-3 right-3 p-2 rounded-full bg-white/80 backdrop-blur-md text-slate-700 hover:text-amber-500 transition-colors shadow"
-                        >
-                            <svg 
-                                class="w-4 h-4" 
-                                :fill="wishlist.includes(dest.id) ? '#f59e0b' : 'none'" 
-                                :stroke="wishlist.includes(dest.id) ? '#f59e0b' : 'currentColor'" 
-                                viewBox="0 0 24 24"
-                            >
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                        </button>
-
-                        <!-- Rating & Location Bottom Image -->
+                        <!-- Location & Duration Bottom Image -->
                         <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-white">
-                            <span class="flex items-center space-x-1 font-bold">
-                                📍 {{ dest.location }}
+                            <span class="flex items-center space-x-1 font-bold truncate max-w-[65%]">
+                                📍 {{ dest.destination ? dest.destination.name : (dest.subtitle || 'Global Expedition') }}
                             </span>
-                            <span class="flex items-center space-x-1 bg-amber-400 text-slate-950 px-1.5 py-0.5 rounded font-black">
-                                ⭐ {{ dest.rating }}
+                            <span class="flex items-center space-x-1 bg-slate-900/80 text-white px-2 py-0.5 rounded font-bold text-[10px] border border-white/20">
+                                ⏱️ {{ dest.duration || (dest.duration_days + ' Days') }}
                             </span>
                         </div>
                     </div>
 
                     <!-- Card Body -->
                     <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
-                        <div>
-                            <div class="text-[11px] font-bold text-teal-700 uppercase tracking-wider mb-1">
-                                ⏱️ {{ dest.duration }}
-                            </div>
-                            <h3 class="text-base font-bold text-slate-900 group-hover:text-[#2196F3] transition-colors line-clamp-1">
-                                {{ dest.title }}
-                            </h3>
-                            <p class="text-slate-600 text-xs mt-1.5 line-clamp-2 leading-relaxed">
-                                {{ dest.description || dest.overview }}
+                        <div class="space-y-1.5">
+                            <Link :href="route('tours.show', dest.slug || dest.id)" class="block">
+                                <h3 class="text-base font-extrabold text-slate-900 hover:text-[#2196F3] transition-colors line-clamp-1">
+                                    {{ dest.title }}
+                                </h3>
+                            </Link>
+                            <p class="text-slate-600 text-xs line-clamp-2 leading-relaxed font-medium">
+                                {{ dest.subtitle || dest.overview }}
                             </p>
                         </div>
 
-                        <!-- Highlights / Inclusions Tags -->
-                        <div v-if="dest.highlights || dest.inclusions" class="flex flex-wrap gap-1 pt-1">
-                            <span v-for="(hl, idx) in (dest.highlights || dest.inclusions || []).slice(0, 3)" :key="idx" class="text-[10px] bg-slate-100 text-slate-700 border border-slate-200/80 px-2 py-0.5 rounded font-semibold">
-                                ✓ {{ hl }}
-                            </span>
-                        </div>
-
                         <!-- Price & Action Footer -->
-                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-                            <div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <div class="min-w-0">
                                 <template v-if="dest.price && Number(dest.price) > 0">
                                     <span class="text-[10px] text-slate-500 font-medium block">Starting from</span>
                                     <div class="flex items-baseline space-x-1">
-                                        <span class="text-xl font-black text-[#0D47A1]">${{ Number(dest.price).toLocaleString() }}</span>
-                                        <span v-if="dest.originalPrice" class="text-[10px] text-slate-400 line-through">${{ Number(dest.originalPrice).toLocaleString() }}</span>
+                                        <span class="text-lg sm:text-xl font-black text-[#0D47A1]">${{ Number(dest.price).toLocaleString() }}</span>
                                     </div>
                                 </template>
                                 <template v-else>
-                                    <span class="text-[11px] font-extrabold text-[#0D47A1] bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100 block">
-                                        Inquire for Pricing
+                                    <span class="text-[10px] font-extrabold text-[#0D47A1] bg-blue-50 px-2 py-1 rounded-md border border-blue-100 block whitespace-nowrap">
+                                        Inquire Quote
                                     </span>
                                 </template>
                             </div>
 
-                            <button 
-                                @click="openQuickView(dest)"
-                                class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-[#0D47A1] hover:text-white text-slate-800 font-bold text-xs transition-all duration-300"
-                            >
-                                Quick View
-                            </button>
+                            <div class="flex items-center space-x-1.5 flex-shrink-0">
+                                <button 
+                                    @click.stop="openQuickView(dest)"
+                                    class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all whitespace-nowrap shadow-2xs"
+                                >
+                                    Quick View
+                                </button>
+                                <Link 
+                                    :href="route('tours.show', dest.slug || dest.id)"
+                                    @click.stop
+                                    class="px-3 py-1.5 rounded-xl bg-[#0D47A1] hover:bg-[#1565C0] text-white font-extrabold text-xs shadow-md hover:shadow-lg transition-all flex items-center space-x-1 whitespace-nowrap"
+                                >
+                                    <span>Details</span>
+                                    <span>→</span>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- Empty state if no backend packages match -->
+            <div v-else class="text-center py-16 bg-white rounded-3xl border border-slate-200/80 p-8 shadow-xs">
+                <div class="text-4xl mb-3">🌍</div>
+                <h3 class="text-lg font-bold text-slate-800">No Tour Packages Found</h3>
+                <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Active tour packages added in the backend admin panel will appear here.</p>
             </div>
         </section>
 
@@ -1741,9 +1608,9 @@ const features = [
             </div>
         </footer>
 
-        <!-- QUICK VIEW / BOOKING MODAL -->
-        <div v-if="isBookingModalOpen && activeModalDestination" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-            <div class="bg-white border border-slate-200 rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-5 sm:p-7 space-y-5 shadow-2xl relative">
+        <!-- QUICK VIEW MODAL (100% Exact Actual Data from Backend) -->
+        <div v-if="isBookingModalOpen && activeModalDestination" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
+            <div class="bg-white border border-slate-200 rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5 shadow-2xl relative">
                 <!-- Close Button -->
                 <button @click="closeModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 p-1.5 text-lg font-bold">
                     ✕
@@ -1751,10 +1618,11 @@ const features = [
 
                 <!-- Modal Content Header -->
                 <div class="flex items-center space-x-3">
-                    <span class="bg-slate-900 text-white font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase">
-                        {{ activeModalDestination.badge }}
+                    <span class="bg-[#0D47A1] text-white font-extrabold text-[10px] px-3 py-1 rounded-full uppercase shadow-xs">
+                        {{ activeModalDestination.badge || (activeModalDestination.destination ? activeModalDestination.destination.name : 'Worldine Tour') }}
                     </span>
-                    <span class="text-xs text-slate-500 font-bold">📍 {{ activeModalDestination.location }}</span>
+                    <span class="text-xs text-slate-600 font-bold">📍 {{ activeModalDestination.destination ? activeModalDestination.destination.name : (activeModalDestination.subtitle || 'Global Expedition') }}</span>
+                    <span class="text-xs text-[#0D47A1] font-extrabold ml-auto">⏱️ {{ activeModalDestination.duration || (activeModalDestination.duration_days + ' Days') }}</span>
                 </div>
 
                 <h3 class="text-xl sm:text-2xl font-black text-slate-900">
@@ -1762,36 +1630,49 @@ const features = [
                 </h3>
 
                 <!-- Modal Image -->
-                <img :src="activeModalDestination.image" :alt="activeModalDestination.title" class="w-full h-52 object-cover rounded-xl shadow-sm" />
+                <img 
+                    :src="activeModalDestination.image || activeModalDestination.main_image || '/images/Logo/worldineback.png'" 
+                    :alt="activeModalDestination.title" 
+                    class="w-full h-56 object-cover rounded-2xl shadow-sm" 
+                />
 
                 <!-- Description & Highlights -->
-                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                    {{ activeModalDestination.description }}
+                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed font-medium">
+                    {{ activeModalDestination.overview || activeModalDestination.subtitle }}
                 </p>
 
-                <div>
-                    <h4 class="text-[11px] font-bold text-teal-700 uppercase tracking-wider mb-1.5">Package Inclusions:</h4>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div v-for="(hl, i) in activeModalDestination.highlights" :key="i" class="text-xs bg-slate-50 p-2 rounded-lg border border-slate-200 text-slate-700 flex items-center space-x-1.5 font-medium">
-                            <span>✨</span>
-                            <span>{{ hl }}</span>
+                <div v-if="activeModalDestination.inclusions && activeModalDestination.inclusions.length">
+                    <h4 class="text-[11px] font-black text-slate-900 uppercase tracking-wider mb-2">Package Inclusions:</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div v-for="(inc, i) in activeModalDestination.inclusions" :key="i" class="text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 text-slate-700 flex items-center space-x-2 font-medium">
+                            <span class="text-blue-600 font-bold">✓</span>
+                            <span>{{ inc }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Price & Modal Action -->
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
                     <div>
-                        <span class="text-[10px] text-slate-500">Total Price / Person</span>
-                        <div class="text-xl font-black text-teal-700">${{ activeModalDestination.price.toLocaleString() }}</div>
+                        <span class="text-[10px] text-slate-500 font-medium block">Starting Price</span>
+                        <div v-if="activeModalDestination.price && Number(activeModalDestination.price) > 0" class="text-2xl font-black text-[#0D47A1]">
+                            ${{ Number(activeModalDestination.price).toLocaleString() }} USD
+                        </div>
+                        <div v-else class="text-xs font-black bg-blue-50 text-[#0D47A1] px-3 py-1 rounded-lg border border-blue-100">
+                            Inquire for Quote
+                        </div>
                     </div>
                     <div class="flex space-x-2">
-                        <button @click="closeModal" class="px-3.5 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200">
+                        <button @click="closeModal" class="px-4 py-2.5 rounded-full bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200">
                             Close
                         </button>
-                        <button @click="alert('Booking request initiated for ' + activeModalDestination.title + '! Our concierge team will contact you shortly.'); closeModal()" class="px-5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow">
-                            Confirm Reservation
-                        </button>
+                        <Link 
+                            :href="route('tours.show', activeModalDestination.slug)"
+                            class="px-5 py-2.5 rounded-full bg-[#0D47A1] hover:bg-[#1565C0] text-white font-extrabold text-xs shadow-md transition-all flex items-center space-x-1.5"
+                        >
+                            <span>View Full Itinerary</span>
+                            <span>→</span>
+                        </Link>
                     </div>
                 </div>
             </div>

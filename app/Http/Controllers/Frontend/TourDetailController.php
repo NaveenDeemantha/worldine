@@ -14,7 +14,10 @@ class TourDetailController extends Controller
     public function show(string $slug): Response
     {
         $package = TourPackage::with(['destination', 'itineraryDays'])
-            ->where('slug', $slug)
+            ->where(function ($q) use ($slug) {
+                $q->where('slug', $slug)
+                  ->orWhere('id', $slug);
+            })
             ->where('is_active', true)
             ->firstOrFail();
 

@@ -31,10 +31,10 @@ class HomeController extends Controller
             });
 
         // Featured Tour Packages Grid
-        $featuredPackages = TourPackage::with('destination')
+        $featuredPackages = TourPackage::with(['destination', 'itineraryDays'])
             ->where('is_active', true)
-            ->where('is_featured', true)
             ->orderBy('sort_order')
+            ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($pkg) {
                 return [
@@ -44,11 +44,21 @@ class HomeController extends Controller
                     'subtitle' => $pkg->subtitle,
                     'category' => $pkg->category,
                     'price' => $pkg->price !== null ? (float) $pkg->price : null,
-                    'duration' => $pkg->duration_days . ' Days / ' . $pkg->duration_nights . ' Nights',
-                    'badge' => $pkg->badge ?? ($pkg->destination ? $pkg->destination->name : 'Special Tour'),
-                    'image' => $pkg->main_image,
+                    'duration' => $pkg->duration_days . ' Days' . ($pkg->duration_nights ? ' / ' . $pkg->duration_nights . ' Nights' : ''),
+                    'duration_days' => $pkg->duration_days,
+                    'duration_nights' => $pkg->duration_nights,
+                    'badge' => $pkg->badge ?: ($pkg->destination ? $pkg->destination->name : 'Worldine Tour'),
+                    'image' => $pkg->main_image ?: '/images/Logo/worldineback.png',
                     'overview' => $pkg->overview,
-                    'inclusions' => $pkg->inclusions,
+                    'inclusions' => is_array($pkg->inclusions) ? $pkg->inclusions : ($pkg->inclusions ? json_decode($pkg->inclusions, true) : []),
+                    'is_featured' => (bool) $pkg->is_featured,
+                    'destination' => $pkg->destination ? [
+                        'id' => $pkg->destination->id,
+                        'name' => $pkg->destination->name,
+                        'slug' => $pkg->destination->slug,
+                        'type' => $pkg->destination->type,
+                    ] : null,
+                    'itinerary_days' => $pkg->itineraryDays,
                 ];
             });
 

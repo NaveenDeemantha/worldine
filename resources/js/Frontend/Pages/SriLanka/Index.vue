@@ -112,7 +112,7 @@ const openQuickDetail = (pkg) => {
 
                         <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
                             <Link 
-                                :href="route('tours.show', pkg.slug)"
+                                :href="route('tours.show', pkg.slug || pkg.id)"
                                 class="px-5 py-2.5 rounded-full bg-[#0D47A1] text-white text-xs font-extrabold shadow-md hover:bg-[#1565C0] transition-all flex items-center space-x-1.5"
                             >
                                 <span>View Day-by-Day Itinerary</span>
@@ -159,7 +159,7 @@ const openQuickDetail = (pkg) => {
                 <div class="pt-4 border-t border-slate-100 flex justify-between items-center">
                     <span v-if="selectedPackage.price && Number(selectedPackage.price) > 0" class="text-xl font-black text-[#0D47A1]">${{ Number(selectedPackage.price).toLocaleString() }} USD</span>
                     <span v-else class="text-xs font-black bg-blue-50 text-[#0D47A1] px-3.5 py-2 rounded-xl border border-blue-100">Custom Tour • Inquire for Quote</span>
-                    <Link :href="route('tours.show', selectedPackage.slug)" class="px-6 py-2.5 rounded-full bg-[#2196F3] text-white text-xs font-extrabold shadow-md hover:bg-[#0D47A1] transition-all">
+                    <Link :href="route('tours.show', selectedPackage.slug || selectedPackage.id)" class="px-6 py-2.5 rounded-full bg-[#2196F3] text-white text-xs font-extrabold shadow-md hover:bg-[#0D47A1] transition-all">
                         Full Itinerary & Booking Page →
                     </Link>
                 </div>

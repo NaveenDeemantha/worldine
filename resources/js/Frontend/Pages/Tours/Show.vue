@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from '@/Frontend/Components/Navbar.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -8,9 +8,13 @@ const props = defineProps({
     relatedPackages: Array,
 });
 
-const isBookingSubmitted = ref(false);
-const inquiryForm = ref({
-    name: '',
+const page = usePage();
+const showSuccessBanner = ref(false);
+
+const form = useForm({
+    tour_package_id: props.package ? props.package.id : null,
+    package_title: props.package ? props.package.title : '',
+    customer_name: '',
     email: '',
     phone: '',
     travel_date: '',
@@ -19,12 +23,16 @@ const inquiryForm = ref({
 });
 
 const submitInquiry = () => {
-    isBookingSubmitted.value = true;
-    setTimeout(() => {
-        isBookingSubmitted.value = false;
-        alert('Thank you! Your tour inquiry has been submitted to Worldine travel concierge. Our team will contact you within 2 hours.');
-        inquiryForm.value = { name: '', email: '', phone: '', travel_date: '', guests: 2, message: '' };
-    }, 800);
+    form.post(route('tours.inquire'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            showSuccessBanner.value = true;
+            form.reset('customer_name', 'email', 'phone', 'travel_date', 'message');
+            setTimeout(() => {
+                showSuccessBanner.value = false;
+            }, 6000);
+        },
+    });
 };
 </script>
 
@@ -152,34 +160,38 @@ const submitInquiry = () => {
                             </template>
                         </div>
 
+                        <div v-if="showSuccessBanner || page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-bold leading-relaxed">
+                            ✓ Thank you! Your tour inquiry has been submitted. Our concierge team will contact you shortly.
+                        </div>
+
                         <form @submit.prevent="submitInquiry" class="space-y-4">
                             <h3 class="text-xs font-black uppercase tracking-wider text-slate-900">Inquire / Book This Tour</h3>
 
                             <div>
-                                <input type="text" v-model="inquiryForm.name" required placeholder="Your Full Name" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none" />
+                                <input type="text" v-model="form.customer_name" required placeholder="Your Full Name" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none" />
                             </div>
 
                             <div>
-                                <input type="email" v-model="inquiryForm.email" required placeholder="Email Address" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none" />
+                                <input type="email" v-model="form.email" required placeholder="Email Address" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none" />
                             </div>
 
                             <div>
-                                <input type="tel" v-model="inquiryForm.phone" required placeholder="Phone / WhatsApp Number" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none" />
+                                <input type="tel" v-model="form.phone" required placeholder="Phone / WhatsApp Number" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none" />
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
-                                <input type="date" v-model="inquiryForm.travel_date" required class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 focus:bg-white focus:border-[#2196F3] outline-none" />
-                                <input type="number" v-model="inquiryForm.guests" min="1" required placeholder="Guests" class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 focus:bg-white focus:border-[#2196F3] outline-none" />
+                                <input type="date" v-model="form.travel_date" required class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 focus:bg-white focus:border-[#2196F3] outline-none" />
+                                <input type="number" v-model="form.guests" min="1" required placeholder="Guests" class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 focus:bg-white focus:border-[#2196F3] outline-none" />
                             </div>
 
-                            <textarea v-model="inquiryForm.message" rows="3" placeholder="Special requests or custom dates..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none"></textarea>
+                            <textarea v-model="form.message" rows="3" placeholder="Special requests or custom dates..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none"></textarea>
 
                             <button 
                                 type="submit" 
-                                class="w-full py-4 rounded-2xl bg-gradient-to-r from-[#2196F3] via-[#2B70B4] to-[#0D47A1] text-white font-extrabold text-xs uppercase tracking-widest shadow-xl hover:shadow-2xl hover:brightness-110 active:scale-[0.99] transition-all duration-300 flex items-center justify-center space-x-2"
-                                :disabled="isBookingSubmitted"
+                                class="w-full py-4 rounded-2xl bg-gradient-to-r from-[#2196F3] via-[#2B70B4] to-[#0D47A1] text-white font-extrabold text-xs uppercase tracking-widest shadow-xl hover:shadow-2xl hover:brightness-110 active:scale-[0.99] transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
+                                :disabled="form.processing"
                             >
-                                <span>{{ isBookingSubmitted ? 'Sending Inquiry...' : 'Request Tour Quote' }}</span>
+                                <span>{{ form.processing ? 'Sending Inquiry...' : 'Request Tour Quote' }}</span>
                                 <span>→</span>
                             </button>
                         </form>

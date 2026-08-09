@@ -38,7 +38,7 @@ const submitForm = () => {
         },
         onError: () => {
             submitting.value = false;
-            isSubmitted.value = true;
+            isSubmitted.value = false;
         }
     });
 };
@@ -140,7 +140,7 @@ const faqs = [
 
         <!-- 2. CONTACT INFORMATION DETAILS (DYNAMIC EDITABLE VALUES) -->
         <section class="py-16 sm:py-20 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 bg-white">
-            <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
+            <div class="w-full grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-8 sm:gap-12">
                 
                 <!-- Column 1: WhatsApp & Hotlines -->
                 <div class="space-y-4">
@@ -203,61 +203,6 @@ const faqs = [
                         <div>
                             <span class="text-[10px] text-slate-400 font-bold block uppercase">Tour Quotations</span>
                             <a :href="`mailto:${settings?.tours_email || 'tours@worldinedestinations.com'}`" class="text-slate-900 hover:text-[#2196F3] transition-colors break-all">{{ settings?.tours_email || 'tours@worldinedestinations.com' }}</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Column 3: Headquarter Address -->
-                <div class="space-y-4">
-                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                        <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-amber-600 block">HEADQUARTER OFFICE</span>
-                        <h3 class="text-xl font-black text-slate-900 mt-1">Visit Our Office</h3>
-                    </div>
-                    <p class="text-xs text-slate-600 font-medium leading-relaxed">
-                        Visit our central travel center in Colombo for face-to-face consultation & visa processing.
-                    </p>
-                    <div class="space-y-1 text-xs font-bold text-slate-900 pt-1">
-                        <div class="text-[11px] text-slate-700 font-semibold leading-normal">
-                            {{ settings?.office_address || 'Worldine Destinations (Pvt) Ltd, Galle Road, Colombo 03, Sri Lanka.' }}
-                        </div>
-                        <a href="#location-map" class="inline-flex items-center space-x-1.5 text-xs text-[#2196F3] font-extrabold hover:underline pt-1">
-                            <span>View Directions</span>
-                            <span>↓</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Column 4: Working Hours & Emergency Desk -->
-                <div class="space-y-4">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                        <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600 block">SERVICE TIMINGS</span>
-                        <h3 class="text-xl font-black text-slate-900 mt-1">Office Hours</h3>
-                    </div>
-                    <p class="text-xs text-slate-600 font-medium leading-relaxed">
-                        Our office welcomes clients during standard working hours; emergency desks run 24/7.
-                    </p>
-                    <div class="space-y-2 text-xs font-medium text-slate-700 pt-1">
-                        <div class="flex justify-between items-center py-0.5">
-                            <span class="font-bold text-slate-900">Mon – Fri</span>
-                            <span class="text-[11px] font-semibold text-slate-600">{{ settings?.office_hours_weekday || '8:30 AM – 6:30 PM' }}</span>
-                        </div>
-                        <div class="flex justify-between items-center py-0.5">
-                            <span class="font-bold text-slate-900">Saturday</span>
-                            <span class="text-[11px] font-semibold text-slate-600">{{ settings?.office_hours_saturday || '9:00 AM – 4:00 PM' }}</span>
-                        </div>
-                        <div class="flex justify-between items-center py-0.5">
-                            <span class="font-bold text-slate-900">Sunday</span>
-                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">{{ settings?.office_hours_sunday || '24/7 On-Call Support' }}</span>
                         </div>
                     </div>
                 </div>

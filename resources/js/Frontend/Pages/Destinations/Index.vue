@@ -135,7 +135,7 @@ const activeHeroImage = computed(() => {
 
                         <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
                             <Link 
-                                :href="route('tours.show', pkg.slug)"
+                                :href="route('tours.show', pkg.slug || pkg.id)"
                                 class="px-5 py-2.5 rounded-full bg-[#0D47A1] text-white text-xs font-extrabold shadow-md hover:bg-[#1565C0] transition-all flex items-center space-x-1.5"
                             >
                                 <span>View Itinerary</span>
