@@ -11,7 +11,12 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => {
-        const pages = import.meta.glob('./**/*.vue');
+        const pages = import.meta.glob([
+            './Frontend/Pages/**/*.vue',
+            './Backend/Pages/**/*.vue',
+            './Pages/**/*.vue',
+            './*.vue'
+        ]);
         
         const possiblePaths = [
             `./${name}.vue`,
@@ -26,7 +31,7 @@ createInertiaApp({
             }
         }
 
-        return resolvePageComponent(`./${name}.vue`, pages);
+        return resolvePageComponent(`./Frontend/Pages/${name}.vue`, pages);
     },
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
