@@ -165,14 +165,16 @@ class DestinationController extends Controller
      */
     public function storePackage(Request $request)
     {
+        $isUpdate = $request->filled('id');
+
         $validated = $request->validate([
             'id' => 'nullable|exists:tour_packages,id',
-            'destination_id' => 'required|exists:destinations,id',
-            'title' => 'required|string|max:255',
+            'destination_id' => $isUpdate ? 'nullable|exists:destinations,id' : 'required|exists:destinations,id',
+            'title' => $isUpdate ? 'nullable|string|max:255' : 'required|string|max:255',
             'subtitle' => 'nullable|string|max:255',
-            'category' => 'required|string',
+            'category' => $isUpdate ? 'nullable|string' : 'required|string',
             'price' => 'nullable|numeric|min:0',
-            'duration_days' => 'required|integer|min:1',
+            'duration_days' => 'nullable|integer|min:1',
             'duration_nights' => 'nullable|integer|min:0',
             'badge' => 'nullable|string|max:255',
             'main_image' => 'nullable',
@@ -185,30 +187,55 @@ class DestinationController extends Controller
             'days.*.title' => 'required|string|max:255',
             'days.*.description' => 'nullable|string',
             'days.*.image' => 'nullable',
+            'days.*.image_file' => 'nullable',
             'days.*.accommodation' => 'nullable|string',
             'days.*.meals' => 'nullable|string',
         ]);
 
         if ($request->hasFile('main_image')) {
             $file = $request->file('main_image');
-            $filename = time() . '_' . Str::slug($validated['title']) . '.' . $file->getClientOriginalExtension();
+            $filename = time() . '_' . Str::slug($validated['title'] ?? 'package') . '.' . $file->getClientOriginalExtension();
             $pkgPath = public_path('images/packages');
             if (!file_exists($pkgPath)) {
                 mkdir($pkgPath, 0755, true);
             }
             $file->move($pkgPath, $filename);
             $validated['main_image'] = '/images/packages/' . $filename;
+        } elseif (isset($validated['main_image']) && is_string($validated['main_image']) && $validated['main_image'] === '[object File]') {
+            unset($validated['main_image']);
         }
-
-        $validated['slug'] = Str::slug($validated['title']) ?: ('package-' . time());
 
         $days = $validated['days'] ?? [];
         unset($validated['days']);
 
         if (!empty($validated['id'])) {
             $package = TourPackage::findOrFail($validated['id']);
-            $package->update($validated);
+            
+            $updateData = array_filter($validated, function ($val) {
+                return $val !== null;
+            });
+
+            if (isset($days) && count($days) > 0) {
+                $updateData['duration_days'] = count($days);
+                $updateData['duration_nights'] = max(0, count($days) - 1);
+            } elseif (isset($updateData['duration_days'])) {
+                $updateData['duration_nights'] = max(0, (int)$updateData['duration_days'] - 1);
+            }
+
+            if (!empty($updateData['title'])) {
+                $updateData['slug'] = Str::slug($updateData['title']);
+            }
+
+            $package->update($updateData);
         } else {
+            $validated['slug'] = Str::slug($validated['title']) ?: ('package-' . time());
+            if (isset($days) && count($days) > 0) {
+                $validated['duration_days'] = count($days);
+                $validated['duration_nights'] = max(0, count($days) - 1);
+            } else {
+                $daysCount = $validated['duration_days'] ?? 1;
+                $validated['duration_nights'] = max(0, (int)$daysCount - 1);
+            }
             $package = TourPackage::create($validated);
         }
 
@@ -216,17 +243,38 @@ class DestinationController extends Controller
         if ($request->has('days')) {
             $package->itineraryDays()->delete();
             foreach ($days as $index => $dayData) {
-                if ($request->hasFile("days.{$index}.image")) {
-                    $dayFile = $request->file("days.{$index}.image");
-                    $dayFilename = time() . "_day_" . ($index + 1) . '_' . Str::slug($validated['title']) . '.' . $dayFile->getClientOriginalExtension();
+                $dayImage = $dayData['image'] ?? null;
+                
+                if ($request->hasFile("days.{$index}.image_file")) {
+                    $dayFile = $request->file("days.{$index}.image_file");
+                    $dayFilename = time() . "_day_" . ($index + 1) . '_' . Str::slug($package->title) . '.' . $dayFile->getClientOriginalExtension();
                     $dayPath = public_path('images/packages');
                     if (!file_exists($dayPath)) {
                         mkdir($dayPath, 0755, true);
                     }
                     $dayFile->move($dayPath, $dayFilename);
-                    $dayData['image'] = '/images/packages/' . $dayFilename;
+                    $dayImage = '/images/packages/' . $dayFilename;
+                } elseif ($request->hasFile("days.{$index}.image")) {
+                    $dayFile = $request->file("days.{$index}.image");
+                    $dayFilename = time() . "_day_" . ($index + 1) . '_' . Str::slug($package->title) . '.' . $dayFile->getClientOriginalExtension();
+                    $dayPath = public_path('images/packages');
+                    if (!file_exists($dayPath)) {
+                        mkdir($dayPath, 0755, true);
+                    }
+                    $dayFile->move($dayPath, $dayFilename);
+                    $dayImage = '/images/packages/' . $dayFilename;
+                } elseif (is_string($dayImage) && $dayImage === '[object File]') {
+                    $dayImage = null;
                 }
-                $package->itineraryDays()->create($dayData);
+
+                $package->itineraryDays()->create([
+                    'day_number' => $dayData['day_number'],
+                    'title' => $dayData['title'],
+                    'description' => $dayData['description'] ?? null,
+                    'image' => $dayImage,
+                    'accommodation' => !empty($dayData['accommodation']) ? $dayData['accommodation'] : null,
+                    'meals' => !empty($dayData['meals']) ? $dayData['meals'] : null,
+                ]);
             }
         }
 

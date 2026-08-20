@@ -34,6 +34,15 @@ const submitInquiry = () => {
         },
     });
 };
+
+const formatDescription = (text) => {
+    if (!text) return '';
+    const escaped = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    return escaped.replace(/\*\*(.*?)\*\*/g, '<strong class="font-extrabold text-slate-900">$1</strong>');
+};
 </script>
 
 <template>
@@ -112,41 +121,45 @@ const submitInquiry = () => {
                         <div 
                             v-for="day in package.itinerary_days" 
                             :key="day.id"
-                            class="bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 p-6 sm:p-8 space-y-4"
+                            class="bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 p-6 sm:p-8 space-y-5"
                         >
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                                 <div class="flex items-center space-x-3">
-                                    <span class="px-3.5 py-1.5 rounded-full bg-[#0D47A1] text-white font-black text-xs tracking-wider flex items-center justify-center shadow-sm flex-shrink-0 uppercase whitespace-nowrap">
+                                    <span class="px-3.5 py-1.5 rounded-full bg-[#0D47A1] text-white font-black text-xs tracking-wider flex items-center justify-center shadow-xs flex-shrink-0 uppercase whitespace-nowrap">
                                         Day-{{ String(day.day_number).padStart(2, '0') }}
                                     </span>
-                                    <h3 class="text-lg font-black text-slate-900">{{ day.title }}</h3>
+                                    <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">{{ day.title }}</h3>
                                 </div>
-                                <span v-if="day.accommodation" class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full w-fit">
-                                    🏨 {{ day.accommodation }}
+                                <span v-if="day.accommodation && day.accommodation.trim() && day.accommodation.trim() !== '-'" class="text-xs font-bold text-slate-600 bg-slate-100/90 px-3.5 py-1.5 rounded-full border border-slate-200/60 w-fit flex items-center space-x-1.5 flex-shrink-0">
+                                    <svg class="w-3.5 h-3.5 text-slate-500 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12h12"/><path d="M6 7h12"/><path d="M6 17h12"/></svg>
+                                    <span>{{ day.accommodation }}</span>
                                 </span>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                                <div :class="[day.image ? 'md:col-span-7' : 'md:col-span-12', 'space-y-3']">
-                                    <p class="text-slate-600 text-xs sm:text-sm font-medium leading-relaxed">
-                                        {{ day.description }}
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+                                <div :class="[day.image ? 'md:col-span-7' : 'md:col-span-12', 'flex flex-col justify-center space-y-3']">
+                                    <p class="text-slate-600 text-xs sm:text-sm font-medium leading-relaxed whitespace-pre-line" v-html="formatDescription(day.description)">
                                     </p>
-                                    <div v-if="day.meals" class="text-xs font-extrabold text-[#2196F3]">
-                                        🍽️ Meals: {{ day.meals }}
-                                    </div>
                                 </div>
 
-                                <div v-if="day.image" class="md:col-span-5 h-44 sm:h-52 rounded-2xl overflow-hidden shadow-md">
-                                    <img :src="day.image" :alt="day.title" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                                <div v-if="day.image" class="md:col-span-5 flex items-center justify-center">
+                                    <div class="w-full h-full min-h-[180px] sm:min-h-[220px] max-h-[300px] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group relative">
+                                        <img 
+                                            :src="day.image" 
+                                            :alt="day.title" 
+                                            class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column: Pricing & Booking Inquiry Card -->
+                <!-- Right Column: Pricing, Inquiry Form, Related Tours & Concierge Card -->
                 <div class="lg:col-span-4 space-y-6">
-                    <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-xl space-y-6 sticky top-24">
+                    <!-- Main Sticky Booking Card -->
+                    <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-xl space-y-6">
                         <div class="border-b border-slate-100 pb-5 text-center">
                             <template v-if="package.price && Number(package.price) > 0">
                                 <span class="text-xs font-extrabold text-slate-400 uppercase tracking-widest">STARTING FROM</span>
@@ -196,11 +209,89 @@ const submitInquiry = () => {
                             </button>
                         </form>
 
-                        <div class="pt-4 border-t border-slate-100 text-center space-y-1 text-slate-500 text-xs">
-                            <div>📞 Direct Concierge: +94 766 834 881</div>
-                            <div>✉️ Email: info@worldinedestinations.com</div>
+                        <div class="pt-4 border-t border-slate-100 text-center space-y-1.5 text-slate-500 text-xs">
+                            <div class="flex items-center justify-center space-x-1.5">
+                                <svg class="w-3.5 h-3.5 text-slate-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                <span>Direct Concierge: +94 766 834 881</span>
+                            </div>
+                            <div class="flex items-center justify-center space-x-1.5">
+                                <svg class="w-3.5 h-3.5 text-slate-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                <span>Email: info@worldinedestinations.com</span>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- RELATED TOUR PACKAGES SIDEBAR CARD -->
+                    <div v-if="relatedPackages && relatedPackages.length > 0" class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/90 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="text-xs font-black uppercase text-slate-900 tracking-wider">Explore Similar Tours</h3>
+                            <span class="text-[10px] font-extrabold text-[#2196F3] bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                                Recommended
+                            </span>
+                        </div>
+
+                        <div class="space-y-3">
+                            <Link 
+                                v-for="relPkg in relatedPackages" 
+                                :key="relPkg.id" 
+                                :href="`/tours/${relPkg.slug}`" 
+                                class="group flex items-start space-x-3.5 p-3 rounded-2xl border border-slate-100 hover:border-sky-300 hover:bg-slate-50/80 transition-all duration-300"
+                            >
+                                <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 border border-slate-200/60 relative">
+                                    <img 
+                                        :src="relPkg.main_image || '/images/Logo/worldineback.png'" 
+                                        :alt="relPkg.title" 
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                    />
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <span class="text-[9px] font-extrabold text-[#2196F3] uppercase tracking-wider block">
+                                        {{ relPkg.destination ? relPkg.destination.name : 'Worldine Tour' }}
+                                    </span>
+                                    <h4 class="text-xs font-black text-slate-900 group-hover:text-[#2196F3] transition-colors line-clamp-1 leading-snug">
+                                        {{ relPkg.title }}
+                                    </h4>
+                                    <div class="flex items-center justify-between mt-1 text-[10px] text-slate-500 font-bold">
+                                        <span class="flex items-center space-x-1">
+                                            <svg class="w-3 h-3 text-slate-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                            <span>{{ relPkg.duration_days }} Days</span>
+                                        </span>
+                                        <span v-if="relPkg.price && Number(relPkg.price) > 0" class="text-[#0D47A1] font-black">
+                                            ${{ Number(relPkg.price).toLocaleString() }}
+                                        </span>
+                                        <span v-else class="text-emerald-600 font-bold">
+                                            Inquire
+                                        </span>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
+
+                    <!-- INSTANT WHATSAPP & CONCIERGE ASSISTANCE CARD -->
+                    <div class="bg-gradient-to-br from-slate-900 via-[#0D47A1] to-[#1565C0] p-6 rounded-3xl text-white shadow-md space-y-3 relative overflow-hidden">
+                        <div class="relative z-10 space-y-2">
+                            <div class="flex items-center space-x-2 text-xs font-bold text-sky-200">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>Instant Concierge Assistance</span>
+                            </div>
+                            <h4 class="text-base font-black text-white">Need a Custom Itinerary?</h4>
+                            <p class="text-xs text-slate-200 font-medium leading-relaxed">
+                                Our travel specialists can customize dates, luxury hotels, and private transfers for your exact itinerary.
+                            </p>
+                            <div class="pt-2">
+                                <a 
+                                    href="https://wa.me/94766834881" 
+                                    target="_blank" 
+                                    class="w-full py-3 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center space-x-2 shadow-sm transition-all hover:scale-[1.02]"
+                                >
+                                    <svg class="w-4 h-4 fill-current text-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l.999 1.595-1.152 4.21 4.316-1.132 1.58.994z"/></svg>
+                                    <span>Chat on WhatsApp (+94 766 834 881)</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>

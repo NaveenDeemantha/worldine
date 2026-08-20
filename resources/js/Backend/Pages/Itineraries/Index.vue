@@ -8,6 +8,7 @@ const props = defineProps({
 });
 
 const selectedPackageId = ref(props.packages.length > 0 ? props.packages[0].id : null);
+const saveSuccess = ref(false);
 
 const selectedPackage = computed(() => {
     return props.packages.find(p => p.id === selectedPackageId.value) || null;
@@ -17,15 +18,46 @@ const itineraryForm = useForm({
     id: null,
     destination_id: null,
     title: '',
+    category: '',
+    duration_days: 1,
+    duration_nights: 0,
+    price: null,
+    badge: '',
+    main_image: '',
+    overview: '',
+    inclusions: [],
+    is_featured: true,
+    is_active: true,
     days: [],
 });
 
 const loadPackageItinerary = (pkg) => {
     selectedPackageId.value = pkg.id;
+    saveSuccess.value = false;
     itineraryForm.id = pkg.id;
     itineraryForm.destination_id = pkg.destination_id;
     itineraryForm.title = pkg.title;
-    itineraryForm.days = pkg.itinerary_days ? pkg.itinerary_days.map(d => ({ ...d })) : [];
+    itineraryForm.category = pkg.category || 'global-outbound';
+    itineraryForm.duration_days = pkg.duration_days || 1;
+    itineraryForm.duration_nights = pkg.duration_nights || 0;
+    itineraryForm.price = pkg.price;
+    itineraryForm.badge = pkg.badge || '';
+    itineraryForm.main_image = pkg.main_image || '';
+    itineraryForm.overview = pkg.overview || '';
+    itineraryForm.inclusions = pkg.inclusions || [];
+    itineraryForm.is_featured = pkg.is_featured ?? true;
+    itineraryForm.is_active = pkg.is_active ?? true;
+    itineraryForm.days = pkg.itinerary_days && pkg.itinerary_days.length > 0
+        ? pkg.itinerary_days.map(d => ({
+            day_number: d.day_number,
+            title: d.title || '',
+            description: d.description || '',
+            image: typeof d.image === 'string' && d.image !== '[object File]' ? d.image : '',
+            image_file: null,
+            accommodation: d.accommodation || '',
+            meals: d.meals || '',
+        }))
+        : [];
 };
 
 if (props.packages.length > 0) {
@@ -50,8 +82,9 @@ const addItineraryDay = () => {
         title: `Day ${nextDayNum}: Sightseeing & Exploration`,
         description: '',
         image: '',
-        accommodation: '4-Star Luxury Resort',
-        meals: 'Breakfast & Dinner',
+        image_file: null,
+        accommodation: '',
+        meals: '',
     });
 };
 
@@ -65,15 +98,20 @@ const removeItineraryDay = (index) => {
 const onDayFileChange = (e, index) => {
     const file = e.target.files[0];
     if (file) {
-        itineraryForm.days[index].image = file;
+        itineraryForm.days[index].image_file = file;
     }
 };
 
 const saveItinerary = () => {
+    saveSuccess.value = false;
     itineraryForm.post(route('admin.packages.store'), {
         preserveScroll: true,
         onSuccess: () => {
-            alert('Itinerary updated successfully!');
+            saveSuccess.value = true;
+            setTimeout(() => { saveSuccess.value = false; }, 4000);
+        },
+        onError: (errors) => {
+            console.error('Save itinerary validation errors:', errors);
         }
     });
 };
@@ -84,6 +122,14 @@ const saveItinerary = () => {
 
     <AuthenticatedLayout>
         <div class="space-y-6 font-aptos">
+
+            <!-- SUCCESS NOTIFICATION BANNER -->
+            <div v-if="saveSuccess" class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold flex items-center justify-between shadow-xs">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-emerald-600 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <span>Itinerary saved successfully! All day details have been updated.</span>
+                </div>
+            </div>
 
             <!-- GLOBAL IMAGE GUIDANCE BANNER -->
             <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200/90 text-amber-900 text-xs font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
@@ -192,21 +238,30 @@ const saveItinerary = () => {
                                                     <svg class="w-3.5 h-3.5 text-slate-500 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                                                     <span>Or Web URL:</span>
                                                 </span>
-                                                <input type="text" v-model="day.image" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold" placeholder="https://..." />
+                                                <input type="text" v-model="day.image" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900" placeholder="https://..." />
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="sm:col-span-2">
-                                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Hotel Stay</label>
-                                        <input type="text" v-model="day.accommodation" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900" placeholder="e.g. Sigiriya Resort (5★)" />
+                                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">
+                                            Hotel Stay <span class="text-slate-400 font-normal">(Optional)</span>
+                                        </label>
+                                        <input type="text" v-model="day.accommodation" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900" placeholder="e.g. Sigiriya Resort (5★) or leave empty if not applicable" />
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="pt-4 border-t border-slate-100 flex items-center justify-end">
-                                <button type="submit" class="px-8 py-3 rounded-xl bg-[#0D47A1] hover:bg-[#1565C0] text-white text-xs font-extrabold shadow-md">
-                                    Save Complete Itinerary
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                                <span v-if="itineraryForm.isDirty" class="text-xs font-bold text-amber-600">Unsaved changes</span>
+                                <span v-else></span>
+
+                                <button 
+                                    type="submit" 
+                                    :disabled="itineraryForm.processing"
+                                    class="px-8 py-3 rounded-xl bg-[#0D47A1] hover:bg-[#1565C0] text-white text-xs font-extrabold shadow-md transition-all disabled:opacity-50"
+                                >
+                                    {{ itineraryForm.processing ? 'Saving Itinerary...' : 'Save Complete Itinerary' }}
                                 </button>
                             </div>
                         </form>
