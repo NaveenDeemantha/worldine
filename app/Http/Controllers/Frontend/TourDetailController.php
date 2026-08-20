@@ -21,11 +21,22 @@ class TourDetailController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
-        $relatedPackages = TourPackage::where('destination_id', $package->destination_id)
+        $relatedPackages = TourPackage::with('destination')
+            ->where('destination_id', $package->destination_id)
             ->where('id', '!=', $package->id)
             ->where('is_active', true)
-            ->take(3)
+            ->take(4)
             ->get();
+
+        if ($relatedPackages->count() < 3) {
+            $existingIds = $relatedPackages->pluck('id')->push($package->id)->toArray();
+            $extraPackages = TourPackage::with('destination')
+                ->whereNotIn('id', $existingIds)
+                ->where('is_active', true)
+                ->take(4 - $relatedPackages->count())
+                ->get();
+            $relatedPackages = $relatedPackages->merge($extraPackages);
+        }
 
         return Inertia::render('Frontend/Pages/Tours/Show', [
             'package' => $package,

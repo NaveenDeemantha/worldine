@@ -64,17 +64,17 @@ const activeHeroImage = computed(() => {
                     class="w-full h-full object-cover object-center transition-all duration-700"
                     fetchpriority="high"
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/70"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/20 to-slate-950/30 pointer-events-none"></div>
             </div>
 
             <div class="relative z-10 text-center max-w-4xl px-6 space-y-4">
-                <span class="text-xs font-black uppercase tracking-[0.3em] text-[#2196F3] bg-[#E3F2FD] px-4 py-1.5 rounded-full border border-[#90CAF9]/40 inline-block shadow-md">
+                <span class="text-xs font-black uppercase tracking-[0.3em] text-[#0D47A1] bg-[#E3F2FD]/95 px-4 py-1.5 rounded-full border border-[#90CAF9]/60 inline-block shadow-md backdrop-blur-sm">
                     {{ activeDestination ? (activeDestination.badge || activeDestination.name) : 'GLOBAL OUTBOUND EXPEDITIONS' }}
                 </span>
-                <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white uppercase leading-tight">
+                <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white uppercase leading-tight drop-shadow-lg">
                     {{ activeDestination ? activeDestination.name : 'Explore The World With Worldine' }}
                 </h1>
-                <p class="text-slate-200 text-xs sm:text-base max-w-2xl mx-auto font-medium leading-relaxed">
+                <p class="text-white text-xs sm:text-base max-w-2xl mx-auto font-bold leading-relaxed drop-shadow-md">
                     {{ activeDestination ? (activeDestination.subtitle || activeDestination.description) : 'Tailored international holiday packages across Australia, Bali, China, Dubai, Egypt, Japan, and Thailand with VIP flights, luxury resort stays, and hassle-free visa processing.' }}
                 </p>
             </div>

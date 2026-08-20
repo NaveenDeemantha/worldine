@@ -15,6 +15,7 @@ class HomeController extends Controller
         // Glimpse Carousel destinations
         $glimpseDestinations = Destination::where('is_active', true)
             ->where('is_glimpse', true)
+            ->withCount('packages')
             ->orderBy('name', 'asc')
             ->get()
             ->map(function ($dest) {
@@ -22,7 +23,7 @@ class HomeController extends Controller
                     'id' => $dest->id,
                     'name' => $dest->name,
                     'subtitle' => $dest->subtitle,
-                    'packagesCount' => $dest->packages()->count() . ' Packages',
+                    'packagesCount' => ($dest->packages_count ?? 0) . ' Packages',
                     'image' => $dest->image,
                     'badge' => $dest->badge,
                     'slug' => $dest->slug,

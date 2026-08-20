@@ -25,42 +25,42 @@ const handleScroll = () => {
 const defaultHeroSlides = [
     {
         id: 1,
-        image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=2400&q=85',
+        image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1400&q=75',
         tagline: 'SYDNEY & GREAT BARRIER REEF',
         title: 'AUSTRALIA TOUR',
         subtitle: 'Explore Sydney Opera House, Gold Coast beaches, and Barrier Reef coral diving.'
     },
     {
         id: 2,
-        image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=2400&q=85',
+        image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1400&q=75',
         tagline: 'PARIS, SWISS ALPS & ROME',
         title: 'EUROPE SCHENGEN TOUR',
         subtitle: 'Discover Paris Eiffel cruises, snow-capped Swiss Alps, and hassle-free Schengen visas.'
     },
     {
         id: 3,
-        image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=2400&q=85',
+        image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1400&q=75',
         tagline: 'UBUD VILLAS & TROPICAL BEACHES',
         title: 'BALI ISLAND ESCAPE',
         subtitle: 'Unwind in luxury jungle pool villas, sunset ocean temples, and coral reefs.'
     },
     {
         id: 4,
-        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=2400&q=85',
+        image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1400&q=75',
         tagline: 'TOKYO & MOUNT FUJI',
         title: 'JAPAN DISCOVERY TOUR',
         subtitle: 'Experience Tokyo city lights, Mount Fuji views, and Kyoto cherry blossom temples.'
     },
     {
         id: 5,
-        image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2400&q=85',
+        image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1400&q=75',
         tagline: 'BURJ KHALIFA & DESERT SAFARI',
         title: 'DUBAI LUXURY HOLIDAY',
         subtitle: 'Witness Burj Khalifa skyscrapers, 4x4 dune bashing, and luxury marina cruises.'
     },
     {
         id: 6,
-        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=2400&q=85',
+        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1400&q=75',
         tagline: 'OVERWATER VILLAS & CORAL REEFS',
         title: 'MALDIVES LUXURY ESCAPE',
         subtitle: 'Indulge in private water villa suites, seaplane lagoon flights, and sunset cruises.'
@@ -243,6 +243,17 @@ const toggleWishlist = (id) => {
 };
 
 // Dynamic Categories Computed from Backend Database Packages
+const getDurationBadgeText = (dest) => {
+    if (!dest) return '';
+    const days = (dest.itinerary_days && dest.itinerary_days.length > 0) 
+        ? dest.itinerary_days.length 
+        : (dest.duration_days || 1);
+    const nights = (dest.duration_nights !== null && dest.duration_nights !== undefined && dest.duration_nights > 0)
+        ? dest.duration_nights
+        : Math.max(0, days - 1);
+    return nights > 0 ? `${days} Days / ${nights} Nights` : `${days} Day Tour`;
+};
+
 const categories = computed(() => {
     const list = props.dbFeaturedPackages || [];
     const inboundCount = list.filter(p => p.category === 'srilanka-inbound' || p.category === 'inbound' || (p.destination && p.destination.type === 'inbound')).length;
@@ -892,11 +903,13 @@ const features = [
 
                         <!-- Location & Duration Bottom Image -->
                         <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-white">
-                            <span class="flex items-center space-x-1 font-bold truncate max-w-[65%]">
-                                📍 {{ dest.destination ? dest.destination.name : (dest.subtitle || 'Global Expedition') }}
+                            <span class="flex items-center space-x-1 font-bold truncate max-w-[60%]">
+                                <svg class="w-3.5 h-3.5 text-[#2196F3] fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span>{{ dest.destination ? dest.destination.name : (dest.subtitle || 'Global Expedition') }}</span>
                             </span>
-                            <span class="flex items-center space-x-1 bg-slate-900/80 text-white px-2 py-0.5 rounded font-bold text-[10px] border border-white/20">
-                                ⏱️ {{ dest.duration || (dest.duration_days + ' Days') }}
+                            <span class="flex items-center space-x-1 bg-slate-900/85 backdrop-blur-md text-white px-2.5 py-1 rounded-md font-bold text-[10px] border border-white/20 shadow-xs">
+                                <svg class="w-3 h-3 text-sky-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <span>{{ getDurationBadgeText(dest) }}</span>
                             </span>
                         </div>
                     </div>
