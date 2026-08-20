@@ -60,7 +60,7 @@ const formatDescription = (text) => {
                     class="w-full h-full object-cover object-center"
                     fetchpriority="high"
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-slate-950/40"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/20 to-slate-950/25 pointer-events-none"></div>
             </div>
 
             <div class="relative z-10 max-w-4xl space-y-4">
@@ -79,8 +79,8 @@ const formatDescription = (text) => {
                 <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase leading-tight">
                     {{ package.title }}
                 </h1>
-                <p class="text-slate-200 text-sm sm:text-base max-w-2xl font-medium leading-relaxed">
-                    {{ package.subtitle || package.overview }}
+                <p v-if="package.subtitle" class="text-white text-sm sm:text-base max-w-2xl font-semibold leading-relaxed drop-shadow-md">
+                    {{ package.subtitle }}
                 </p>
             </div>
         </section>

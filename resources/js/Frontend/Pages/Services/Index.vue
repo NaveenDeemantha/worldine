@@ -32,7 +32,7 @@ const serviceList = [
                 <!-- Smooth White Top Fade for Navbar -->
                 <div class="absolute top-0 left-0 right-0 h-20 sm:h-28 bg-gradient-to-b from-white via-white/20 to-transparent pointer-events-none z-10"></div>
                 <!-- Soft Dark Protection Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/40 z-10"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/20 to-slate-950/30 z-10 pointer-events-none"></div>
             </div>
 
             <div class="relative z-20 text-center w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 pt-10 sm:pt-14 max-w-4xl mx-auto space-y-2">
