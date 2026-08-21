@@ -539,7 +539,7 @@ const filteredDestinations = computed(() => {
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-200/80 pb-2">
                             <label class="block text-xs font-bold text-slate-800 uppercase">Destination Cover Image</label>
                             <span class="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2.5 py-0.5 rounded-full">
-                                📐 Rec: 1200×800 px | ⚡ Max: 500 KB
+                                Rec: 1200×800 px | Max: 500 KB
                             </span>
                         </div>
 

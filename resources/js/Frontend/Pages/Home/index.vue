@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import Navbar from '../../Components/Navbar.vue';
 
 // Props passed from Inertia controller (optional)
@@ -9,7 +9,8 @@ const props = defineProps({
     canRegister: { type: Boolean, default: true },
     auth: { type: Object, default: () => ({ user: null }) },
     dbGlimpseDestinations: { type: Array, default: () => [] },
-    dbFeaturedPackages: { type: Array, default: () => [] }
+    dbFeaturedPackages: { type: Array, default: () => [] },
+    dbTestimonials: { type: Array, default: () => [] }
 });
 
 // Navigation & UI State
@@ -532,8 +533,43 @@ const handleSubscribe = () => {
     }
 };
 
-// Testimonials Data
-const testimonials = [
+// Testimonials & Public Story Submission State
+const isStoryModalOpen = ref(false);
+const storySuccessMessage = ref('');
+const testimonialContainerRef = ref(null);
+
+const scrollTestimonialRow = (direction) => {
+    if (testimonialContainerRef.value) {
+        const scrollAmount = direction === 'left' ? -380 : 380;
+        testimonialContainerRef.value.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+};
+
+const storyForm = useForm({
+    name: '',
+    location: '',
+    destination: '',
+    rating: 5,
+    avatar: '',
+    text: '',
+});
+
+const submitStory = () => {
+    storyForm.post(route('testimonials.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            isStoryModalOpen.value = false;
+            storyForm.reset();
+            storyForm.rating = 5;
+            storySuccessMessage.value = 'Thank you for sharing your story! Your experience has been published.';
+            setTimeout(() => {
+                storySuccessMessage.value = '';
+            }, 6000);
+        }
+    });
+};
+
+const defaultTestimonials = [
     {
         name: 'Samantha & Richard Vance',
         location: 'London, UK',
@@ -545,10 +581,10 @@ const testimonials = [
     {
         name: 'Kasun & Dilini Wickramasinghe',
         location: 'Colombo, Sri Lanka',
-        destination: 'Canada Student Visa (Acadia Univ)',
+        destination: 'Australia Sydney & Barrier Reef Tour',
         rating: 5,
         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
-        text: 'Worldine Education guided me step-by-step through my Acadia University application and Canada student visa approval. Their 20+ years of travel trade expertise truly shines!'
+        text: 'Worldine guided us step-by-step through our Australia visa and holiday package. Their 20+ years of travel trade expertise truly shines!'
     },
     {
         name: 'Hans & Greta Müller',
@@ -559,6 +595,13 @@ const testimonials = [
         text: 'Seeing wild leopards in Yala and hundreds of elephants in Minneriya was magical! Worldine Destinations is definitely the best tour operator in Sri Lanka.'
     }
 ];
+
+const testimonials = computed(() => {
+    if (props.dbTestimonials && props.dbTestimonials.length > 0) {
+        return props.dbTestimonials;
+    }
+    return defaultTestimonials;
+});
 
 // Why Choose Us Features
 const features = [
@@ -978,7 +1021,7 @@ const features = [
             </div>
             <!-- Empty state if no backend packages match -->
             <div v-else class="text-center py-16 bg-white rounded-3xl border border-slate-200/80 p-8 shadow-xs">
-                <div class="text-4xl mb-3">🌍</div>
+                <svg class="w-12 h-12 text-[#2196F3] mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V7a2 2 0 00-2-2h-1.5A2.5 2.5 0 0113 2.5V2M12 21a9 9 0 100-18 9 9 0 000 18z"/></svg>
                 <h3 class="text-lg font-bold text-slate-800">No Tour Packages Found</h3>
                 <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Active tour packages added in the backend admin panel will appear here.</p>
             </div>
@@ -1247,39 +1290,206 @@ const features = [
         </section>
 
         <!-- CUSTOMER REVIEWS & TESTIMONIALS SECTION (MOVED HERE AFTER WHY CHOOSE WORLDINE SECTION) -->
-        <section id="testimonials" class="py-16 sm:py-24 bg-white border-b border-slate-100 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24">
+        <!-- REAL TRAVELER STORIES SECTION WITH SINGLE SCROLLABLE ROW -->
+        <section id="testimonials" class="py-16 sm:py-24 bg-white border-b border-slate-100 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 overflow-hidden">
             <div class="w-full">
-                <div class="text-center max-w-xl mx-auto mb-12">
-                    <span class="text-[#2B70B4] text-xs font-black uppercase tracking-widest">REAL TRAVELER STORIES</span>
-                    <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 mt-1">Loved By Over 45,000+ Explorers</h2>
+                <!-- Section Header & Controls -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+                    <div class="text-left max-w-xl">
+                        <span class="text-[#2B70B4] text-xs font-black uppercase tracking-widest">REAL TRAVELER STORIES</span>
+                        <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 mt-1">Loved By Over 45,000+ Explorers</h2>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <!-- Navigation Scroll Buttons -->
+                        <div class="flex items-center space-x-2">
+                            <button 
+                                @click="scrollTestimonialRow('left')" 
+                                class="w-10 h-10 rounded-full bg-slate-100 hover:bg-[#2B70B4] text-slate-700 hover:text-white flex items-center justify-center transition-all shadow-xs border border-slate-200 active:scale-95"
+                                aria-label="Scroll left"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                            </button>
+                            <button 
+                                @click="scrollTestimonialRow('right')" 
+                                class="w-10 h-10 rounded-full bg-[#2B70B4] hover:bg-[#1E5288] text-white flex items-center justify-center transition-all shadow-md active:scale-95"
+                                aria-label="Scroll right"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Add Story Button -->
+                        <button 
+                            @click="isStoryModalOpen = true"
+                            class="px-5 py-3 rounded-full bg-slate-900 hover:bg-[#2B70B4] text-white font-extrabold text-xs uppercase tracking-widest shadow-md hover:shadow-lg transition-all duration-300 flex items-center space-x-2 flex-shrink-0"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                            <span>Share Your Story</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full">
+                <!-- Story Submission Success Toast -->
+                <div v-if="storySuccessMessage" class="mb-8 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 font-bold text-xs flex items-center justify-between shadow-sm animate-fade-in">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-black">✓</span>
+                        <span>{{ storySuccessMessage }}</span>
+                    </div>
+                    <button @click="storySuccessMessage = ''" class="text-emerald-700 font-black text-sm">✕</button>
+                </div>
+
+                <!-- SINGLE SCROLLABLE ROW OF STORIES -->
+                <div 
+                    ref="testimonialContainerRef"
+                    class="flex space-x-6 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory scroll-smooth no-scrollbar w-full"
+                >
                     <div 
                         v-for="(t, idx) in testimonials" 
                         :key="idx"
-                        class="bg-slate-50/80 border border-slate-200/80 hover:border-[#2B70B4]/40 p-6 sm:p-7 rounded-3xl space-y-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300 w-full"
+                        class="w-[300px] sm:w-[360px] md:w-[400px] flex-shrink-0 snap-start bg-slate-50/80 border border-slate-200/80 hover:border-[#2B70B4]/40 p-6 sm:p-7 rounded-3xl space-y-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300"
                     >
                         <div class="space-y-3">
                             <div class="flex text-amber-400 space-x-1 text-sm">
-                                <span v-for="star in t.rating" :key="star">★</span>
+                                <span v-for="star in (t.rating || 5)" :key="star">★</span>
                             </div>
-                            <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed">
+                            <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed line-clamp-4">
                                 "{{ t.text }}"
                             </p>
                         </div>
 
                         <div class="pt-3 border-t border-slate-200/60 flex items-center space-x-3">
-                            <img :src="t.avatar" :alt="t.name" class="w-10 h-10 rounded-full object-cover border-2 border-[#2B70B4]" />
-                            <div>
-                                <div class="font-bold text-slate-900 text-xs sm:text-sm">{{ t.name }}</div>
-                                <div class="text-[11px] text-slate-500">{{ t.location }} • <span class="text-[#2B70B4] font-semibold">{{ t.destination }}</span></div>
+                            <img 
+                                :src="t.avatar || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(t.name) + '&background=2B70B4&color=fff')" 
+                                :alt="t.name" 
+                                class="w-10 h-10 rounded-full object-cover border-2 border-[#2B70B4] flex-shrink-0" 
+                            />
+                            <div class="overflow-hidden">
+                                <div class="font-bold text-slate-900 text-xs sm:text-sm truncate">{{ t.name }}</div>
+                                <div class="text-[11px] text-slate-500 truncate">{{ t.location || 'Explorer' }} • <span class="text-[#2B70B4] font-semibold">{{ t.destination || 'Worldine Experience' }}</span></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- SHARE YOUR STORY PUBLIC MODAL -->
+        <div v-if="isStoryModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
+            <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto text-slate-800">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                        <span class="text-xs font-black uppercase text-[#2B70B4] tracking-widest">WORLDINE COMMUNITY</span>
+                        <h3 class="text-xl sm:text-2xl font-black text-slate-900">Share Your Travel Story</h3>
+                    </div>
+                    <button @click="isStoryModalOpen = false" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+                </div>
+
+                <form @submit.prevent="submitStory" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
+                            Your Name *
+                        </label>
+                        <input 
+                            v-model="storyForm.name"
+                            type="text"
+                            required
+                            placeholder="e.g. Samantha & Richard"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#2B70B4] focus:ring-2 focus:ring-[#2B70B4]/20 text-xs font-medium text-slate-900 outline-none"
+                        />
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
+                                Your City / Country
+                            </label>
+                            <input 
+                                v-model="storyForm.location"
+                                type="text"
+                                placeholder="e.g. London, UK"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#2B70B4] focus:ring-2 focus:ring-[#2B70B4]/20 text-xs font-medium text-slate-900 outline-none"
+                            />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
+                                Tour / Destination Visited
+                            </label>
+                            <input 
+                                v-model="storyForm.destination"
+                                type="text"
+                                placeholder="e.g. Sri Lanka 8D7N Heritage Tour"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#2B70B4] focus:ring-2 focus:ring-[#2B70B4]/20 text-xs font-medium text-slate-900 outline-none"
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
+                            Your Rating (Stars) *
+                        </label>
+                        <div class="flex items-center space-x-2">
+                            <button 
+                                v-for="s in 5" 
+                                :key="s"
+                                type="button"
+                                @click="storyForm.rating = s"
+                                :class="[
+                                    'text-2xl transition-all transform hover:scale-110',
+                                    s <= storyForm.rating ? 'text-amber-400' : 'text-slate-300'
+                                ]"
+                            >
+                                ★
+                            </button>
+                            <span class="text-xs font-extrabold text-slate-600 pl-2">({{ storyForm.rating }} Stars)</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
+                            Your Story & Feedback *
+                        </label>
+                        <textarea 
+                            v-model="storyForm.text"
+                            required
+                            rows="4"
+                            placeholder="Tell us about your trip experience, chauffeur guide, hotels, or memorable moments..."
+                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#2B70B4] focus:ring-2 focus:ring-[#2B70B4]/20 text-xs font-medium text-slate-900 outline-none"
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
+                            Avatar Photo Link (Optional)
+                        </label>
+                        <input 
+                            v-model="storyForm.avatar"
+                            type="text"
+                            placeholder="https://... (or leave blank for generated avatar)"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#2B70B4] focus:ring-2 focus:ring-[#2B70B4]/20 text-xs font-medium text-slate-900 outline-none"
+                        />
+                    </div>
+
+                    <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
+                        <button 
+                            type="button"
+                            @click="isStoryModalOpen = false"
+                            class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit"
+                            :disabled="storyForm.processing"
+                            class="px-7 py-3 rounded-xl bg-[#2B70B4] hover:bg-[#1E5288] text-white font-extrabold text-xs uppercase tracking-widest shadow-lg transition-all"
+                        >
+                            {{ storyForm.processing ? 'Submitting...' : 'Post Story →' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <!-- READY TO START YOUR ADVENTURE CTA BANNER WITH ANIMATED AIRPLANES & DESTINATION MARKS -->
         <section class="py-8 sm:py-20 w-full px-4 sm:px-10 md:px-14 lg:px-20 xl:px-24">
@@ -1525,25 +1735,25 @@ const features = [
                         <ul class="space-y-2 text-xs font-semibold text-slate-200">
                             <li>
                                 <a href="tel:+94766834881" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
-                                    <span>📞</span>
+                                    <svg class="w-4 h-4 text-[#90CAF9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                     <span>+94 766 834 881</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="tel:+94718834881" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
-                                    <span>📞</span>
+                                    <svg class="w-4 h-4 text-[#90CAF9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                     <span>+94 718 834 881</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="tel:+94778692229" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
-                                    <span>📞</span>
+                                    <svg class="w-4 h-4 text-[#90CAF9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                     <span>+94 778 869 222</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="mailto:info@worldinedestinations.com" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
-                                    <span>✉️</span>
+                                    <svg class="w-4 h-4 text-[#90CAF9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                     <span class="truncate">info@worldinedestinations.com</span>
                                 </a>
                             </li>
@@ -1647,8 +1857,14 @@ const features = [
                     <span class="bg-[#0D47A1] text-white font-extrabold text-[10px] px-3 py-1 rounded-full uppercase shadow-xs">
                         {{ activeModalDestination.badge || (activeModalDestination.destination ? activeModalDestination.destination.name : 'Worldine Tour') }}
                     </span>
-                    <span class="text-xs text-slate-600 font-bold">📍 {{ activeModalDestination.destination ? activeModalDestination.destination.name : (activeModalDestination.subtitle || 'Global Expedition') }}</span>
-                    <span class="text-xs text-[#0D47A1] font-extrabold ml-auto">⏱️ {{ activeModalDestination.duration || (activeModalDestination.duration_days + ' Days') }}</span>
+                    <span class="text-xs text-slate-600 font-bold flex items-center space-x-1">
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <span>{{ activeModalDestination.destination ? activeModalDestination.destination.name : (activeModalDestination.subtitle || 'Global Expedition') }}</span>
+                    </span>
+                    <span class="text-xs text-[#0D47A1] font-extrabold ml-auto flex items-center space-x-1">
+                        <svg class="w-3.5 h-3.5 text-[#0D47A1]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>{{ activeModalDestination.duration || (activeModalDestination.duration_days + ' Days') }}</span>
+                    </span>
                 </div>
 
                 <h3 class="text-xl sm:text-2xl font-black text-slate-900">

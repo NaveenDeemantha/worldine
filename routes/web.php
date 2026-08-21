@@ -7,9 +7,11 @@ use App\Http\Controllers\Frontend\OutboundDestinationController;
 use App\Http\Controllers\Frontend\TourDetailController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\ServicesController;
+use App\Http\Controllers\Frontend\TestimonialController;
 use App\Http\Controllers\Backend\DestinationController;
 use App\Http\Controllers\Backend\ContactAdminController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\TestimonialAdminController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -22,6 +24,7 @@ Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'sendInquiry'])->name('contact.send');
 Route::post('/tours/inquire', [TourDetailController::class, 'sendPackageInquiry'])->name('tours.inquire');
+Route::post('/testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
 
 // Admin Dashboard & Auth Protected Routes
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -45,6 +48,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/bookings', [DestinationController::class, 'indexBookings'])->name('admin.bookings.index');
     Route::get('/admin/contact', [ContactAdminController::class, 'index'])->name('admin.contact.index');
     Route::put('/admin/contact', [ContactAdminController::class, 'update'])->name('admin.contact.update');
+
+    // Traveller Stories / Testimonials Admin Routes
+    Route::get('/admin/testimonials', [TestimonialAdminController::class, 'index'])->name('admin.testimonials.index');
+    Route::post('/admin/testimonials', [TestimonialAdminController::class, 'store'])->name('admin.testimonials.store');
+    Route::put('/admin/testimonials/{testimonial}', [TestimonialAdminController::class, 'update'])->name('admin.testimonials.update');
+    Route::patch('/admin/testimonials/{testimonial}/toggle', [TestimonialAdminController::class, 'toggle'])->name('admin.testimonials.toggle');
+    Route::delete('/admin/testimonials/{testimonial}', [TestimonialAdminController::class, 'destroy'])->name('admin.testimonials.destroy');
 });
 
 require __DIR__.'/auth.php';

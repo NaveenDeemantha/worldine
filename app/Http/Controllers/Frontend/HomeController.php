@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Destination;
 use App\Models\TourPackage;
+use App\Models\Testimonial;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -12,6 +13,11 @@ class HomeController extends Controller
 {
     public function index(): Response
     {
+        // Active Traveller Stories / Testimonials
+        $testimonials = Testimonial::where('is_active', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         // Glimpse Carousel destinations
         $glimpseDestinations = Destination::where('is_active', true)
             ->where('is_glimpse', true)
@@ -66,6 +72,7 @@ class HomeController extends Controller
         return Inertia::render('Frontend/Pages/Home/index', [
             'dbGlimpseDestinations' => $glimpseDestinations,
             'dbFeaturedPackages' => $featuredPackages,
+            'dbTestimonials' => $testimonials,
         ]);
     }
 }

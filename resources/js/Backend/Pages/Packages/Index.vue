@@ -121,7 +121,7 @@ const filteredPackages = computed(() => {
                         placeholder="Search tour title or region..." 
                         class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2196F3]"
                     />
-                    <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+                    <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
 
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
