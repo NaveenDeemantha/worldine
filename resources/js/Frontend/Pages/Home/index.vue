@@ -142,7 +142,7 @@ const prevHeroSlide = () => {
 };
 
 // About Section Destination Image Showcase Data
-const aboutDestinations = ref([
+const defaultAboutDestinations = [
     {
         country: 'Worldine Expeditions',
         flag: '🌐',
@@ -153,7 +153,7 @@ const aboutDestinations = ref([
         country: 'Sri Lanka',
         flag: '🇱🇰',
         tagline: 'Sigiriya Rock Citadel & UNESCO Ancient Kingdoms',
-        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1200&q=80'
+        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80'
     },
     {
         country: 'Australia',
@@ -171,19 +171,13 @@ const aboutDestinations = ref([
         country: 'Thailand',
         flag: '🇹🇭',
         tagline: 'Bangkok Grand Palaces & Turquoise Beach Lagoons',
-        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'
+        image: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80'
     },
     {
-        country: 'Malaysia',
-        flag: '🇲🇾',
-        tagline: 'Petronas Twin Towers & Rainforest Island Escapes',
-        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1200&q=80'
-    },
-    {
-        country: 'Singapore',
-        flag: '🇸🇬',
-        tagline: 'Marina Bay Sands Towers & Supertree Grove',
-        image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1200&q=80'
+        country: 'Dubai',
+        flag: '🇦🇪',
+        tagline: 'Burj Khalifa, Desert Dunes & Marina Luxury Yacht Cruises',
+        image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80'
     },
     {
         country: 'China',
@@ -191,7 +185,26 @@ const aboutDestinations = ref([
         tagline: 'Great Wall of China & Historical Forbidden City',
         image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=1200&q=80'
     }
-]);
+];
+
+const aboutDestinations = computed(() => {
+    if (glimpseDestinations.value && glimpseDestinations.value.length > 0) {
+        const dynamicDests = glimpseDestinations.value.map(dest => ({
+            country: dest.name,
+            tagline: dest.subtitle || dest.badge || 'Discover Extraordinary Journeys',
+            image: dest.image || '/images/Logo/worldineback.png'
+        }));
+        return [
+            {
+                country: 'Worldine Expeditions',
+                tagline: 'Over 20 Years of Premier Travel & Visa Expertise',
+                image: '/images/Logo/worldineback.png'
+            },
+            ...dynamicDests
+        ];
+    }
+    return defaultAboutDestinations;
+});
 
 const currentAboutSlide = ref(0);
 let aboutSlideTimer = null;
@@ -272,7 +285,7 @@ const defaultGlimpseDestinations = [
         name: 'Sri Lanka',
         subtitle: 'Pearl of the Indian Ocean & UNESCO Heritage',
         packagesCount: 'Inbound Specialist',
-        image: 'https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80',
         badge: 'Inbound Specialist'
     },
     {
@@ -817,10 +830,10 @@ const features = [
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent z-20 pointer-events-none"></div>
 
                             <!-- Bottom Info Caption -->
-                            <div class="absolute bottom-6 left-6 right-6 z-30 text-white space-y-1">
-                                <h3 class="text-xl sm:text-3xl font-black tracking-wide">{{ aboutDestinations[currentAboutSlide].country }}</h3>
+                            <div v-if="aboutDestinations[currentAboutSlide]" class="absolute bottom-6 left-6 right-6 z-30 text-white space-y-1">
+                                <h3 class="text-xl sm:text-3xl font-black tracking-wide">{{ aboutDestinations[currentAboutSlide]?.country }}</h3>
                                 <p class="text-xs sm:text-sm text-slate-200 font-medium leading-tight">
-                                    {{ aboutDestinations[currentAboutSlide].tagline }}
+                                    {{ aboutDestinations[currentAboutSlide]?.tagline }}
                                 </p>
                             </div>
                         </div>
