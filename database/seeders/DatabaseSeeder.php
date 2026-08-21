@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Destination;
 use App\Models\TourPackage;
 use App\Models\PackageItineraryDay;
+use App\Models\Testimonial;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -137,6 +138,41 @@ class DatabaseSeeder extends Seeder
 
         foreach ($destinationsData as $destData) {
             Destination::updateOrCreate(['slug' => $destData['slug']], $destData);
+        }
+
+        // 3. Seed Default Real Traveller Stories
+        $testimonials = [
+            [
+                'name' => 'Samantha & Richard Vance',
+                'location' => 'London, UK',
+                'destination' => 'Sri Lanka 8D7N Grand Heritage Tour',
+                'rating' => 5,
+                'avatar' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+                'text' => 'Worldine Destinations made our Sri Lanka trip unforgettable! From our private chauffeur guide to the Sigiriya luxury hotel, every detail was handled with top-tier professionalism.',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Kasun & Dilini Wickramasinghe',
+                'location' => 'Colombo, Sri Lanka',
+                'destination' => 'Australia Sydney & Barrier Reef Tour',
+                'rating' => 5,
+                'avatar' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+                'text' => 'Worldine guided us step-by-step through our Australia visa and holiday package. Their 20+ years of travel trade expertise truly shines!',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Hans & Greta Müller',
+                'location' => 'Frankfurt, Germany',
+                'destination' => 'Sri Lanka Wildlife & Safari Tour',
+                'rating' => 5,
+                'avatar' => 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80',
+                'text' => 'Seeing wild leopards in Yala and hundreds of elephants in Minneriya was magical! Worldine Destinations is definitely the best tour operator in Sri Lanka.',
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($testimonials as $t) {
+            Testimonial::updateOrCreate(['name' => $t['name']], $t);
         }
     }
 }
