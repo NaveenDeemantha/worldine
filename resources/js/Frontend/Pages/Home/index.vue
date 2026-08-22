@@ -662,7 +662,7 @@ const features = [
                 </div>
                 -->
                 <img 
-                    src="/images/Logo/worldineback.png" 
+                    src="/images/Logo/worldineback.webp" 
                     alt="Worldine Hero" 
                     class="w-full h-full object-cover object-top"
                     fetchpriority="high"
@@ -776,6 +776,8 @@ const features = [
                                 <img 
                                     :src="dest.image" 
                                     :alt="dest.name" 
+                                    loading="lazy"
+                                    decoding="async"
                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                 />
                                 <!-- Sleek Dark Gradient Protection Overlay -->
@@ -947,8 +949,10 @@ const features = [
                     <!-- Image Banner & Badges (Clickable -> Opens Quick View) -->
                     <div @click="openQuickView(dest)" class="relative h-48 sm:h-56 lg:h-60 overflow-hidden bg-slate-100 cursor-pointer">
                         <img 
-                            :src="dest.image || dest.main_image || '/images/Logo/worldineback.png'" 
+                            :src="dest.image || dest.main_image || '/images/Logo/worldineback.webp'" 
                             :alt="dest.title" 
+                            loading="lazy"
+                            decoding="async"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent"></div>

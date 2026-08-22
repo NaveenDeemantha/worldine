@@ -60,6 +60,7 @@ const formatDescription = (text) => {
                     :alt="package.title" 
                     class="w-full h-full object-cover object-center"
                     fetchpriority="high"
+                    decoding="async"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/20 to-slate-950/25 pointer-events-none"></div>
             </div>
@@ -148,6 +149,8 @@ const formatDescription = (text) => {
                                         <img 
                                             :src="day.image" 
                                             :alt="day.title" 
+                                            loading="lazy"
+                                            decoding="async"
                                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
                                         />
                                     </div>

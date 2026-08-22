@@ -10,6 +10,10 @@
         <link rel="icon" type="image/png" href="/images/Logo/worldine.png">
         <link rel="apple-touch-icon" href="/images/Logo/worldine.png">
 
+        <!-- Preload Critical Hero Background -->
+        <link rel="preload" as="image" href="/images/Logo/worldineback.webp" type="image/webp" fetchpriority="high">
+        <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

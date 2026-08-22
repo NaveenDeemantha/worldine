@@ -108,14 +108,11 @@ class DestinationController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . Str::slug($validated['name']) . '.' . $file->getClientOriginalExtension();
-            $destPath = public_path('images/destinations');
-            if (!file_exists($destPath)) {
-                mkdir($destPath, 0755, true);
-            }
-            $file->move($destPath, $filename);
-            $validated['image'] = '/images/destinations/' . $filename;
+            $validated['image'] = \App\Services\ImageOptimizerService::storeOptimized(
+                $request->file('image'),
+                'images/destinations',
+                $validated['name']
+            );
         }
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -143,14 +140,11 @@ class DestinationController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . Str::slug($validated['name']) . '.' . $file->getClientOriginalExtension();
-            $destPath = public_path('images/destinations');
-            if (!file_exists($destPath)) {
-                mkdir($destPath, 0755, true);
-            }
-            $file->move($destPath, $filename);
-            $validated['image'] = '/images/destinations/' . $filename;
+            $validated['image'] = \App\Services\ImageOptimizerService::storeOptimized(
+                $request->file('image'),
+                'images/destinations',
+                $validated['name']
+            );
         }
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -202,14 +196,11 @@ class DestinationController extends Controller
         ]);
 
         if ($request->hasFile('main_image')) {
-            $file = $request->file('main_image');
-            $filename = time() . '_' . Str::slug($validated['title'] ?? 'package') . '.' . $file->getClientOriginalExtension();
-            $pkgPath = public_path('images/packages');
-            if (!file_exists($pkgPath)) {
-                mkdir($pkgPath, 0755, true);
-            }
-            $file->move($pkgPath, $filename);
-            $validated['main_image'] = '/images/packages/' . $filename;
+            $validated['main_image'] = \App\Services\ImageOptimizerService::storeOptimized(
+                $request->file('main_image'),
+                'images/packages',
+                $validated['title'] ?? 'package'
+            );
         } elseif (isset($validated['main_image']) && is_string($validated['main_image']) && $validated['main_image'] === '[object File]') {
             unset($validated['main_image']);
         }
@@ -255,23 +246,17 @@ class DestinationController extends Controller
                 $dayImage = $dayData['image'] ?? null;
                 
                 if ($request->hasFile("days.{$index}.image_file")) {
-                    $dayFile = $request->file("days.{$index}.image_file");
-                    $dayFilename = time() . "_day_" . ($index + 1) . '_' . Str::slug($package->title) . '.' . $dayFile->getClientOriginalExtension();
-                    $dayPath = public_path('images/packages');
-                    if (!file_exists($dayPath)) {
-                        mkdir($dayPath, 0755, true);
-                    }
-                    $dayFile->move($dayPath, $dayFilename);
-                    $dayImage = '/images/packages/' . $dayFilename;
+                    $dayImage = \App\Services\ImageOptimizerService::storeOptimized(
+                        $request->file("days.{$index}.image_file"),
+                        'images/packages',
+                        "day_" . ($index + 1) . '_' . ($package->title ?? 'tour')
+                    );
                 } elseif ($request->hasFile("days.{$index}.image")) {
-                    $dayFile = $request->file("days.{$index}.image");
-                    $dayFilename = time() . "_day_" . ($index + 1) . '_' . Str::slug($package->title) . '.' . $dayFile->getClientOriginalExtension();
-                    $dayPath = public_path('images/packages');
-                    if (!file_exists($dayPath)) {
-                        mkdir($dayPath, 0755, true);
-                    }
-                    $dayFile->move($dayPath, $dayFilename);
-                    $dayImage = '/images/packages/' . $dayFilename;
+                    $dayImage = \App\Services\ImageOptimizerService::storeOptimized(
+                        $request->file("days.{$index}.image"),
+                        'images/packages',
+                        "day_" . ($index + 1) . '_' . ($package->title ?? 'tour')
+                    );
                 } elseif (is_string($dayImage) && $dayImage === '[object File]') {
                     $dayImage = null;
                 }
