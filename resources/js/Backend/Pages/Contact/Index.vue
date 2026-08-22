@@ -14,6 +14,7 @@ const form = useForm({
     hero_badge: props.settings.hero_badge || '',
     hero_title: props.settings.hero_title || '',
     hero_subtitle: props.settings.hero_subtitle || '',
+    landline_phone: props.settings.landline_phone || '',
     primary_phone: props.settings.primary_phone || '',
     outbound_phone: props.settings.outbound_phone || '',
     inbound_phone: props.settings.inbound_phone || '',
@@ -98,7 +99,6 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.hero_badge"
                                 type="text"
-                                required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
@@ -110,7 +110,6 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.hero_title"
                                 type="text"
-                                required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
@@ -122,7 +121,6 @@ const submitSettings = () => {
                         </label>
                         <textarea 
                             v-model="form.hero_subtitle"
-                            required
                             rows="2"
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                         ></textarea>
@@ -136,39 +134,51 @@ const submitSettings = () => {
                         <p class="text-xs text-slate-500 font-medium">Contact phone numbers and email addresses.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                                Primary Phone / WhatsApp
+                                Landline Phone No
+                            </label>
+                            <input 
+                                v-model="form.landline_phone"
+                                type="text"
+                                placeholder="+94 11 263 6558"
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
+                            />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                                Mobile Hotline 1
                             </label>
                             <input 
                                 v-model="form.primary_phone"
                                 type="text"
-                                required
+                                placeholder="+94 766 834 881"
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                                Outbound Expeditions Phone
+                                Mobile Hotline 2
                             </label>
                             <input 
                                 v-model="form.outbound_phone"
                                 type="text"
-                                required
+                                placeholder="+94 718 834 881"
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                                Inbound Sri Lanka Phone
+                                Mobile Hotline 3
                             </label>
                             <input 
                                 v-model="form.inbound_phone"
                                 type="text"
-                                required
+                                placeholder="+94 778 692 229"
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
@@ -182,7 +192,6 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.primary_email"
                                 type="email"
-                                required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
@@ -194,7 +203,6 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.tours_email"
                                 type="email"
-                                required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
@@ -215,7 +223,6 @@ const submitSettings = () => {
                         <input 
                             v-model="form.office_address"
                             type="text"
-                            required
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                         />
                     </div>
@@ -228,7 +235,6 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.office_hours_weekday"
                                 type="text"
-                                required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
@@ -240,7 +246,6 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.office_hours_saturday"
                                 type="text"
-                                required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
@@ -252,7 +257,6 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.office_hours_sunday"
                                 type="text"
-                                required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
@@ -274,7 +278,6 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.form_title"
                                 type="text"
-                                required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
@@ -286,7 +289,6 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.form_subtitle"
                                 type="text"
-                                required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                         </div>
