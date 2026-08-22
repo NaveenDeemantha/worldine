@@ -25,5 +25,7 @@ class ContactSetting extends Model
         'google_maps_url',
         'form_title',
         'form_subtitle',
+        'notification_email',
+        'notification_cc_emails',
     ];
 }
