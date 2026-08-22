@@ -324,7 +324,7 @@ const submitSettings = () => {
                             <input 
                                 v-model="form.notification_email"
                                 type="email"
-                                placeholder="e.g. naveenpunchihewa9@gmail.com"
+                                placeholder="e.g. alerts@worldinedestinations.com or inquiries@yourdomain.com"
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
                             />
                             <p class="text-[11px] text-slate-400 mt-1">Main inbox that receives all instant inquiry and booking alert emails.</p>
