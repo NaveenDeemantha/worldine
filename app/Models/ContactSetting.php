@@ -13,6 +13,7 @@ class ContactSetting extends Model
         'hero_badge',
         'hero_title',
         'hero_subtitle',
+        'landline_phone',
         'primary_phone',
         'outbound_phone',
         'inbound_phone',

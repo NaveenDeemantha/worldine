@@ -158,26 +158,40 @@ const faqs = [
                         Connect directly with our senior travel concierges for instant quotes & tour assistance.
                     </p>
                     <div class="space-y-2 text-xs font-bold text-slate-800 pt-1">
-                        <a :href="`tel:${settings?.primary_phone || '+94766834881'}`" class="flex items-center justify-between hover:text-[#2196F3] transition-colors py-1">
+                        <!-- Landline -->
+                        <a :href="`tel:${(settings?.landline_phone || '+94112636558').replace(/\s+/g, '')}`" class="flex items-center justify-between hover:text-[#2196F3] transition-colors py-1">
+                            <span class="flex items-center space-x-2">
+                                <svg class="w-3.5 h-3.5 text-slate-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                <span>{{ settings?.landline_phone || '+94 11 263 6558' }}</span>
+                            </span>
+                            <span class="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md font-extrabold">Landline</span>
+                        </a>
+
+                        <!-- Mobile 1 -->
+                        <a :href="`tel:${(settings?.primary_phone || '+94766834881').replace(/\s+/g, '')}`" class="flex items-center justify-between hover:text-[#2196F3] transition-colors py-1">
                             <span class="flex items-center space-x-2">
                                 <svg class="w-3.5 h-3.5 text-slate-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                                 <span>{{ settings?.primary_phone || '+94 766 834 881' }}</span>
                             </span>
-                            <span class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-md font-extrabold">Primary</span>
+                            <span class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-md font-extrabold">Mobile 1</span>
                         </a>
-                        <a :href="`tel:${settings?.outbound_phone || '+94718834881'}`" class="flex items-center justify-between hover:text-[#2196F3] transition-colors py-1">
+
+                        <!-- Mobile 2 -->
+                        <a :href="`tel:${(settings?.outbound_phone || '+94718834881').replace(/\s+/g, '')}`" class="flex items-center justify-between hover:text-[#2196F3] transition-colors py-1">
                             <span class="flex items-center space-x-2">
                                 <svg class="w-3.5 h-3.5 text-slate-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                                 <span>{{ settings?.outbound_phone || '+94 718 834 881' }}</span>
                             </span>
-                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-extrabold">Outbound</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-extrabold">Mobile 2</span>
                         </a>
-                        <a :href="`tel:${settings?.inbound_phone || '+94778869222'}`" class="flex items-center justify-between hover:text-[#2196F3] transition-colors py-1">
+
+                        <!-- Mobile 3 -->
+                        <a :href="`tel:${(settings?.inbound_phone || '+9477869229').replace(/\s+/g, '')}`" class="flex items-center justify-between hover:text-[#2196F3] transition-colors py-1">
                             <span class="flex items-center space-x-2">
                                 <svg class="w-3.5 h-3.5 text-slate-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                <span>{{ settings?.inbound_phone || '+94 778 869 222' }}</span>
+                                <span>{{ settings?.inbound_phone || '+94 778 692 229' }}</span>
                             </span>
-                            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-md font-extrabold">Inbound</span>
+                            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-md font-extrabold">Mobile 3</span>
                         </a>
                     </div>
                 </div>

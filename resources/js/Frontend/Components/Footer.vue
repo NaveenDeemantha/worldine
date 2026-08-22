@@ -85,17 +85,29 @@ defineProps({
                         <h4 class="text-[#90CAF9] font-spinnaker font-bold text-xs uppercase tracking-wider border-b border-white/15 pb-1.5">
                             Hotline & Office
                         </h4>
-                        <ul class="space-y-2 text-xs font-semibold text-slate-200 mt-3">
+                        <ul class="space-y-1.5 text-xs font-semibold text-slate-200 mt-2.5">
                             <li>
-                                <a :href="`tel:${settings?.primary_phone || '+94766834881'}`" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
+                                <a :href="`tel:${(settings?.landline_phone || '+94112636558').replace(/\s+/g, '')}`" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
                                     <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                    <span>{{ settings?.primary_phone || '+94 766 834 881' }}</span>
+                                    <span>Land: {{ settings?.landline_phone || '+94 11 263 6558' }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a :href="`tel:${settings?.outbound_phone || '+94718834881'}`" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
+                                <a :href="`tel:${(settings?.primary_phone || '+94766834881').replace(/\s+/g, '')}`" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
                                     <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                    <span>{{ settings?.outbound_phone || '+94 718 834 881' }}</span>
+                                    <span>Mob: {{ settings?.primary_phone || '+94 766 834 881' }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a :href="`tel:${(settings?.outbound_phone || '+94718834881').replace(/\s+/g, '')}`" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
+                                    <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    <span>Mob: {{ settings?.outbound_phone || '+94 718 834 881' }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a :href="`tel:${(settings?.inbound_phone || '+9477869229').replace(/\s+/g, '')}`" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
+                                    <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    <span>Mob: {{ settings?.inbound_phone || '+94 778 692 229' }}</span>
                                 </a>
                             </li>
                             <li>
@@ -189,9 +201,9 @@ defineProps({
                 <div class="space-y-1.5">
                     <h4 class="text-[#90CAF9] font-bold uppercase tracking-wider border-b border-white/15 pb-1">Hotline</h4>
                     <ul class="space-y-1 text-slate-200 font-semibold">
-                        <li><a :href="`tel:${settings?.primary_phone || '+94766834881'}`" class="hover:text-[#90CAF9] block truncate">{{ settings?.primary_phone || '+94 766 834' }}</a></li>
-                        <li><a :href="`tel:${settings?.outbound_phone || '+94718834881'}`" class="hover:text-[#90CAF9] block truncate">{{ settings?.outbound_phone || '+94 718 834' }}</a></li>
-                        <li><a :href="`mailto:${settings?.primary_email || 'info@worldinedestinations.com'}`" class="hover:text-[#90CAF9] block truncate">Email Us</a></li>
+                        <li><a :href="`tel:${(settings?.landline_phone || '+94112636558').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block truncate">{{ settings?.landline_phone || '+94 11 263 6558' }}</a></li>
+                        <li><a :href="`tel:${(settings?.primary_phone || '+94766834881').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block truncate">{{ settings?.primary_phone || '+94 766 834 881' }}</a></li>
+                        <li><a :href="`tel:${(settings?.inbound_phone || '+9477869229').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block truncate">{{ settings?.inbound_phone || '+94 778 692 229' }}</a></li>
                     </ul>
                 </div>
             </div>
