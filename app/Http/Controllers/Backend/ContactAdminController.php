@@ -33,6 +33,8 @@ class ContactAdminController extends Controller
                 'google_maps_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.798485292415!2d79.848888!3d6.914722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2594000000001%3A0x0!2zNsKwNTQnNTMuMCJOIDc5wrA1MCc1Ni4wIkU!5e0!3m2!1sen!2slk!4v1700000000000!5m2!1sen!2slk',
                 'form_title' => 'Send Us A Message',
                 'form_subtitle' => 'Complete the inquiry form and our travel experts will curate a personalized itinerary, flight options, or visa guidance tailored to your budget.',
+                'notification_email' => env('ADMIN_NOTIFICATION_EMAIL', 'naveenpunchihewa9@gmail.com'),
+                'notification_cc_emails' => null,
             ]
         );
 
@@ -62,6 +64,8 @@ class ContactAdminController extends Controller
             'google_maps_url' => 'nullable|string',
             'form_title' => 'required|string|max:255',
             'form_subtitle' => 'required|string',
+            'notification_email' => 'nullable|email|max:255',
+            'notification_cc_emails' => 'nullable|string',
         ]);
 
         $settings = ContactSetting::firstOrCreate(['id' => 1]);

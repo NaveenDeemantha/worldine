@@ -26,6 +26,8 @@ const form = useForm({
     google_maps_url: props.settings.google_maps_url || '',
     form_title: props.settings.form_title || '',
     form_subtitle: props.settings.form_subtitle || '',
+    notification_email: props.settings.notification_email || '',
+    notification_cc_emails: props.settings.notification_cc_emails || '',
 });
 
 const successMessage = ref('');
@@ -299,6 +301,47 @@ const submitSettings = () => {
                             rows="3"
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-mono text-slate-900 outline-none"
                         ></textarea>
+                    </div>
+                </div>
+
+                <!-- SECTION 5: INQUIRY & LEAD EMAIL ALERT SETTINGS -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 space-y-4">
+                    <div class="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2.5 py-0.5 rounded-md bg-blue-100 text-[#0D47A1] text-[10px] font-black uppercase tracking-wider">BREVO SMTP</span>
+                                <h2 class="text-lg font-black text-slate-900">5. Email Alerts & Notification Recipients</h2>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium mt-1">Configure where instant email alerts are sent when a customer submits a Tour Booking or Contact Form.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                                Primary Alert Email Address <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                v-model="form.notification_email"
+                                type="email"
+                                placeholder="e.g. naveenpunchihewa9@gmail.com"
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
+                            />
+                            <p class="text-[11px] text-slate-400 mt-1">Main inbox that receives all instant inquiry and booking alert emails.</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                                CC Email Recipients (Optional)
+                            </label>
+                            <input 
+                                v-model="form.notification_cc_emails"
+                                type="text"
+                                placeholder="e.g. manager@worldinedestinations.com, tours@worldinedestinations.com"
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
+                            />
+                            <p class="text-[11px] text-slate-400 mt-1">Add multiple emails separated by commas to receive a CC copy of every lead alert.</p>
+                        </div>
                     </div>
                 </div>
 
