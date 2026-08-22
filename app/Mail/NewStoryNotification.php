@@ -30,14 +30,12 @@ class NewStoryNotification extends Mailable
     public function envelope(): Envelope
     {
         $author = $this->testimonial->name ?? 'Traveller';
-        $ratingStars = str_repeat('★', (int)($this->testimonial->rating ?? 5));
+        $title = $this->testimonial->title ?: 'Customer Review';
+        $subject = "Traveller Story | {$title} - {$author}";
 
         return new Envelope(
-            from: new Address(config('mail.from.address'), 'Worldine Destinations (Do Not Reply)'),
-            replyTo: [
-                new Address('no-reply@worldinedestinations.com', 'Do Not Reply'),
-            ],
-            subject: "[New Traveller Story] {$ratingStars} - {$author}",
+            from: new Address(config('mail.from.address'), config('mail.from.name', 'Worldine Destinations')),
+            subject: $subject,
         );
     }
 

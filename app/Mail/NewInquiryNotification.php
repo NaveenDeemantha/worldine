@@ -29,16 +29,25 @@ class NewInquiryNotification extends Mailable
      */
     public function envelope(): Envelope
     {
-        $typeLabel = $this->inquiry->type === 'package_inquiry' ? 'New Booking Inquiry' : 'New Contact Lead';
-        $ref = $this->inquiry->reference_id ?? 'WRD';
         $customer = $this->inquiry->customer_name ?? 'Guest';
+        
+        if ($this->inquiry->type === 'package_inquiry') {
+            $pkg = $this->inquiry->package_title ?: 'Tour Package';
+            $subject = "Tour Booking Inquiry | {$pkg} - {$customer}";
+        } else {
+            $category = $this->inquiry->inquiry_type ?: ($this->inquiry->destination_name ?: 'General Inquiry');
+            $subject = "Contact Inquiry | {$category} - {$customer}";
+        }
+
+        $replyToList = [];
+        if (!empty($this->inquiry->email) && filter_var($this->inquiry->email, FILTER_VALIDATE_EMAIL)) {
+            $replyToList[] = new Address($this->inquiry->email, $customer);
+        }
 
         return new Envelope(
-            from: new Address(config('mail.from.address'), 'Worldine Destinations (Do Not Reply)'),
-            replyTo: [
-                new Address('no-reply@worldinedestinations.com', 'Do Not Reply'),
-            ],
-            subject: "[{$typeLabel}] {$ref} - {$customer}",
+            from: new Address(config('mail.from.address'), config('mail.from.name', 'Worldine Destinations')),
+            replyTo: $replyToList,
+            subject: $subject,
         );
     }
 
