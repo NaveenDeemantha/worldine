@@ -166,7 +166,6 @@ const viewInquiryDetails = (inq) => {
                                 <th class="py-4 px-4">Traveler & Contact</th>
                                 <th class="py-4 px-4">Requested Tour Package</th>
                                 <th class="py-4 px-4">Travel Date & Guests</th>
-                                <th class="py-4 px-4">Status</th>
                                 <th class="py-4 px-6 text-right">Actions</th>
                             </tr>
                         </thead>
@@ -182,12 +181,6 @@ const viewInquiryDetails = (inq) => {
                                     <div class="font-bold text-slate-800">{{ inq.travel_date }}</div>
                                     <div class="text-[11px] text-slate-500">{{ inq.guests }} Traveler(s)</div>
                                 </td>
-                                <td class="py-4 px-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center space-x-1.5 text-xs font-extrabold">
-                                        <span :class="['w-2 h-2 rounded-full', inq.status === 'Confirmed' ? 'bg-emerald-500' : (inq.status === 'Contacted' ? 'bg-blue-500' : 'bg-amber-500')]"></span>
-                                        <span :class="inq.status === 'Confirmed' ? 'text-emerald-700' : (inq.status === 'Contacted' ? 'text-blue-700' : 'text-amber-700')">{{ inq.status }}</span>
-                                    </span>
-                                </td>
                                 <td class="py-4 px-6 text-right whitespace-nowrap">
                                     <button 
                                         @click="viewInquiryDetails(inq)"
@@ -198,7 +191,7 @@ const viewInquiryDetails = (inq) => {
                                 </td>
                             </tr>
                             <tr v-if="!packageInquiries.length">
-                                <td colspan="6" class="py-8 text-center text-slate-400 font-medium">No tour package inquiries submitted yet.</td>
+                                <td colspan="5" class="py-8 text-center text-slate-400 font-medium">No tour package inquiries submitted yet.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -213,7 +206,6 @@ const viewInquiryDetails = (inq) => {
                                 <th class="py-4 px-4">Traveler & Contact</th>
                                 <th class="py-4 px-4">Inquiry Category / Destination</th>
                                 <th class="py-4 px-4">Travel Date & Guests</th>
-                                <th class="py-4 px-4">Status</th>
                                 <th class="py-4 px-6 text-right">Actions</th>
                             </tr>
                         </thead>
@@ -232,12 +224,6 @@ const viewInquiryDetails = (inq) => {
                                     <div class="font-bold text-slate-800">{{ inq.travel_date }}</div>
                                     <div class="text-[11px] text-slate-500">{{ inq.guests }} Traveler(s)</div>
                                 </td>
-                                <td class="py-4 px-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center space-x-1.5 text-xs font-extrabold">
-                                        <span :class="['w-2 h-2 rounded-full', inq.status === 'Confirmed' ? 'bg-emerald-500' : (inq.status === 'Contacted' ? 'bg-blue-500' : 'bg-amber-500')]"></span>
-                                        <span :class="inq.status === 'Confirmed' ? 'text-emerald-700' : (inq.status === 'Contacted' ? 'text-blue-700' : 'text-amber-700')">{{ inq.status }}</span>
-                                    </span>
-                                </td>
                                 <td class="py-4 px-6 text-right whitespace-nowrap">
                                     <button 
                                         @click="viewInquiryDetails(inq)"
@@ -248,7 +234,7 @@ const viewInquiryDetails = (inq) => {
                                 </td>
                             </tr>
                             <tr v-if="!contactInquiries.length">
-                                <td colspan="6" class="py-8 text-center text-slate-400 font-medium">No contact form inquiries submitted yet.</td>
+                                <td colspan="5" class="py-8 text-center text-slate-400 font-medium">No contact form inquiries submitted yet.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -371,15 +357,9 @@ const viewInquiryDetails = (inq) => {
                 </div>
 
                 <div class="space-y-3 text-xs">
-                    <div class="grid grid-cols-2 gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                        <div>
-                            <span class="text-[10px] text-slate-400 uppercase font-bold block">Customer Name</span>
-                            <span class="font-extrabold text-slate-900 text-sm">{{ selectedInquiry.customer_name }}</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] text-slate-400 uppercase font-bold block">Status</span>
-                            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 mt-0.5">{{ selectedInquiry.status }}</span>
-                        </div>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <span class="text-[10px] text-slate-400 uppercase font-bold block">Customer Name</span>
+                        <span class="font-extrabold text-slate-900 text-sm">{{ selectedInquiry.customer_name }}</span>
                     </div>
 
                     <div class="space-y-1.5 p-3 rounded-xl bg-slate-50 border border-slate-100">

@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import Navbar from '../../Components/Navbar.vue';
+import Footer from '../../Components/Footer.vue';
 
 // Props passed from Inertia controller (optional)
 const props = defineProps({
@@ -1656,193 +1657,8 @@ const features = [
             </div>
         </section>
 
-        <!-- FOOTER WITH SITE THEME (RESPONSIVE: DESKTOP 4-COLUMN + MOBILE 3-ROW) -->
-        <footer id="footer" class="relative bg-slate-950 text-white text-xs w-full overflow-hidden font-spinnaker">
-            <!-- Background Image with Very Low Opacity (10%) & Dark Blue Protection Gradient Overlay -->
-            <div class="absolute inset-0 z-0">
-                <img 
-                    src="/images/Logo/worldineback.png" 
-                    alt="Footer Background" 
-                    class="w-full h-full object-cover object-center filter blur-[1px] opacity-10 scale-105"
-                />
-                <div class="absolute inset-0 bg-gradient-to-b from-[#0A2540]/95 via-[#0B2E59]/97 to-slate-950/99"></div>
-            </div>
-
-            <!-- DESKTOP FOOTER VIEW (md:block hidden) -->
-            <div class="hidden md:block relative z-10 pt-8 sm:pt-10 pb-4 sm:pb-5 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 font-spinnaker">
-                <div class="w-full grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-                    
-                    <!-- Column 1: Logo & Branding -->
-                    <div class="space-y-3">
-                        <Link href="/" class="inline-block group">
-                            <img 
-                                src="/images/Logo/worldine.png" 
-                                alt="Worldine Destinations Logo" 
-                                class="h-16 sm:h-20 w-auto object-contain filter drop-shadow-md group-hover:scale-105 transition-transform" 
-                            />
-                        </Link>
-                        <p class="text-slate-300 text-xs leading-relaxed font-normal">
-                            Worldine Destinations (Pvt) Ltd. Over 20 years of experience in the travel trade with deep knowledge in Ticketing, Visas, Outbound & Inbound tours, and Travel Insurance.
-                        </p>
-
-                        <!-- Social Media Section -->
-                        <div class="pt-1">
-                            <h5 class="text-[11px] font-bold text-[#90CAF9] uppercase tracking-wider mb-2 font-spinnaker">Follow Us</h5>
-                            <div class="flex items-center space-x-2.5">
-                                <a href="https://www.facebook.com/worldinedestinations/" target="_blank" class="w-7 h-7 rounded-full bg-white/10 hover:bg-[#2196F3] text-white flex items-center justify-center font-bold text-xs transition-all border border-white/15 shadow-sm" aria-label="Facebook">
-                                    f
-                                </a>
-                                <a href="https://www.instagram.com/worldinedestinations" target="_blank" class="w-7 h-7 rounded-full bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center font-bold text-xs transition-all border border-white/15 shadow-sm" aria-label="Instagram">
-                                    📷
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Column 2: Quick Links -->
-                    <div class="space-y-3">
-                        <h4 class="text-[#90CAF9] font-spinnaker font-bold text-xs uppercase tracking-wider border-b border-white/15 pb-1.5">
-                            Quick Links
-                        </h4>
-                        <ul class="space-y-2 text-xs font-semibold text-slate-200">
-                            <li><a href="#hero" class="hover:text-[#90CAF9] transition-colors">Home</a></li>
-                            <li><a href="#about" class="hover:text-[#90CAF9] transition-colors">About Us</a></li>
-                            <li><a href="#glimpse-destinations" class="hover:text-[#90CAF9] transition-colors">Destinations</a></li>
-                            <li><Link href="/contact" class="hover:text-[#90CAF9] transition-colors">Contact Us</Link></li>
-                            <li><a href="#testimonials" class="hover:text-[#90CAF9] transition-colors">Traveler Stories</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Column 3: Inbound & Outbound Tours -->
-                    <div class="space-y-3">
-                        <h4 class="text-[#90CAF9] font-spinnaker font-bold text-xs uppercase tracking-wider border-b border-white/15 pb-1.5">
-                            Tour Expeditions
-                        </h4>
-                        <ul class="space-y-2 text-xs font-semibold text-slate-200">
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Sri Lanka Heritage Tours</a></li>
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Maldives Luxury Escapes</a></li>
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Dubai & UAE Safaris</a></li>
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Europe Schengen Tours</a></li>
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Japan & East Asia Tours</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Column 4: Contact & Hotlines -->
-                    <div class="space-y-3">
-                        <h4 class="text-[#90CAF9] font-spinnaker font-bold text-xs uppercase tracking-wider border-b border-white/15 pb-1.5">
-                            Contact & Support
-                        </h4>
-                        <ul class="space-y-2 text-xs font-semibold text-slate-200">
-                            <li>
-                                <a href="tel:+94766834881" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
-                                    <svg class="w-4 h-4 text-[#90CAF9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                    <span>+94 766 834 881</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="tel:+94718834881" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
-                                    <svg class="w-4 h-4 text-[#90CAF9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                    <span>+94 718 834 881</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="tel:+94778692229" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
-                                    <svg class="w-4 h-4 text-[#90CAF9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                    <span>+94 778 869 222</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="mailto:info@worldinedestinations.com" class="flex items-center space-x-2 hover:text-[#90CAF9] transition-colors">
-                                    <svg class="w-4 h-4 text-[#90CAF9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                    <span class="truncate">info@worldinedestinations.com</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Bottom Copyright Bar -->
-                <div class="mt-5 pt-2.5 border-t border-white/15 flex flex-row items-center justify-between gap-2 text-[11px] text-slate-400 font-spinnaker">
-                    <div>
-                        Copyright © 2026 Worldine Destinations (Pvt) Ltd. All Rights Reserved.
-                    </div>
-                </div>
-            </div>
-
-            <!-- MOBILE FOOTER VIEW (block md:hidden) -->
-            <div class="block md:hidden relative z-10 pt-6 pb-4 w-full px-4 space-y-5 font-spinnaker">
-                
-                <!-- ROW 1: Logo & Social Links -->
-                <div class="flex items-center justify-between border-b border-white/15 pb-4">
-                    <Link href="/" class="inline-block group">
-                        <img 
-                            src="/images/Logo/worldine.png" 
-                            alt="Worldine Destinations Logo" 
-                            class="h-12 w-auto object-contain filter drop-shadow-md" 
-                        />
-                    </Link>
-
-                    <!-- Social Media Links -->
-                    <div class="flex items-center space-x-2">
-                        <a href="https://www.facebook.com/worldinedestinations/" target="_blank" class="w-7 h-7 rounded-full bg-white/10 hover:bg-[#2196F3] text-white flex items-center justify-center font-bold text-xs transition-all border border-white/15 shadow-sm" aria-label="Facebook">
-                            f
-                        </a>
-                        <a href="https://www.instagram.com/worldinedestinations" target="_blank" class="w-7 h-7 rounded-full bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center font-bold text-xs transition-all border border-white/15 shadow-sm" aria-label="Instagram">
-                            📷
-                        </a>
-                    </div>
-                </div>
-
-                <!-- ROW 2: 3 Columns for Contents and Links -->
-                <div class="grid grid-cols-3 gap-2">
-                    <!-- Column 1: Quick Links -->
-                    <div class="space-y-2">
-                        <h4 class="text-[#90CAF9] font-spinnaker font-bold text-[10px] uppercase tracking-wider border-b border-white/15 pb-1">
-                            Quick Links
-                        </h4>
-                        <ul class="space-y-1.5 text-[9.5px] font-semibold text-slate-200">
-                            <li><a href="#hero" class="hover:text-[#90CAF9] transition-colors">Home</a></li>
-                            <li><a href="#about" class="hover:text-[#90CAF9] transition-colors">About Us</a></li>
-                            <li><a href="#glimpse-destinations" class="hover:text-[#90CAF9] transition-colors">Tours</a></li>
-                            <li><a href="#estimator" class="hover:text-[#90CAF9] transition-colors">Education</a></li>
-                            <li><a href="#testimonials" class="hover:text-[#90CAF9] transition-colors">Stories</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Column 2: Tour Expeditions -->
-                    <div class="space-y-2">
-                        <h4 class="text-[#90CAF9] font-spinnaker font-bold text-[10px] uppercase tracking-wider border-b border-white/15 pb-1">
-                            Tours
-                        </h4>
-                        <ul class="space-y-1.5 text-[9.5px] font-semibold text-slate-200">
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Sri Lanka</a></li>
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Maldives</a></li>
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Dubai</a></li>
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Schengen</a></li>
-                            <li><a href="#destinations" class="hover:text-[#90CAF9] transition-colors">Japan</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Column 3: Contact & Support -->
-                    <div class="space-y-2">
-                        <h4 class="text-[#90CAF9] font-spinnaker font-bold text-[10px] uppercase tracking-wider border-b border-white/15 pb-1">
-                            Contact
-                        </h4>
-                        <ul class="space-y-1.5 text-[9.5px] font-semibold text-slate-200">
-                            <li><a href="tel:+94766834881" class="hover:text-[#90CAF9] transition-colors block truncate">+94 766 834 881</a></li>
-                            <li><a href="tel:+94718834881" class="hover:text-[#90CAF9] transition-colors block truncate">+94 718 834 881</a></li>
-                            <li><a href="tel:+94778692229" class="hover:text-[#90CAF9] transition-colors block truncate">+94 778 869 222</a></li>
-                            <li><a href="mailto:info@worldinedestinations.com" class="hover:text-[#90CAF9] transition-colors block truncate">Email Us</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- ROW 3: Bottom Copyright Bar -->
-                <div class="pt-3 border-t border-white/15 text-center text-[10px] text-slate-400 font-spinnaker">
-                    <div>Copyright © 2026 Worldine Destinations (Pvt) Ltd. All Rights Reserved.</div>
-                </div>
-            </div>
-        </footer>
+        <!-- FOOTER COMPONENT -->
+        <Footer />
 
         <!-- QUICK VIEW MODAL (100% Exact Actual Data from Backend) -->
         <div v-if="isBookingModalOpen && activeModalDestination" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
@@ -1891,6 +1707,18 @@ const features = [
                             <span>{{ inc }}</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Supported Payments Badge in Modal -->
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase">Payment:</span>
+                        <div class="flex items-center space-x-2">
+                            <img src="/images/Logo/vsms.png" alt="Visa MasterCard" class="h-4 max-h-4 w-auto max-w-[60px] object-contain bg-white px-1.5 py-0.5 rounded border border-slate-200 block" />
+                            <img src="/images/Logo/koko pay.png" alt="KOKO Pay" class="h-4 max-h-4 w-auto max-w-[50px] object-contain bg-white px-1.5 py-0.5 rounded border border-slate-200 block" />
+                        </div>
+                    </div>
+                    <span class="text-[10px] text-emerald-700 font-extrabold bg-emerald-50 px-2 py-0.5 rounded-full">Installments Available</span>
                 </div>
 
                 <!-- Price & Modal Action -->
