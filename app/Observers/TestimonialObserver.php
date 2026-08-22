@@ -37,21 +37,7 @@ class TestimonialObserver
         }
 
         dispatch(function () use ($adminEmail, $ccEmails, $testimonial) {
-            try {
-                $pendingMail = Mail::to($adminEmail);
-                if (!empty($ccEmails)) {
-                    $pendingMail->cc($ccEmails);
-                }
-                $pendingMail->send(new NewStoryNotification($testimonial));
-
-                $ccLog = !empty($ccEmails) ? ' (CC: ' . implode(', ', $ccEmails) . ')' : '';
-                Log::info("Brevo SMTP: Traveller Story notification email sent for story by {$testimonial->name} to {$adminEmail}{$ccLog}");
-            } catch (\Throwable $e) {
-                Log::error("Brevo SMTP: Failed to send Traveller Story notification email for {$testimonial->name}. Error: " . $e->getMessage(), [
-                    'exception' => $e,
-                    'testimonial_id' => $testimonial->id,
-                ]);
-            }
+            \App\Services\BrevoMailerService::sendStory($testimonial, $adminEmail, $ccEmails);
         })->afterResponse();
     }
 }

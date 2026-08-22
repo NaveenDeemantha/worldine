@@ -37,21 +37,7 @@ class InquiryObserver
         }
 
         dispatch(function () use ($adminEmail, $ccEmails, $inquiry) {
-            try {
-                $pendingMail = Mail::to($adminEmail);
-                if (!empty($ccEmails)) {
-                    $pendingMail->cc($ccEmails);
-                }
-                $pendingMail->send(new NewInquiryNotification($inquiry));
-
-                $ccLog = !empty($ccEmails) ? ' (CC: ' . implode(', ', $ccEmails) . ')' : '';
-                Log::info("Brevo SMTP: Inquiry notification email sent for inquiry {$inquiry->reference_id} to {$adminEmail}{$ccLog}");
-            } catch (\Throwable $e) {
-                Log::error("Brevo SMTP: Failed to send inquiry notification email for {$inquiry->reference_id}. Error: " . $e->getMessage(), [
-                    'exception' => $e,
-                    'inquiry_id' => $inquiry->id,
-                ]);
-            }
+            \App\Services\BrevoMailerService::sendInquiry($inquiry, $adminEmail, $ccEmails);
         })->afterResponse();
     }
 }
