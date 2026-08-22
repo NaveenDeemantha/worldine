@@ -76,10 +76,14 @@ class BrevoMailerService
             return false;
         }
 
-        $typeLabel = $inquiry->type === 'package_inquiry' ? 'New Booking Inquiry' : 'New Contact Lead';
-        $ref = $inquiry->reference_id ?? 'WRD';
         $customer = $inquiry->customer_name ?? 'Guest';
-        $subject = "[{$typeLabel}] {$ref} - {$customer}";
+        if ($inquiry->type === 'package_inquiry') {
+            $pkg = $inquiry->package_title ?: 'Tour Package';
+            $subject = "Tour Booking Inquiry | {$pkg} - {$customer}";
+        } else {
+            $category = $inquiry->inquiry_type ?: ($inquiry->destination_name ?: 'General Inquiry');
+            $subject = "Contact Inquiry | {$category} - {$customer}";
+        }
 
         $htmlContent = View::make('emails.new_inquiry', ['inquiry' => $inquiry])->render();
 
@@ -97,7 +101,9 @@ class BrevoMailerService
             return false;
         }
 
-        $subject = "[New Traveller Story] " . ($testimonial->title ?? 'New Story Submission') . " by " . ($testimonial->name ?? 'Guest');
+        $author = $testimonial->name ?? 'Traveller';
+        $title = $testimonial->title ?: 'Customer Review';
+        $subject = "Traveller Story | {$title} - {$author}";
         $htmlContent = View::make('emails.new_story', ['testimonial' => $testimonial])->render();
 
         return self::sendViaBrevoApi($adminEmail, $subject, $htmlContent, $ccEmails);
