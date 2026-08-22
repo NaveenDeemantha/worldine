@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from '@/Frontend/Components/Navbar.vue';
+import Footer from '@/Frontend/Components/Footer.vue';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -159,65 +160,136 @@ const formatDescription = (text) => {
                 <!-- Right Column: Pricing, Inquiry Form, Related Tours & Concierge Card -->
                 <div class="lg:col-span-4 space-y-6">
                     <!-- Main Sticky Booking Card -->
-                    <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-xl space-y-6">
+                    <div class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 space-y-5">
+                        
+                        <!-- Price & Value Proposition Header -->
                         <div class="border-b border-slate-100 pb-5 text-center">
                             <template v-if="package.price && Number(package.price) > 0">
-                                <span class="text-xs font-extrabold text-slate-400 uppercase tracking-widest">STARTING FROM</span>
-                                <div class="text-4xl font-black text-[#0D47A1] mt-1">${{ Number(package.price).toLocaleString() }} <span class="text-xs text-slate-400 font-semibold">/ person</span></div>
-                                <p class="text-xs text-emerald-600 font-bold mt-1">✓ No Hidden Booking Fees</p>
+                                <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest block">Starting From</span>
+                                <div class="text-3xl sm:text-4xl font-black text-[#0D47A1] mt-1 tracking-tight">
+                                    ${{ Number(package.price).toLocaleString() }} 
+                                    <span class="text-xs text-slate-400 font-semibold tracking-normal">/ person</span>
+                                </div>
+                                <div class="flex items-center justify-center space-x-2 mt-2">
+                                    <span class="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100">
+                                        ✓ No Hidden Booking Fees
+                                    </span>
+                                </div>
                             </template>
                             <template v-else>
-                                <span class="text-xs font-extrabold text-slate-400 uppercase tracking-widest">CUSTOM TOUR PACKAGE</span>
-                                <div class="text-2xl font-black text-[#0D47A1] mt-1">Inquire for Price</div>
-                                <p class="text-xs text-emerald-600 font-bold mt-1">✓ Personalised Itinerary & Quote</p>
+                                <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest block">Custom Expedition</span>
+                                <div class="text-2xl font-black text-[#0D47A1] mt-1">Inquire for Custom Quote</div>
+                                <p class="text-xs text-emerald-600 font-bold mt-1">✓ 100% Tailored Private Itinerary</p>
                             </template>
+                        </div>
+
+                        <!-- Seamless Payment Trust Strip -->
+                        <div class="bg-slate-50/90 rounded-2xl p-3.5 border border-slate-200/70 flex items-center justify-between gap-3">
+                            <div class="space-y-0.5">
+                                <div class="flex items-center space-x-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    <span class="text-[11px] font-bold text-slate-800">Flexible Payment Options</span>
+                                </div>
+                                <p class="text-[10px] text-slate-500 font-medium">Installments via KOKO & Cards</p>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white px-2.5 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs shrink-0">
+                                <img src="/images/Logo/vsms.png" alt="Visa MasterCard" class="h-4 max-h-4 w-auto max-w-[55px] object-contain block" />
+                                <span class="text-slate-200 text-xs">|</span>
+                                <img src="/images/Logo/koko pay.png" alt="KOKO Pay" class="h-3.5 max-h-3.5 w-auto max-w-[45px] object-contain block" />
+                            </div>
                         </div>
 
                         <div v-if="showSuccessBanner || page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-bold leading-relaxed">
                             ✓ Thank you! Your tour inquiry has been submitted. Our concierge team will contact you shortly.
                         </div>
 
-                        <form @submit.prevent="submitInquiry" class="space-y-4">
-                            <h3 class="text-xs font-black uppercase tracking-wider text-slate-900">Inquire / Book This Tour</h3>
-
-                            <div>
-                                <input type="text" v-model="form.customer_name" required placeholder="Your Full Name" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none" />
+                        <!-- Inquiry Form -->
+                        <form @submit.prevent="submitInquiry" class="space-y-3.5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-slate-900">Inquire / Book This Tour</h3>
+                                <span class="text-[10px] font-bold text-[#2196F3]">Quick Response</span>
                             </div>
 
                             <div>
-                                <input type="email" v-model="form.email" required placeholder="Email Address" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none" />
+                                <input 
+                                    type="text" 
+                                    v-model="form.customer_name" 
+                                    required 
+                                    placeholder="Your Full Name *" 
+                                    class="w-full px-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] focus:ring-2 focus:ring-[#2196F3]/15 outline-none transition-all" 
+                                />
                             </div>
 
                             <div>
-                                <input type="tel" v-model="form.phone" required placeholder="Phone / WhatsApp Number" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none" />
+                                <input 
+                                    type="email" 
+                                    v-model="form.email" 
+                                    required 
+                                    placeholder="Email Address *" 
+                                    class="w-full px-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] focus:ring-2 focus:ring-[#2196F3]/15 outline-none transition-all" 
+                                />
                             </div>
 
-                            <div class="grid grid-cols-2 gap-3">
-                                <input type="date" v-model="form.travel_date" required class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 focus:bg-white focus:border-[#2196F3] outline-none" />
-                                <input type="number" v-model="form.guests" min="1" required placeholder="Guests" class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 focus:bg-white focus:border-[#2196F3] outline-none" />
+                            <div>
+                                <input 
+                                    type="tel" 
+                                    v-model="form.phone" 
+                                    required 
+                                    placeholder="Phone / WhatsApp Number *" 
+                                    class="w-full px-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] focus:ring-2 focus:ring-[#2196F3]/15 outline-none transition-all" 
+                                />
                             </div>
 
-                            <textarea v-model="form.message" rows="3" placeholder="Special requests or custom dates..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] outline-none"></textarea>
+                            <div class="grid grid-cols-2 gap-2.5">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Departure Date</label>
+                                    <input 
+                                        type="date" 
+                                        v-model="form.travel_date" 
+                                        required 
+                                        class="w-full px-3 py-2.5 bg-slate-50/70 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:border-[#2196F3] focus:ring-2 focus:ring-[#2196F3]/15 outline-none transition-all" 
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total Guests</label>
+                                    <input 
+                                        type="number" 
+                                        v-model="form.guests" 
+                                        min="1" 
+                                        required 
+                                        placeholder="2" 
+                                        class="w-full px-3 py-2.5 bg-slate-50/70 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:border-[#2196F3] focus:ring-2 focus:ring-[#2196F3]/15 outline-none transition-all" 
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <textarea 
+                                    v-model="form.message" 
+                                    rows="3" 
+                                    placeholder="Special requests, flight details or custom dates..." 
+                                    class="w-full px-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:border-[#2196F3] focus:ring-2 focus:ring-[#2196F3]/15 outline-none transition-all resize-none"
+                                ></textarea>
+                            </div>
 
                             <button 
                                 type="submit" 
-                                class="w-full py-4 rounded-2xl bg-gradient-to-r from-[#2196F3] via-[#2B70B4] to-[#0D47A1] text-white font-extrabold text-xs uppercase tracking-widest shadow-xl hover:shadow-2xl hover:brightness-110 active:scale-[0.99] transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
+                                class="w-full py-3.5 rounded-xl bg-[#0D47A1] hover:bg-[#1565C0] text-white font-extrabold text-xs uppercase tracking-wider shadow-lg hover:shadow-xl active:scale-[0.99] transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50"
                                 :disabled="form.processing"
                             >
                                 <span>{{ form.processing ? 'Sending Inquiry...' : 'Request Tour Quote' }}</span>
-                                <span>→</span>
+                                <span class="text-sm">→</span>
                             </button>
                         </form>
 
-                        <div class="pt-4 border-t border-slate-100 text-center space-y-1.5 text-slate-500 text-xs">
-                            <div class="flex items-center justify-center space-x-1.5">
-                                <svg class="w-3.5 h-3.5 text-slate-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                <span>Direct Concierge: +94 766 834 881</span>
-                            </div>
-                            <div class="flex items-center justify-center space-x-1.5">
-                                <svg class="w-3.5 h-3.5 text-slate-400 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                                <span>Email: info@worldinedestinations.com</span>
-                            </div>
+                        <!-- Direct Concierge Help -->
+                        <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-slate-500 text-[11px] font-medium">
+                            <a :href="`tel:${page.props.settings?.primary_phone || '+94766834881'}`" class="flex items-center space-x-1.5 hover:text-[#0D47A1] transition-colors">
+                                <svg class="w-3.5 h-3.5 text-blue-600 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                <span>+94 766 834 881</span>
+                            </a>
+                            <span class="text-slate-300">•</span>
+                            <span class="text-slate-400">Personal Travel Concierge</span>
                         </div>
                     </div>
 
@@ -296,6 +368,9 @@ const formatDescription = (text) => {
 
             </div>
         </section>
+
+        <!-- FOOTER -->
+        <Footer />
 
     </div>
 </template>

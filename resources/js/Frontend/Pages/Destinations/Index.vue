@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import Navbar from '@/Frontend/Components/Navbar.vue';
+import Footer from '@/Frontend/Components/Footer.vue';
 
 const props = defineProps({
     destinations: Array,
@@ -150,5 +151,9 @@ const activeHeroImage = computed(() => {
                 </div>
             </div>
         </section>
+
+        <!-- FOOTER -->
+        <Footer />
+
     </div>
 </template>

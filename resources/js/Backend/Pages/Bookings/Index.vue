@@ -40,7 +40,6 @@ const viewBooking = (b) => {
                                 <th class="p-4">Inquiry Source</th>
                                 <th class="p-4">Requested Package / Subject</th>
                                 <th class="p-4">Travel Date & Guests</th>
-                                <th class="p-4">Status</th>
                                 <th class="p-4 text-right">Actions</th>
                             </tr>
                         </thead>
@@ -61,12 +60,6 @@ const viewBooking = (b) => {
                                 <td class="p-4">
                                     <div>{{ b.travel_date }}</div>
                                     <div class="text-[11px] text-slate-500">{{ b.guests }} Traveler(s)</div>
-                                </td>
-                                <td class="p-4">
-                                    <span class="inline-flex items-center space-x-1.5 text-xs font-extrabold">
-                                        <span :class="['w-2 h-2 rounded-full', b.status === 'Confirmed' ? 'bg-emerald-500' : (b.status === 'Contacted' ? 'bg-blue-500' : 'bg-amber-500')]"></span>
-                                        <span :class="b.status === 'Confirmed' ? 'text-emerald-700' : (b.status === 'Contacted' ? 'text-blue-700' : 'text-amber-700')">{{ b.status }}</span>
-                                    </span>
                                 </td>
                                 <td class="p-4 text-right">
                                     <button @click="viewBooking(b)" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all">View Details</button>

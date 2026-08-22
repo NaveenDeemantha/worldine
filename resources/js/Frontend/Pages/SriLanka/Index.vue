@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from '@/Frontend/Components/Navbar.vue';
+import Footer from '@/Frontend/Components/Footer.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 
@@ -156,6 +157,18 @@ const openQuickDetail = (pkg) => {
                     </div>
                 </div>
 
+                <!-- Supported Payments Badge in Modal -->
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase">Payment:</span>
+                        <div class="flex items-center space-x-2">
+                            <img src="/images/Logo/vsms.png" alt="Visa MasterCard" class="h-4 max-h-4 w-auto max-w-[60px] object-contain bg-white px-1.5 py-0.5 rounded border border-slate-200 block" />
+                            <img src="/images/Logo/koko pay.png" alt="KOKO Pay" class="h-4 max-h-4 w-auto max-w-[50px] object-contain bg-white px-1.5 py-0.5 rounded border border-slate-200 block" />
+                        </div>
+                    </div>
+                    <span class="text-[10px] text-emerald-700 font-extrabold bg-emerald-50 px-2 py-0.5 rounded-full">Installments Available</span>
+                </div>
+
                 <div class="pt-4 border-t border-slate-100 flex justify-between items-center">
                     <span v-if="selectedPackage.price && Number(selectedPackage.price) > 0" class="text-xl font-black text-[#0D47A1]">${{ Number(selectedPackage.price).toLocaleString() }} USD</span>
                     <span v-else class="text-xs font-black bg-blue-50 text-[#0D47A1] px-3.5 py-2 rounded-xl border border-blue-100">Custom Tour • Inquire for Quote</span>
@@ -165,6 +178,9 @@ const openQuickDetail = (pkg) => {
                 </div>
             </div>
         </div>
+
+        <!-- FOOTER -->
+        <Footer />
 
     </div>
 </template>
