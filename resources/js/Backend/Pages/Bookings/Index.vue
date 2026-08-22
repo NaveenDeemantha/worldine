@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Backend/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -14,6 +14,17 @@ const viewBooking = (b) => {
     selectedBooking.value = b;
     isModalOpen.value = true;
 };
+
+const deleteBooking = (b) => {
+    if (confirm(`Are you sure you want to permanently delete this lead (${b.id} - ${b.customer_name})?`)) {
+        router.delete(route('admin.inquiries.destroy', b.db_id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                isModalOpen.value = false;
+            }
+        });
+    }
+};
 </script>
 
 <template>
@@ -24,7 +35,7 @@ const viewBooking = (b) => {
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 font-aptos">
                 <div>
                     <h1 class="text-2xl font-black text-slate-900 tracking-tight">Bookings & Customer Leads</h1>
-                    <p class="text-xs text-slate-500 mt-0.5 font-medium">Manage incoming tour reservation inquiries submitted by travelers on Worldine Destinations.</p>
+                    <p class="text-xs text-slate-500 mt-0.5 font-medium">Manage and review incoming tour reservation inquiries and contact leads.</p>
                 </div>
             </div>
         </template>
@@ -62,8 +73,20 @@ const viewBooking = (b) => {
                                     <div class="text-[11px] text-slate-500">{{ b.guests }} Traveler(s)</div>
                                 </td>
                                 <td class="p-4 text-right">
-                                    <button @click="viewBooking(b)" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all">View Details</button>
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <button @click="viewBooking(b)" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all">View</button>
+                                        <button 
+                                            @click="deleteBooking(b)" 
+                                            class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold transition-all"
+                                            title="Delete Lead"
+                                        >
+                                            <svg class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                        </button>
+                                    </div>
                                 </td>
+                            </tr>
+                            <tr v-if="!bookings.length">
+                                <td colspan="6" class="p-8 text-center text-slate-400 font-medium">No bookings or customer inquiries recorded.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -90,16 +113,27 @@ const viewBooking = (b) => {
                         <div class="font-semibold text-slate-700">{{ selectedBooking.phone }}</div>
                     </div>
                     <div>
-                        <span class="text-slate-400 font-bold uppercase block">Requested Package</span>
+                        <span class="text-slate-400 font-bold uppercase block">Requested Package / Source</span>
                         <div class="font-bold text-[#0D47A1]">{{ selectedBooking.package_title }}</div>
                     </div>
                     <div>
                         <span class="text-slate-400 font-bold uppercase block">Travel Details</span>
                         <div class="font-semibold text-slate-800">Date: {{ selectedBooking.travel_date }} ({{ selectedBooking.guests }} Guests)</div>
                     </div>
+                    <div v-if="selectedBooking.message">
+                        <span class="text-slate-400 font-bold uppercase block">Message / Note</span>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 text-slate-700 font-medium">{{ selectedBooking.message }}</div>
+                    </div>
                 </div>
 
-                <div class="pt-3 border-t border-slate-100 flex justify-end">
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <button 
+                        @click="deleteBooking(selectedBooking)" 
+                        class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-xs font-extrabold transition-all flex items-center space-x-1.5"
+                    >
+                        <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        <span>Delete Lead</span>
+                    </button>
                     <button @click="isModalOpen = false" class="px-4 py-2 rounded-xl bg-[#0D47A1] text-white text-xs font-extrabold">Close</button>
                 </div>
             </div>

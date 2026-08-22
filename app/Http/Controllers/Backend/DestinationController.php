@@ -82,6 +82,15 @@ class DestinationController extends Controller
     }
 
     /**
+     * Delete an Inquiry / Booking Lead
+     */
+    public function destroyInquiry(\App\Models\Inquiry $inquiry)
+    {
+        $inquiry->delete();
+        return redirect()->back()->with('success', 'Inquiry lead deleted successfully!');
+    }
+
+    /**
      * Store a newly created Destination
      */
     public function storeDestination(Request $request)

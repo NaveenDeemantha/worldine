@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/itineraries', [DestinationController::class, 'indexItineraries'])->name('admin.itineraries.index');
     Route::get('/admin/bookings', [DestinationController::class, 'indexBookings'])->name('admin.bookings.index');
+    Route::delete('/admin/inquiries/{inquiry}', [DestinationController::class, 'destroyInquiry'])->name('admin.inquiries.destroy');
     Route::get('/admin/contact', [ContactAdminController::class, 'index'])->name('admin.contact.index');
     Route::put('/admin/contact', [ContactAdminController::class, 'update'])->name('admin.contact.update');
 

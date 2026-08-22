@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Backend/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -45,6 +45,17 @@ const isInquiryModalOpen = ref(false);
 const viewInquiryDetails = (inq) => {
     selectedInquiry.value = inq;
     isInquiryModalOpen.value = true;
+};
+
+const deleteInquiry = (inq) => {
+    if (confirm(`Are you sure you want to permanently delete inquiry (${inq.id} - ${inq.customer_name})?`)) {
+        router.delete(route('admin.inquiries.destroy', inq.db_id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                isInquiryModalOpen.value = false;
+            }
+        });
+    }
 };
 </script>
 
@@ -182,12 +193,21 @@ const viewInquiryDetails = (inq) => {
                                     <div class="text-[11px] text-slate-500">{{ inq.guests }} Traveler(s)</div>
                                 </td>
                                 <td class="py-4 px-6 text-right whitespace-nowrap">
-                                    <button 
-                                        @click="viewInquiryDetails(inq)"
-                                        class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all"
-                                    >
-                                        View Details
-                                    </button>
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <button 
+                                            @click="viewInquiryDetails(inq)"
+                                            class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all"
+                                        >
+                                            View
+                                        </button>
+                                        <button 
+                                            @click="deleteInquiry(inq)"
+                                            class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold transition-all"
+                                            title="Delete Inquiry"
+                                        >
+                                            <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <tr v-if="!packageInquiries.length">
@@ -225,12 +245,21 @@ const viewInquiryDetails = (inq) => {
                                     <div class="text-[11px] text-slate-500">{{ inq.guests }} Traveler(s)</div>
                                 </td>
                                 <td class="py-4 px-6 text-right whitespace-nowrap">
-                                    <button 
-                                        @click="viewInquiryDetails(inq)"
-                                        class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all"
-                                    >
-                                        View Details
-                                    </button>
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <button 
+                                            @click="viewInquiryDetails(inq)"
+                                            class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#2196F3] hover:text-white text-slate-700 font-bold transition-all"
+                                        >
+                                            View
+                                        </button>
+                                        <button 
+                                            @click="deleteInquiry(inq)"
+                                            class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white font-bold transition-all"
+                                            title="Delete Lead"
+                                        >
+                                            <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <tr v-if="!contactInquiries.length">
@@ -377,7 +406,14 @@ const viewInquiryDetails = (inq) => {
                     </div>
                 </div>
 
-                <div class="pt-2 flex justify-end">
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <button 
+                        @click="deleteInquiry(selectedInquiry)" 
+                        class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-xs font-extrabold transition-all flex items-center space-x-1.5"
+                    >
+                        <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        <span>Delete Lead</span>
+                    </button>
                     <button 
                         @click="isInquiryModalOpen = false" 
                         class="px-5 py-2 rounded-xl bg-[#0D47A1] hover:bg-blue-800 text-white text-xs font-bold transition-all shadow-sm"
