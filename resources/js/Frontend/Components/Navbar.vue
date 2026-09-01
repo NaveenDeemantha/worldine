@@ -75,18 +75,18 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <header class="sticky top-0 left-0 right-0 z-50 w-full bg-white py-2.5 sm:py-3 pl-6 sm:pl-10 lg:pl-14 pr-0 flex items-center justify-between transition-all duration-300 border-none outline-none border-b-0 font-spinnaker">
+    <header class="sticky top-0 left-0 right-0 z-50 w-full bg-white py-2 sm:py-2.5 pl-6 sm:pl-9 lg:pl-12 xl:pl-14 pr-0 flex items-center justify-between transition-all duration-300 border-none outline-none border-b-0 font-spinnaker">
         <!-- Worldine Logo -->
-        <Link href="/" class="flex items-center group py-1">
+        <Link href="/" class="flex items-center group py-0.5">
             <img 
                 src="/images/Logo/worldine.png" 
                 alt="Worldine Logo" 
-                class="h-11 sm:h-13 lg:h-15 xl:h-16 w-auto object-contain group-hover:scale-105 transition-transform"
+                class="h-10 sm:h-11 lg:h-13 xl:h-14 w-auto object-contain group-hover:scale-105 transition-transform"
             />
         </Link>
 
         <!-- Desktop Navigation Links inside Blue Capsule -->
-        <nav class="hidden lg:flex items-center bg-[#2B70B4] text-white rounded-l-full px-6 sm:px-8 lg:px-10 xl:px-12 py-3 sm:py-3.5 lg:py-4 space-x-4 sm:space-x-5 lg:space-x-7 xl:space-x-9 text-xs sm:text-sm lg:text-base font-bold tracking-wide shadow-md font-spinnaker">
+        <nav class="hidden lg:flex items-center bg-[#2B70B4] text-white rounded-l-full px-6 sm:px-7 lg:px-8 xl:px-10 py-2.5 sm:py-2.5 lg:py-3 space-x-3.5 sm:space-x-4 lg:space-x-5 xl:space-x-7 text-xs sm:text-sm lg:text-[14px] xl:text-[15px] font-bold tracking-wide shadow-md font-spinnaker">
             <Link href="/" class="text-white hover:text-sky-200 transition-colors whitespace-nowrap">Home</Link>
             <a href="/#about" @click="scrollToAbout" class="text-white/95 hover:text-sky-200 transition-colors whitespace-nowrap cursor-pointer">About Us</a>
             
@@ -107,7 +107,7 @@ onUnmounted(() => {
                 <!-- Dynamic Sri Lanka Inbound Tours Dropdown Menu -->
                 <div 
                     v-if="activeSriLankaDropdown && navInboundPackages.length > 0" 
-                    class="absolute left-0 mt-2 w-64 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left max-h-80 overflow-y-auto"
+                    class="absolute left-0 mt-2.5 w-60 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left max-h-80 overflow-y-auto"
                     @mouseenter="openSriLanka"
                     @mouseleave="closeSriLanka"
                 >
@@ -116,7 +116,7 @@ onUnmounted(() => {
                         :key="pkg.id" 
                         :href="`/tours/${pkg.slug}`" 
                         @click="activeSriLankaDropdown = false" 
-                        class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group"
+                        class="flex items-center justify-between px-3 py-1.5 rounded-lg text-white hover:bg-white/15 transition-colors group"
                     >
                         <span class="truncate">{{ pkg.title }}</span>
                         <span class="text-white/70 group-hover:text-white text-xs ml-1 flex-shrink-0">→</span>
@@ -141,7 +141,7 @@ onUnmounted(() => {
                 <!-- Dynamic Destinations Countries Dropdown Menu -->
                 <div 
                     v-if="activeDestinationsDropdown && navDestinations.length > 0" 
-                    class="absolute left-0 mt-2 w-60 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left max-h-80 overflow-y-auto"
+                    class="absolute left-0 mt-2.5 w-56 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left max-h-80 overflow-y-auto"
                     @mouseenter="openDestinations"
                     @mouseleave="closeDestinations"
                 >
@@ -150,7 +150,7 @@ onUnmounted(() => {
                         :key="dest.id" 
                         :href="`/destinations?region=${dest.slug}`" 
                         @click="activeDestinationsDropdown = false" 
-                        class="flex items-center justify-between px-3 py-2 rounded-lg text-white hover:bg-white/15 transition-colors group"
+                        class="flex items-center justify-between px-3 py-1.5 rounded-lg text-white hover:bg-white/15 transition-colors group"
                     >
                         <span>{{ dest.name }}</span>
                         <span class="text-white/70 group-hover:text-white text-xs flex-shrink-0">→</span>
