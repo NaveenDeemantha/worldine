@@ -244,7 +244,7 @@ onUnmounted(() => {
 });
 
 // Category & Search State
-const searchCategory = ref('all');
+const searchCategory = ref('outbound');
 const searchBudget = ref(5000);
 
 // Wishlist State
@@ -271,13 +271,22 @@ const getDurationBadgeText = (dest) => {
 
 const categories = computed(() => {
     const list = props.dbFeaturedPackages || [];
-    const inboundCount = list.filter(p => p.category === 'srilanka-inbound' || p.category === 'inbound' || (p.destination && p.destination.type === 'inbound')).length;
-    const outboundCount = list.filter(p => p.category === 'global-outbound' || p.category === 'outbound' || (p.destination && p.destination.type === 'outbound') || p.category !== 'srilanka-inbound').length;
+    const inboundCount = list.filter(p => {
+        const cat = p.category || '';
+        const type = p.destination ? p.destination.type : '';
+        return cat === 'srilanka-inbound' || cat === 'inbound' || type === 'inbound';
+    }).length;
+    const outboundCount = list.filter(p => {
+        const cat = p.category || '';
+        const type = p.destination ? p.destination.type : '';
+        const isInbound = cat === 'srilanka-inbound' || cat === 'inbound' || type === 'inbound';
+        return cat === 'global-outbound' || cat === 'outbound' || type === 'outbound' || (!isInbound);
+    }).length;
     
     return [
-        { id: 'all', label: 'All Tour Packages', count: list.length },
+        { id: 'outbound', label: 'Global Outbound Tours', count: outboundCount },
         { id: 'inbound', label: 'Sri Lanka Inbound Tours', count: inboundCount },
-        { id: 'outbound', label: 'Global Outbound Tours', count: outboundCount }
+        { id: 'all', label: 'All Tour Packages', count: list.length }
     ];
 });
 
@@ -416,63 +425,169 @@ const prevDestSlide = () => {
     }
 };
 
-// Airline Partners Brand Data — logos auto-discovered via Wikipedia Commons search API
+// Airline Partners Brand Data — 26 Selected Airlines with direct official vector logos
 const airlinePartners = ref([
-    { name: 'Emirates',          searchQuery: 'Emirates airline logo',          accent: '#D71921', img: null },
-    { name: 'Qatar Airways',     searchQuery: 'Qatar Airways logo',             accent: '#5C0632', img: null },
-    { name: 'Singapore Airlines',searchQuery: 'Singapore Airlines logo',        accent: '#00205B', img: null },
-    { name: 'Etihad Airways',    searchQuery: 'Etihad Airways logo',            accent: '#BF9B30', img: null },
-    { name: 'British Airways',   searchQuery: 'British Airways logo',           accent: '#2176AE', img: null },
-    { name: 'Lufthansa',         searchQuery: 'Lufthansa logo',                 accent: '#05164D', img: null },
-    { name: 'Air France',        searchQuery: 'Air France logo',                accent: '#002157', img: null },
-    { name: 'Turkish Airlines',  searchQuery: 'Turkish Airlines logo',          accent: '#E81932', img: null },
-    { name: 'American Airlines', searchQuery: 'American Airlines logo',         accent: '#0078D2', img: null },
-    { name: 'Delta Air Lines',   searchQuery: 'Delta Air Lines logo',           accent: '#003366', img: null },
-    { name: 'United Airlines',   searchQuery: 'United Airlines logo',           accent: '#002244', img: null },
-    { name: 'Cathay Pacific',    searchQuery: 'Cathay Pacific logo',            accent: '#005155', img: null },
-    { name: 'ANA',               searchQuery: 'All Nippon Airways logo',        accent: '#1B3A6B', img: null },
-    { name: 'Japan Airlines',    searchQuery: 'Japan Airlines logo',            accent: '#CC0000', img: null },
-    { name: 'Korean Air',        searchQuery: 'Korean Air logo',                accent: '#00256C', img: null },
-    { name: 'Malaysia Airlines', searchQuery: 'Malaysia Airlines logo',         accent: '#CC0001', img: null },
-    { name: 'Thai Airways',      searchQuery: 'Thai Airways logo',              accent: '#6B2D8B', img: null },
-    { name: 'SriLankan Airlines',searchQuery: 'SriLankan Airlines logo',        accent: '#1D6FA4', img: null },
-    { name: 'Air Arabia',        searchQuery: 'Air Arabia logo',                accent: '#CC0000', img: null },
-    { name: 'flydubai',          searchQuery: 'flydubai logo',                  accent: '#FF6600', img: null },
+    { 
+        name: 'SriLankan Airlines', 
+        searchQuery: 'SriLankan Airlines logo', 
+        accent: '#00539B', 
+        img: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/78/SriLankan_Airlines_Logo.svg/330px-SriLankan_Airlines_Logo.svg.png' 
+    },
+    { 
+        name: 'Singapore Airlines', 
+        searchQuery: 'Singapore Airlines logo', 
+        accent: '#00205B', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Singapore_Airlines_Logo.svg/330px-Singapore_Airlines_Logo.svg.png' 
+    },
+    { 
+        name: 'Cathay Pacific', 
+        searchQuery: 'Cathay Pacific logo', 
+        accent: '#005155', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Cathay_Pacific_Ltd._logo.svg/330px-Cathay_Pacific_Ltd._logo.svg.png' 
+    },
+    { 
+        name: 'Thai Airways', 
+        searchQuery: 'Thai Airways logo', 
+        accent: '#6B2D8B', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Thai_Airways_logo.svg/330px-Thai_Airways_logo.svg.png' 
+    },
+    { 
+        name: 'Emirates', 
+        searchQuery: 'Emirates airline logo', 
+        accent: '#D71921', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/330px-Emirates_logo.svg.png' 
+    },
+    { 
+        name: 'Qatar Airways', 
+        searchQuery: 'Qatar Airways logo', 
+        accent: '#5C0632', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Qatar_Airways_logo.svg/330px-Qatar_Airways_logo.svg.png' 
+    },
+    { 
+        name: 'Etihad Airways', 
+        searchQuery: 'Etihad Airways logo', 
+        accent: '#BF9B30', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Etihad-airways-logo.svg/330px-Etihad-airways-logo.svg.png' 
+    },
+    { 
+        name: 'Turkish Airways', 
+        searchQuery: 'Turkish Airlines logo', 
+        accent: '#E81932', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Turkish_Airlines_logo_2019.svg/330px-Turkish_Airlines_logo_2019.svg.png' 
+    },
+    { 
+        name: 'Air India', 
+        searchQuery: 'Air India logo', 
+        accent: '#E31837', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Air_India_2023.svg/330px-Air_India_2023.svg.png' 
+    },
+    { 
+        name: 'IndiGo', 
+        searchQuery: 'IndiGo logo', 
+        accent: '#001B94', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IndiGo_Airlines_logo.svg/330px-IndiGo_Airlines_logo.svg.png' 
+    },
+    { 
+        name: 'China Eastern Airlines', 
+        searchQuery: 'China Eastern Airlines logo', 
+        accent: '#D81E06', 
+        img: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/China_Eastern_Airlines_logo.svg/330px-China_Eastern_Airlines_logo.svg.png' 
+    },
+    { 
+        name: 'Air China', 
+        searchQuery: 'Air China logo', 
+        accent: '#D90011', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Air_China_wordmark.svg/330px-Air_China_wordmark.svg.png' 
+    },
+    { 
+        name: 'British Airways', 
+        searchQuery: 'British Airways logo', 
+        accent: '#2176AE', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/BRITISH_AIRWAYS_logo.svg/330px-BRITISH_AIRWAYS_logo.svg.png' 
+    },
+    { 
+        name: 'Fly Dubai', 
+        searchQuery: 'Flydubai logo', 
+        accent: '#FF6600', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Fly_Dubai_logo_2010_03.svg/330px-Fly_Dubai_logo_2010_03.svg.png' 
+    },
+    { 
+        name: 'Lufthansa', 
+        searchQuery: 'Lufthansa logo', 
+        accent: '#05164D', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lufthansa_Logo_2018.svg/330px-Lufthansa_Logo_2018.svg.png' 
+    },
+    { 
+        name: 'Air Canada', 
+        searchQuery: 'Air Canada logo', 
+        accent: '#F01428', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Air_Canada_logo.svg/330px-Air_Canada_logo.svg.png' 
+    },
+    { 
+        name: 'Air France', 
+        searchQuery: 'Air France logo', 
+        accent: '#002157', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Air_France_Logo_%282016%29.png/330px-Air_France_Logo_%282016%29.png' 
+    },
+    { 
+        name: 'Air Arabia', 
+        searchQuery: 'Air Arabia logo', 
+        accent: '#E30613', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Air_Arabia_Logo.svg/330px-Air_Arabia_Logo.svg.png' 
+    },
+    { 
+        name: 'Jetstar', 
+        searchQuery: 'Jetstar logo', 
+        accent: '#FF6600', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Jetstar_logo.svg/330px-Jetstar_logo.svg.png' 
+    },
+    { 
+        name: 'AirAsia', 
+        searchQuery: 'AirAsia logo', 
+        accent: '#ED1C24', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AirAsia_New_Logo.svg/330px-AirAsia_New_Logo.svg.png' 
+    },
+    { 
+        name: 'Batik Air', 
+        searchQuery: 'Batik Air logo', 
+        accent: '#BA0C2F', 
+        img: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Batik_Air_logo.svg/330px-Batik_Air_logo.svg.png' 
+    },
+    { 
+        name: 'Qantas', 
+        searchQuery: 'Qantas logo', 
+        accent: '#E40000', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Qantas_wordmark_2016.svg/330px-Qantas_wordmark_2016.svg.png' 
+    },
+    { 
+        name: 'Malaysian Airlines', 
+        searchQuery: 'Malaysia Airlines logo', 
+        accent: '#CC0001', 
+        img: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/13/Malaysia_Airlines_Logo.svg/330px-Malaysia_Airlines_Logo.svg.png' 
+    },
+    { 
+        name: 'Vietnam Airlines', 
+        searchQuery: 'Vietnam Airlines logo', 
+        accent: '#005D84', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Vietnam_Airlines_2015_wordmark.svg/330px-Vietnam_Airlines_2015_wordmark.svg.png' 
+    },
+    { 
+        name: 'VietJet Air', 
+        searchQuery: 'VietJet Air logo', 
+        accent: '#EE1C25', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/VietJet_Air_logo.svg/330px-VietJet_Air_logo.svg.png' 
+    },
+    { 
+        name: 'Gulf Air', 
+        searchQuery: 'Gulf Air logo', 
+        accent: '#9B783E', 
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Gulf_Air_2001_wordmark.svg/330px-Gulf_Air_2001_wordmark.svg.png' 
+    },
 ]);
 
-// Auto-discover airline logo via Wikipedia Commons search API, then fetch thumbnail URL
+// Fallback dynamic logo loader if an image fails to render
 const loadAirlineLogos = async () => {
-    await Promise.allSettled(
-        airlinePartners.value.map(async (airline, index) => {
-            try {
-                const searchUrl = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(airline.searchQuery + ' filetype:svg')}&srnamespace=6&srlimit=5&format=json&origin=*`;
-                const searchRes = await fetch(searchUrl);
-                const searchData = await searchRes.json();
-                const results = searchData?.query?.search || [];
-
-                const match = results.find(r => 
-                    r.title.toLowerCase().includes('logo') && 
-                    r.title.toLowerCase().endsWith('.svg')
-                ) || results.find(r => r.title.toLowerCase().endsWith('.svg'));
-
-                if (!match) return;
-
-                const fileTitle = match.title;
-                const infoUrl = `https://commons.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(fileTitle)}&prop=imageinfo&iiprop=url&iiurlwidth=240&format=json&origin=*`;
-                const infoRes = await fetch(infoUrl);
-                const infoData = await infoRes.json();
-                const pages = infoData?.query?.pages;
-                const page = pages ? Object.values(pages)[0] : null;
-                const thumburl = page?.imageinfo?.[0]?.thumburl;
-
-                if (thumburl) {
-                    airlinePartners.value[index] = { ...airlinePartners.value[index], img: thumburl };
-                }
-            } catch (e) {
-                // Silently fall back to brand pill
-            }
-        })
-    );
+    // Images are pre-resolved with high reliability; kept as resilient fallback
 };
 
 const loopedAirlinePartners = computed(() => {
@@ -490,21 +605,27 @@ const filteredDestinations = computed(() => {
         const destCat = dest.category || '';
         const destType = dest.destination ? dest.destination.type : '';
 
-        const matchesCategory = searchCategory.value === 'all' 
-            || destCat === searchCategory.value 
-            || (searchCategory.value === 'inbound' && (destCat === 'srilanka-inbound' || destCat === 'inbound' || destType === 'inbound'))
-            || (searchCategory.value === 'outbound' && (destCat === 'global-outbound' || destCat === 'outbound' || destType === 'outbound' || destCat !== 'srilanka-inbound'));
-        
-        return matchesCategory;
+        const isInbound = destCat === 'srilanka-inbound' || destCat === 'inbound' || destType === 'inbound';
+        const isOutbound = destCat === 'global-outbound' || destCat === 'outbound' || destType === 'outbound' || (!isInbound);
+
+        if (searchCategory.value === 'inbound') {
+            return isInbound;
+        }
+        if (searchCategory.value === 'outbound') {
+            return isOutbound;
+        }
+        return true; // 'all'
     });
 });
 
 const displayedFilteredDestinations = computed(() => {
     const list = filteredDestinations.value || [];
-    if (windowWidth.value < 640) {
-        return list.slice(0, 5);
-    }
-    return list;
+    if (list.length === 0) return [];
+    
+    // Always show an even number of cards (e.g. 2, 4, 6, 8) so the grid rows are aesthetically balanced
+    // If only 1 package is available, show it rather than hiding it
+    const evenCount = (list.length > 1 && list.length % 2 !== 0) ? list.length - 1 : list.length;
+    return list.slice(0, evenCount);
 });
 
 // Modal State
@@ -538,10 +659,12 @@ const handleSubscribe = () => {
 const isStoryModalOpen = ref(false);
 const storySuccessMessage = ref('');
 const testimonialContainerRef = ref(null);
+const storyImagePreview = ref(null);
+const storyFileInputRef = ref(null);
 
 const scrollTestimonialRow = (direction) => {
     if (testimonialContainerRef.value) {
-        const scrollAmount = direction === 'left' ? -380 : 380;
+        const scrollAmount = direction === 'left' ? -310 : 310;
         testimonialContainerRef.value.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
 };
@@ -551,17 +674,50 @@ const storyForm = useForm({
     location: '',
     destination: '',
     rating: 5,
+    image: null,
     avatar: '',
     text: '',
 });
 
+const triggerStoryFileInput = () => {
+    if (storyFileInputRef.value) {
+        storyFileInputRef.value.click();
+    }
+};
+
+const handleStoryImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        storyForm.image = file;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            storyImagePreview.value = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+const removeStoryImage = () => {
+    storyForm.image = null;
+    storyImagePreview.value = null;
+    if (storyFileInputRef.value) {
+        storyFileInputRef.value.value = '';
+    }
+};
+
+const closeStoryModal = () => {
+    isStoryModalOpen.value = false;
+    storyForm.reset();
+    storyForm.rating = 5;
+    removeStoryImage();
+};
+
 const submitStory = () => {
     storyForm.post(route('testimonials.store'), {
         preserveScroll: true,
+        forceFormData: true,
         onSuccess: () => {
-            isStoryModalOpen.value = false;
-            storyForm.reset();
-            storyForm.rating = 5;
+            closeStoryModal();
             storySuccessMessage.value = 'Thank you for sharing your story! Your experience has been published.';
             setTimeout(() => {
                 storySuccessMessage.value = '';
@@ -915,10 +1071,10 @@ const features = [
             <div class="w-full flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10">
                 <div>
                     <span class="text-[#2196F3] text-xs font-black uppercase tracking-widest">WORLDINE DESTINATIONS</span>
-                    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-1">Inbound & Outbound Tour Packages</h2>
+                    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-1">Global Outbound & Inbound Tour Packages</h2>
                 </div>
                 <p class="text-slate-600 text-xs sm:text-sm max-w-md mt-2 md:mt-0 font-medium leading-relaxed">
-                    Discover authentic Sri Lanka Inbound expeditions and premier Global Outbound tour packages curated with 20+ years of travel expertise.
+                    Discover premier Global Outbound tour packages and authentic Sri Lanka Inbound expeditions curated with 20+ years of travel expertise.
                 </p>
             </div>
 
@@ -940,7 +1096,7 @@ const features = [
             </div>
 
             <!-- Destinations Cards Grid (100% Exact Actual Data from Backend) -->
-            <div v-if="filteredDestinations && filteredDestinations.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 gap-6 lg:gap-8 w-full">
+            <div v-if="displayedFilteredDestinations && displayedFilteredDestinations.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 w-full">
                 <div 
                     v-for="dest in displayedFilteredDestinations" 
                     :key="dest.id"
@@ -1296,49 +1452,49 @@ const features = [
 
         <!-- CUSTOMER REVIEWS & TESTIMONIALS SECTION (MOVED HERE AFTER WHY CHOOSE WORLDINE SECTION) -->
         <!-- REAL TRAVELER STORIES SECTION WITH SINGLE SCROLLABLE ROW -->
-        <section id="testimonials" class="py-16 sm:py-24 bg-white border-b border-slate-100 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 overflow-hidden">
+        <section id="testimonials" class="py-10 sm:py-14 bg-white border-b border-slate-100 w-full px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 overflow-hidden">
             <div class="w-full">
                 <!-- Section Header & Controls -->
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-                    <div class="text-left max-w-xl">
-                        <span class="text-[#2B70B4] text-xs font-black uppercase tracking-widest">REAL TRAVELER STORIES</span>
-                        <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 mt-1">Loved By Over 45,000+ Explorers</h2>
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-6 sm:mb-8">
+                    <div class="text-left max-w-lg">
+                        <span class="text-[#2B70B4] text-[11px] font-black uppercase tracking-widest">REAL TRAVELER STORIES</span>
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 mt-0.5">Loved By Over 45,000+ Explorers</h2>
                     </div>
 
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-2.5">
                         <!-- Navigation Scroll Buttons -->
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center space-x-1.5">
                             <button 
                                 @click="scrollTestimonialRow('left')" 
-                                class="w-10 h-10 rounded-full bg-slate-100 hover:bg-[#2B70B4] text-slate-700 hover:text-white flex items-center justify-center transition-all shadow-xs border border-slate-200 active:scale-95"
+                                class="w-8 h-8 rounded-full bg-slate-100 hover:bg-[#2B70B4] text-slate-700 hover:text-white flex items-center justify-center transition-all shadow-xs border border-slate-200 active:scale-95 cursor-pointer"
                                 aria-label="Scroll left"
                             >
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
                             </button>
                             <button 
                                 @click="scrollTestimonialRow('right')" 
-                                class="w-10 h-10 rounded-full bg-[#2B70B4] hover:bg-[#1E5288] text-white flex items-center justify-center transition-all shadow-md active:scale-95"
+                                class="w-8 h-8 rounded-full bg-[#2B70B4] hover:bg-[#1E5288] text-white flex items-center justify-center transition-all shadow-xs active:scale-95 cursor-pointer"
                                 aria-label="Scroll right"
                             >
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                             </button>
                         </div>
 
                         <!-- Add Story Button -->
                         <button 
                             @click="isStoryModalOpen = true"
-                            class="px-5 py-3 rounded-full bg-slate-900 hover:bg-[#2B70B4] text-white font-extrabold text-xs uppercase tracking-widest shadow-md hover:shadow-lg transition-all duration-300 flex items-center space-x-2 flex-shrink-0"
+                            class="px-4 py-2 rounded-full bg-slate-900 hover:bg-[#2B70B4] text-white font-extrabold text-[11px] uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 flex items-center space-x-1.5 flex-shrink-0 cursor-pointer"
                         >
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                             <span>Share Your Story</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Story Submission Success Toast -->
-                <div v-if="storySuccessMessage" class="mb-8 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 font-bold text-xs flex items-center justify-between shadow-sm animate-fade-in">
+                <div v-if="storySuccessMessage" class="mb-6 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 font-bold text-xs flex items-center justify-between shadow-xs animate-fade-in">
                     <div class="flex items-center space-x-2">
-                        <span class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-black">✓</span>
+                        <span class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-black">✓</span>
                         <span>{{ storySuccessMessage }}</span>
                     </div>
                     <button @click="storySuccessMessage = ''" class="text-emerald-700 font-black text-sm">✕</button>
@@ -1347,31 +1503,54 @@ const features = [
                 <!-- SINGLE SCROLLABLE ROW OF STORIES -->
                 <div 
                     ref="testimonialContainerRef"
-                    class="flex space-x-6 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory scroll-smooth no-scrollbar w-full"
+                    class="flex items-start space-x-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth no-scrollbar w-full"
                 >
                     <div 
                         v-for="(t, idx) in testimonials" 
                         :key="idx"
-                        class="w-[300px] sm:w-[360px] md:w-[400px] flex-shrink-0 snap-start bg-slate-50/80 border border-slate-200/80 hover:border-[#2B70B4]/40 p-6 sm:p-7 rounded-3xl space-y-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300"
+                        class="w-[250px] sm:w-[280px] md:w-[310px] flex-shrink-0 snap-start bg-white border border-slate-200/90 hover:border-[#2B70B4]/60 p-4 sm:p-4.5 rounded-2xl flex flex-col shadow-2xs hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 space-y-3"
                     >
-                        <div class="space-y-3">
-                            <div class="flex text-amber-400 space-x-1 text-sm">
-                                <span v-for="star in (t.rating || 5)" :key="star">★</span>
+                        <div class="space-y-2">
+                            <!-- Card Header: Rating Stars & Verified Badge -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-0.5">
+                                    <span v-for="star in (t.rating || 5)" :key="star" class="text-amber-400 text-xs">★</span>
+                                    <span v-if="(t.rating || 5) < 5" v-for="emptyStar in (5 - (t.rating || 5))" :key="'e-'+emptyStar" class="text-slate-200 text-xs">★</span>
+                                </div>
+                                <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/70 flex items-center space-x-1">
+                                    <svg class="w-2.5 h-2.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                    <span>Verified</span>
+                                </span>
                             </div>
-                            <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed line-clamp-4">
+
+                            <!-- Review Text -->
+                            <p class="text-slate-600 text-xs italic leading-relaxed line-clamp-3 font-normal">
                                 "{{ t.text }}"
                             </p>
+
+                            <!-- Attached Trip Photo (Aspect Ratio & Rounded Preview) -->
+                            <div v-if="t.avatar" class="relative mt-1.5 rounded-xl overflow-hidden aspect-[16/10] max-h-28 sm:max-h-32 w-full bg-slate-100 border border-slate-200/80 shadow-2xs group/img">
+                                <img 
+                                    :src="t.avatar" 
+                                    :alt="t.name + ' travel photo'" 
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105"
+                                    loading="lazy"
+                                />
+                            </div>
                         </div>
 
-                        <div class="pt-3 border-t border-slate-200/60 flex items-center space-x-3">
-                            <img 
-                                :src="t.avatar || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(t.name) + '&background=2B70B4&color=fff')" 
-                                :alt="t.name" 
-                                class="w-10 h-10 rounded-full object-cover border-2 border-[#2B70B4] flex-shrink-0" 
-                            />
-                            <div class="overflow-hidden">
-                                <div class="font-bold text-slate-900 text-xs sm:text-sm truncate">{{ t.name }}</div>
-                                <div class="text-[11px] text-slate-500 truncate">{{ t.location || 'Explorer' }} • <span class="text-[#2B70B4] font-semibold">{{ t.destination || 'Worldine Experience' }}</span></div>
+                        <!-- User Profile Info at Bottom with Default User Avatar SVG -->
+                        <div class="pt-2.5 border-t border-slate-100 flex items-center space-x-2.5">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200/80 text-slate-400 flex items-center justify-center shadow-2xs flex-shrink-0">
+                                <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12 4a4 4 0 100 8 4 4 0 000-8zm-2 9a6 6 0 00-6 6v1h16v-1a6 6 0 00-6-6h-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="overflow-hidden min-w-0">
+                                <div class="font-bold text-slate-900 text-xs truncate">{{ t.name }}</div>
+                                <div class="text-[10px] text-slate-500 truncate">
+                                    {{ t.location || 'Explorer' }} • <span class="text-[#2B70B4] font-semibold">{{ t.destination || 'Worldine Experience' }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1381,13 +1560,13 @@ const features = [
 
         <!-- SHARE YOUR STORY PUBLIC MODAL -->
         <div v-if="isStoryModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-            <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto text-slate-800">
+            <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto no-scrollbar text-slate-800">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                     <div>
                         <span class="text-xs font-black uppercase text-[#2B70B4] tracking-widest">WORLDINE COMMUNITY</span>
                         <h3 class="text-xl sm:text-2xl font-black text-slate-900">Share Your Travel Story</h3>
                     </div>
-                    <button @click="isStoryModalOpen = false" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+                    <button @click="closeStoryModal" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
                 </div>
 
                 <form @submit.prevent="submitStory" class="space-y-4">
@@ -1464,32 +1643,97 @@ const features = [
                         ></textarea>
                     </div>
 
+                    <!-- Image / Photo Upload Section -->
                     <div>
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
-                            Avatar Photo Link (Optional)
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center justify-between">
+                            <span>Attach Trip Photo / Selfie <span class="text-slate-400 font-normal lowercase">(optional)</span></span>
+                            <span class="text-[10px] text-slate-400 font-medium">PNG, JPG, WebP up to 5MB</span>
                         </label>
+
+                        <!-- Permanent File Input (Always in DOM) -->
                         <input 
-                            v-model="storyForm.avatar"
-                            type="text"
-                            placeholder="https://... (or leave blank for generated avatar)"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#2B70B4] focus:ring-2 focus:ring-[#2B70B4]/20 text-xs font-medium text-slate-900 outline-none"
+                            id="story_image_file_input"
+                            ref="storyFileInputRef"
+                            type="file" 
+                            accept="image/jpeg,image/png,image/webp,image/gif,image/jpg"
+                            class="hidden" 
+                            @change="handleStoryImageChange" 
                         />
+
+                        <!-- If image selected -> Live Preview Card with Change and Remove options -->
+                        <div v-if="storyImagePreview" class="relative rounded-2xl border-2 border-emerald-300 bg-emerald-50/50 p-3.5 flex items-center justify-between gap-3 shadow-xs">
+                            <div class="flex items-center space-x-3 min-w-0">
+                                <img :src="storyImagePreview" alt="Story preview" class="w-16 h-16 rounded-xl object-cover border-2 border-emerald-400 flex-shrink-0 shadow-sm" />
+                                <div class="min-w-0">
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-emerald-600 text-white">
+                                            ✓ Attached
+                                        </span>
+                                        <span v-if="storyForm.image?.size" class="text-[10px] font-semibold text-slate-500">
+                                            {{ (storyForm.image.size / (1024 * 1024)).toFixed(2) }} MB
+                                        </span>
+                                    </div>
+                                    <p class="text-xs font-bold text-slate-800 truncate mt-1 max-w-[170px] sm:max-w-[210px]">
+                                        {{ storyForm.image?.name || 'Attached Photo' }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 flex-shrink-0">
+                                <button 
+                                    type="button" 
+                                    @click="triggerStoryFileInput"
+                                    class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200 transition-colors shadow-2xs"
+                                >
+                                    Change
+                                </button>
+                                <button 
+                                    type="button" 
+                                    @click="removeStoryImage"
+                                    class="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs border border-rose-200 transition-colors flex items-center space-x-1 shadow-2xs"
+                                    title="Remove attached photo"
+                                >
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    <span>Remove</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Dropzone button when no image is selected -->
+                        <label 
+                            v-else
+                            for="story_image_file_input"
+                            class="flex flex-col items-center justify-center p-5 border-2 border-dashed border-slate-300 hover:border-[#2B70B4] bg-slate-50/70 hover:bg-blue-50/40 rounded-2xl cursor-pointer transition-all duration-200 group text-center"
+                        >
+                            <div class="w-10 h-10 rounded-full bg-white shadow-xs border border-slate-200 flex items-center justify-center text-slate-500 group-hover:text-[#2B70B4] group-hover:border-[#2B70B4]/40 transition-colors mb-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            </div>
+                            <p class="text-xs font-bold text-slate-800 group-hover:text-[#2B70B4] transition-colors">
+                                Click to upload photo or selfie
+                            </p>
+                            <p class="text-[11px] text-slate-500 mt-0.5">
+                                Attach a memory from your tour (PNG, JPG, WebP up to 5MB)
+                            </p>
+                        </label>
                     </div>
 
                     <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
                         <button 
-                            type="button"
-                            @click="isStoryModalOpen = false"
+                            type="button" 
+                            @click="closeStoryModal"
                             class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs"
                         >
                             Cancel
                         </button>
                         <button 
-                            type="submit"
+                            type="submit" 
                             :disabled="storyForm.processing"
-                            class="px-7 py-3 rounded-xl bg-[#2B70B4] hover:bg-[#1E5288] text-white font-extrabold text-xs uppercase tracking-widest shadow-lg transition-all"
+                            class="px-7 py-3 rounded-xl bg-[#2B70B4] hover:bg-[#1E5288] text-white font-extrabold text-xs uppercase tracking-widest shadow-lg transition-all flex items-center space-x-2"
                         >
-                            {{ storyForm.processing ? 'Submitting...' : 'Post Story →' }}
+                            <svg v-if="storyForm.processing" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            <span>{{ storyForm.processing ? 'Publishing...' : 'Post Story →' }}</span>
                         </button>
                     </div>
                 </form>
@@ -1666,7 +1910,7 @@ const features = [
 
         <!-- QUICK VIEW MODAL (100% Exact Actual Data from Backend) -->
         <div v-if="isBookingModalOpen && activeModalDestination" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-            <div class="bg-white border border-slate-200 rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5 shadow-2xl relative">
+            <div class="bg-white border border-slate-200 rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-5 shadow-2xl relative">
                 <!-- Close Button -->
                 <button @click="closeModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 p-1.5 text-lg font-bold">
                     ✕

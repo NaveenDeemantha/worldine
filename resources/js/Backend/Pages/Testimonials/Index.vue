@@ -14,16 +14,46 @@ const isModalOpen = ref(false);
 const isEditing = ref(false);
 const editingId = ref(null);
 const successMessage = ref('');
+const imagePreview = ref(null);
+const fileInputRef = ref(null);
 
 const form = useForm({
     name: '',
     location: '',
     destination: '',
     rating: 5,
+    image: null,
     avatar: '',
     text: '',
     is_active: true,
 });
+
+const triggerFileInput = () => {
+    if (fileInputRef.value) {
+        fileInputRef.value.click();
+    }
+};
+
+const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        form.image = file;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            imagePreview.value = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+const removeImage = () => {
+    form.image = null;
+    imagePreview.value = null;
+    form.avatar = '';
+    if (fileInputRef.value) {
+        fileInputRef.value.value = '';
+    }
+};
 
 const openAddModal = () => {
     isEditing.value = false;
@@ -31,6 +61,7 @@ const openAddModal = () => {
     form.reset();
     form.rating = 5;
     form.is_active = true;
+    imagePreview.value = null;
     isModalOpen.value = true;
 };
 
@@ -41,29 +72,40 @@ const openEditModal = (t) => {
     form.location = t.location || '';
     form.destination = t.destination || '';
     form.rating = t.rating || 5;
+    form.image = null;
     form.avatar = t.avatar || '';
     form.text = t.text || '';
     form.is_active = Boolean(t.is_active);
+    imagePreview.value = t.avatar || null;
     isModalOpen.value = true;
 };
 
 const closeModal = () => {
     isModalOpen.value = false;
     form.reset();
+    imagePreview.value = null;
 };
 
 const saveTestimonial = () => {
     if (isEditing.value && editingId.value) {
-        form.put(route('admin.testimonials.update', editingId.value), {
+        form.transform((data) => ({
+            ...data,
+            _method: 'PUT'
+        })).post(route('admin.testimonials.update', editingId.value), {
             preserveScroll: true,
+            forceFormData: true,
             onSuccess: () => {
                 closeModal();
                 showSuccess('Traveller story updated successfully!');
             }
         });
     } else {
-        form.post(route('admin.testimonials.store'), {
+        form.transform((data) => ({
+            ...data,
+            _method: 'POST'
+        })).post(route('admin.testimonials.store'), {
             preserveScroll: true,
+            forceFormData: true,
             onSuccess: () => {
                 closeModal();
                 showSuccess('Traveller story added successfully!');
@@ -176,16 +218,26 @@ const showSuccess = (msg) => {
                         <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed">
                             "{{ t.text }}"
                         </p>
+
+                        <!-- Attached Trip Photo (Shown directly after review text) -->
+                        <div v-if="t.avatar" class="mt-2 rounded-2xl overflow-hidden h-36 w-full bg-slate-100 border border-slate-200 shadow-xs">
+                            <img 
+                                :src="t.avatar" 
+                                :alt="t.name + ' travel memory'" 
+                                class="w-full h-full object-cover"
+                                loading="lazy"
+                            />
+                        </div>
                     </div>
 
                     <!-- Author Info & Action Buttons -->
                     <div class="pt-4 border-t border-slate-100 space-y-3">
                         <div class="flex items-center space-x-3">
-                            <img 
-                                :src="t.avatar || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(t.name) + '&background=0D47A1&color=fff')" 
-                                :alt="t.name" 
-                                class="w-10 h-10 rounded-full object-cover border-2 border-[#0D47A1]" 
-                            />
+                            <div class="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 text-slate-500 flex items-center justify-center shadow-xs flex-shrink-0">
+                                <svg class="w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12 4a4 4 0 100 8 4 4 0 000-8zm-2 9a6 6 0 00-6 6v1h16v-1a6 6 0 00-6-6h-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
                             <div class="overflow-hidden">
                                 <div class="font-black text-slate-900 text-xs sm:text-sm truncate">{{ t.name }}</div>
                                 <div class="text-[11px] text-slate-500 truncate">
@@ -249,7 +301,7 @@ const showSuccess = (msg) => {
 
             <!-- ADD / EDIT MODAL -->
             <div v-if="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
-                <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+                <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto no-scrollbar">
                     
                     <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                         <div>
@@ -322,15 +374,69 @@ const showSuccess = (msg) => {
                             </div>
                         </div>
 
+                        <!-- Image File Upload / Photo Section -->
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                                Avatar Photo URL (Optional)
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center justify-between">
+                                <span>Traveller Photo / Avatar (Optional)</span>
+                                <span class="text-[10px] text-slate-400 font-medium">PNG, JPG, WebP up to 5MB</span>
                             </label>
+
+                            <!-- Permanent File Input -->
+                            <input 
+                                id="admin_testimonial_file_input"
+                                ref="fileInputRef"
+                                type="file" 
+                                accept="image/jpeg,image/png,image/webp,image/gif,image/jpg"
+                                class="hidden" 
+                                @change="handleImageUpload" 
+                            />
+
+                            <!-- Preview if image selected or existing avatar -->
+                            <div v-if="imagePreview" class="relative rounded-2xl border-2 border-blue-200 bg-blue-50/50 p-2.5 flex items-center justify-between gap-3 mb-2 shadow-xs">
+                                <div class="flex items-center space-x-3 min-w-0">
+                                    <img :src="imagePreview" alt="Story preview" class="w-14 h-14 rounded-xl object-cover border border-slate-200 flex-shrink-0 shadow-sm" />
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-bold text-slate-800 truncate">{{ form.image ? form.image.name : 'Current Photo' }}</p>
+                                        <p class="text-[11px] text-emerald-600 font-semibold flex items-center space-x-1 mt-0.5">
+                                            <span>✓</span>
+                                            <span>Image selected</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-1.5 flex-shrink-0">
+                                    <button 
+                                        type="button" 
+                                        @click="triggerFileInput"
+                                        class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 font-bold text-[11px] border border-slate-200 transition-colors shadow-2xs"
+                                    >
+                                        Change
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        @click="removeImage"
+                                        class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-[11px] border border-rose-200 transition-colors shadow-2xs"
+                                        title="Remove photo"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Dropzone button when no image is selected -->
+                            <label 
+                                v-else
+                                for="admin_testimonial_file_input"
+                                class="border-2 border-dashed border-slate-200 hover:border-[#0D47A1] bg-slate-50 hover:bg-blue-50/30 rounded-2xl p-3.5 text-center cursor-pointer transition-all duration-200 group flex items-center justify-center space-x-2 text-slate-500 group-hover:text-[#0D47A1] text-xs font-bold mb-2"
+                            >
+                                <svg class="w-4 h-4 text-slate-500 group-hover:text-[#0D47A1]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <span>Upload Photo File</span>
+                            </label>
+
                             <input 
                                 v-model="form.avatar"
                                 type="text"
-                                placeholder="https://images.unsplash.com/... or leave blank for initials"
-                                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-xs font-medium text-slate-900 outline-none"
+                                placeholder="Or enter Image URL (https://...)"
+                                class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-[#0D47A1] focus:ring-2 focus:ring-[#0D47A1]/20 text-[11px] font-medium text-slate-700 outline-none"
                             />
                         </div>
 

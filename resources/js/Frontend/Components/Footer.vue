@@ -137,11 +137,12 @@ defineProps({
                 </div>
             </div>
 
-            <!-- Bottom Copyright Bar -->
+            <!-- Bottom Copyright Bar (Desktop) -->
             <div class="mt-8 pt-4 border-t border-white/15 flex flex-row items-center justify-between gap-4 text-[11px] text-slate-400 font-spinnaker">
                 <div>
                     Copyright © 2026 Worldine Destinations (Pvt) Ltd. All Rights Reserved.
                 </div>
+
                 <div class="flex items-center space-x-2">
                     <span class="text-[10px] text-slate-400">Secure Payments via</span>
                     <div class="flex items-center space-x-2">
@@ -153,81 +154,147 @@ defineProps({
         </div>
 
         <!-- MOBILE FOOTER VIEW (block md:hidden) -->
-        <div class="block md:hidden relative z-10 pt-6 pb-5 w-full px-5 space-y-5 font-spinnaker">
+        <div class="block md:hidden relative z-10 pt-8 pb-6 w-full px-5 space-y-6 font-spinnaker">
             
-            <!-- ROW 1: Logo & Social Links -->
-            <div class="flex items-center justify-between border-b border-white/15 pb-4">
-                <Link href="/" class="inline-block group">
-                    <img 
-                        src="/images/Logo/worldine.png" 
-                        alt="Worldine Destinations Logo" 
-                        class="h-12 w-auto object-contain filter drop-shadow-md" 
-                    />
-                </Link>
+            <!-- Company Branding & Socials -->
+            <div class="space-y-3 pb-5 border-b border-white/15">
+                <div class="flex items-center justify-between">
+                    <Link href="/" class="inline-block group">
+                        <img 
+                            src="/images/Logo/worldine.png" 
+                            alt="Worldine Destinations Logo" 
+                            class="h-14 w-auto object-contain filter drop-shadow-md" 
+                        />
+                    </Link>
 
-                <!-- Social Media Links -->
-                <div class="flex items-center space-x-2">
-                    <a href="https://www.facebook.com/worldinedestinations" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#2196F3] text-white flex items-center justify-center font-bold text-xs transition-all border border-white/15 shadow-sm" aria-label="Facebook">
-                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    </a>
-                    <a href="https://www.instagram.com/worldinedestinations" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center font-bold text-xs transition-all border border-white/15 shadow-sm" aria-label="Instagram">
-                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    </a>
+                    <!-- Social Media Links -->
+                    <div class="flex items-center space-x-2">
+                        <a href="https://www.facebook.com/worldinedestinations" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#2196F3] text-white flex items-center justify-center font-bold text-xs transition-all border border-white/15 shadow-xs active:scale-95" aria-label="Facebook">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/worldinedestinations" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center font-bold text-xs transition-all border border-white/15 shadow-xs active:scale-95" aria-label="Instagram">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 text-xs leading-relaxed font-normal">
+                    Worldine Destinations (Pvt) Ltd. Over 20 years of experience in the travel trade with deep knowledge in Ticketing, Visas, Outbound & Inbound tours, and Travel Insurance.
+                </p>
+            </div>
+
+            <!-- 3-Column Navigation & Contact Grid -->
+            <div class="grid grid-cols-3 gap-2.5 sm:gap-3 text-[10px] sm:text-xs pb-5 border-b border-white/15">
+                <!-- Column 1: Quick Links -->
+                <div class="space-y-2">
+                    <h4 class="text-[#90CAF9] font-bold text-[11px] sm:text-xs uppercase tracking-wider border-b border-white/15 pb-1 font-spinnaker">
+                        Quick Links
+                    </h4>
+                    <ul class="space-y-1.5 text-slate-200 font-semibold">
+                        <li><Link href="/" class="hover:text-[#90CAF9] block transition-colors">Home</Link></li>
+                        <li><Link href="/srilanka" class="hover:text-[#90CAF9] block transition-colors">Sri Lanka</Link></li>
+                        <li><Link href="/destinations" class="hover:text-[#90CAF9] block transition-colors">Destinations</Link></li>
+                        <li><Link href="/services" class="hover:text-[#90CAF9] block transition-colors">Our Services</Link></li>
+                        <li><Link href="/contact" class="hover:text-[#90CAF9] block transition-colors">Contact</Link></li>
+                    </ul>
+                </div>
+
+                <!-- Column 2: Tour Expeditions -->
+                <div class="space-y-2">
+                    <h4 class="text-[#90CAF9] font-bold text-[11px] sm:text-xs uppercase tracking-wider border-b border-white/15 pb-1 font-spinnaker">
+                        Tours
+                    </h4>
+                    <ul class="space-y-1.5 text-slate-200 font-semibold">
+                        <li><Link href="/srilanka" class="hover:text-[#90CAF9] block transition-colors">Sri Lanka</Link></li>
+                        <li><Link href="/destinations?region=maldives-paradise" class="hover:text-[#90CAF9] block transition-colors">Maldives</Link></li>
+                        <li><Link href="/destinations?region=dubai-uae" class="hover:text-[#90CAF9] block transition-colors">Dubai & UAE</Link></li>
+                        <li><Link href="/destinations?region=switzerland-europe" class="hover:text-[#90CAF9] block transition-colors">Schengen</Link></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Hotline & Office Contacts -->
+                <div class="space-y-2">
+                    <h4 class="text-[#90CAF9] font-bold text-[11px] sm:text-xs uppercase tracking-wider border-b border-white/15 pb-1 font-spinnaker">
+                        Hotline
+                    </h4>
+                    <ul class="space-y-1 text-slate-200 font-semibold">
+                        <li>
+                            <a :href="`tel:${(settings?.landline_phone || '+94112636558').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block leading-snug">
+                                <span class="text-[9px] text-[#90CAF9] block font-bold">Landline</span>
+                                <span class="truncate block text-[10px]">{{ settings?.landline_phone || '+94 11 263 6558' }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a :href="`tel:${(settings?.primary_phone || '+94766834881').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block leading-snug">
+                                <span class="text-[9px] text-[#90CAF9] block font-bold">Primary</span>
+                                <span class="truncate block text-[10px]">{{ settings?.primary_phone || '+94 766 834 881' }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a :href="`tel:${(settings?.outbound_phone || '+94718834881').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block leading-snug">
+                                <span class="text-[9px] text-[#90CAF9] block font-bold">Outbound</span>
+                                <span class="truncate block text-[10px]">{{ settings?.outbound_phone || '+94 718 834 881' }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a :href="`tel:${(settings?.inbound_phone || '+9477869229').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block leading-snug">
+                                <span class="text-[9px] text-[#90CAF9] block font-bold">Inbound</span>
+                                <span class="truncate block text-[10px]">{{ settings?.inbound_phone || '+94 778 692 229' }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a :href="`mailto:${settings?.primary_email || 'info@worldinedestinations.com'}`" class="hover:text-[#90CAF9] block leading-snug">
+                                <span class="text-[9px] text-[#90CAF9] block font-bold">Email</span>
+                                <span class="truncate block text-[10px]">{{ settings?.primary_email || 'info@worldinedestinations.com' }}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- ROW 2: Navigation Links -->
-            <div class="grid grid-cols-3 gap-2 text-[10px]">
-                <div class="space-y-1.5">
-                    <h4 class="text-[#90CAF9] font-bold uppercase tracking-wider border-b border-white/15 pb-1">Links</h4>
-                    <ul class="space-y-1 text-slate-200 font-semibold">
-                        <li><Link href="/" class="hover:text-[#90CAF9] block">Home</Link></li>
-                        <li><Link href="/srilanka" class="hover:text-[#90CAF9] block">Sri Lanka</Link></li>
-                        <li><Link href="/destinations" class="hover:text-[#90CAF9] block">Destinations</Link></li>
-                        <li><Link href="/contact" class="hover:text-[#90CAF9] block">Contact</Link></li>
-                    </ul>
-                </div>
-
-                <div class="space-y-1.5">
-                    <h4 class="text-[#90CAF9] font-bold uppercase tracking-wider border-b border-white/15 pb-1">Tours</h4>
-                    <ul class="space-y-1 text-slate-200 font-semibold">
-                        <li><Link href="/srilanka" class="hover:text-[#90CAF9] block">Sri Lanka</Link></li>
-                        <li><Link href="/destinations?region=maldives-paradise" class="hover:text-[#90CAF9] block">Maldives</Link></li>
-                        <li><Link href="/destinations?region=dubai-uae" class="hover:text-[#90CAF9] block">Dubai</Link></li>
-                        <li><Link href="/destinations?region=switzerland-europe" class="hover:text-[#90CAF9] block">Schengen</Link></li>
-                    </ul>
-                </div>
-
-                <div class="space-y-1.5">
-                    <h4 class="text-[#90CAF9] font-bold uppercase tracking-wider border-b border-white/15 pb-1">Hotline</h4>
-                    <ul class="space-y-1 text-slate-200 font-semibold">
-                        <li><a :href="`tel:${(settings?.landline_phone || '+94112636558').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block truncate">{{ settings?.landline_phone || '+94 11 263 6558' }}</a></li>
-                        <li><a :href="`tel:${(settings?.primary_phone || '+94766834881').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block truncate">{{ settings?.primary_phone || '+94 766 834 881' }}</a></li>
-                        <li><a :href="`tel:${(settings?.inbound_phone || '+9477869229').replace(/\s+/g, '')}`" class="hover:text-[#90CAF9] block truncate">{{ settings?.inbound_phone || '+94 778 692 229' }}</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- ROW 3: Accepted Payments in Mobile -->
-            <div class="pt-3 border-t border-white/15 space-y-2">
+            <!-- Accepted Payments in Mobile -->
+            <div class="space-y-2 pb-4">
                 <span class="text-[10px] font-bold text-[#90CAF9] uppercase tracking-wider block text-center">
-                    Accepted Payment Methods
+                    Accepted Payment Options
                 </span>
                 <div class="flex items-center justify-center space-x-3">
-                    <div class="bg-white/95 px-2.5 py-1 rounded-xl border border-white/20 shadow-sm flex items-center justify-center h-8 shrink-0">
+                    <div class="bg-white/95 px-3 py-1 rounded-xl border border-white/20 shadow-xs flex items-center justify-center h-8 shrink-0">
                         <img src="/images/Logo/vsms.png" alt="Visa and MasterCard" class="h-5 max-h-5 w-auto max-w-[70px] object-contain block" />
                     </div>
-                    <div class="bg-white/95 px-2.5 py-1 rounded-xl border border-white/20 shadow-sm flex items-center justify-center h-8 shrink-0">
+                    <div class="bg-white/95 px-3 py-1 rounded-xl border border-white/20 shadow-xs flex items-center justify-center h-8 shrink-0">
                         <img src="/images/Logo/koko pay.png" alt="KOKO Pay" class="h-4 max-h-4 w-auto max-w-[60px] object-contain block" />
                     </div>
                 </div>
                 <p class="text-[10px] text-center text-slate-400">Card Payments & Installments with KOKO</p>
             </div>
 
-            <!-- ROW 4: Mobile Copyright Bar -->
-            <div class="pt-3 border-t border-white/15 text-center text-[10px] text-slate-400 font-spinnaker">
+            <!-- Mobile Bottom Copyright & Security Bar -->
+            <div class="pt-4 border-t border-white/15 space-y-2 text-center text-[10px] text-slate-400 font-spinnaker">
                 <div>Copyright © 2026 Worldine Destinations (Pvt) Ltd. All Rights Reserved.</div>
+                <div class="flex items-center justify-center space-x-2 pt-1">
+                    <span>Secure Payments via</span>
+                    <img src="/images/Logo/vsms.png" alt="Visa MasterCard" class="h-3.5 max-h-3.5 w-auto max-w-[45px] bg-white/90 px-1 py-0.5 rounded object-contain inline-block" />
+                    <img src="/images/Logo/koko pay.png" alt="KOKO" class="h-3 max-h-3 w-auto max-w-[40px] bg-white/90 px-1 py-0.5 rounded object-contain inline-block" />
+                </div>
             </div>
+        </div>
+
+        <!-- DEDICATED BOTTOM STRIP FOR DEVELOPER CREDIT -->
+        <div class="relative z-10 w-full bg-black/70 border-t border-white/10 py-2.5 px-4 text-center font-spinnaker">
+            <a 
+                href="https://hoomansdigital.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="inline-flex items-center justify-center flex-wrap gap-2 text-[11px] sm:text-xs text-slate-300 hover:text-white transition-all group"
+            >
+                <span class="text-slate-400 group-hover:text-slate-200">System Designed, Developed & Hosted By</span>
+                <img 
+                    src="/images/Logo/digi logo.png" 
+                    alt="Hoomans Digital" 
+                    class="object-contain inline-block transition-transform group-hover:scale-105" 
+                    style="height: 14px; max-height: 16px; width: auto; filter: brightness(0) invert(1);" 
+                />
+            </a>
         </div>
     </footer>
 </template>

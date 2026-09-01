@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Testimonial;
+use App\Services\ImageOptimizerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -27,10 +28,21 @@ class TestimonialAdminController extends Controller
             'location' => 'nullable|string|max:255',
             'destination' => 'nullable|string|max:255',
             'rating' => 'required|integer|min:1|max:5',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'avatar' => 'nullable|string|max:1000',
             'text' => 'required|string|max:2000',
             'is_active' => 'required|boolean',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['avatar'] = ImageOptimizerService::storeOptimized(
+                $request->file('image'),
+                'images/testimonials',
+                $validated['name']
+            );
+        }
+
+        unset($validated['image']);
 
         Testimonial::create($validated);
 
@@ -44,10 +56,21 @@ class TestimonialAdminController extends Controller
             'location' => 'nullable|string|max:255',
             'destination' => 'nullable|string|max:255',
             'rating' => 'required|integer|min:1|max:5',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'avatar' => 'nullable|string|max:1000',
             'text' => 'required|string|max:2000',
             'is_active' => 'required|boolean',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['avatar'] = ImageOptimizerService::storeOptimized(
+                $request->file('image'),
+                'images/testimonials',
+                $validated['name']
+            );
+        }
+
+        unset($validated['image']);
 
         $testimonial->update($validated);
 

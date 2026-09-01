@@ -257,6 +257,28 @@ const toggleCollapse = () => {
             <main class="flex-1 p-4 sm:p-8">
                 <slot />
             </main>
+
+            <!-- ADMIN PORTAL FOOTER -->
+            <footer class="px-4 sm:px-8 py-3.5 border-t border-slate-200/80 bg-white/70 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 font-aptos">
+                <div>
+                    © 2026 Worldine Destinations Admin Portal.
+                </div>
+                <a 
+                    href="https://hoomansdigital.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="inline-flex items-center space-x-1.5 text-[11px] text-slate-500 hover:text-[#0D47A1] font-medium transition-colors"
+                >
+                    <span>System Designed, Developed & Hosted By</span>
+                    <img 
+                        src="/images/Logo/digi logo.png" 
+                        alt="Hoomans Digital Logo" 
+                        class="object-contain inline-block shrink-0" 
+                        style="height: 16px; max-height: 16px; max-width: 80px; width: auto;" 
+                    />
+                    <span class="font-bold text-slate-800">Hoomans Digital</span>
+                </a>
+            </footer>
         </div>
     </div>
 </template>
