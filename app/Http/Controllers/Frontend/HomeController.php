@@ -40,8 +40,7 @@ class HomeController extends Controller
         // Featured Tour Packages Grid
         $featuredPackages = TourPackage::with(['destination', 'itineraryDays'])
             ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('title', 'asc')
             ->get()
             ->map(function ($pkg) {
                 return [
