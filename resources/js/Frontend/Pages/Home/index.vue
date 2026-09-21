@@ -600,22 +600,24 @@ const filteredDestinations = computed(() => {
         ? props.dbFeaturedPackages 
         : [];
 
-    return list.filter(dest => {
-        if (!dest) return false;
-        const destCat = dest.category || '';
-        const destType = dest.destination ? dest.destination.type : '';
+    return list
+        .filter(dest => {
+            if (!dest) return false;
+            const destCat = dest.category || '';
+            const destType = dest.destination ? dest.destination.type : '';
 
-        const isInbound = destCat === 'srilanka-inbound' || destCat === 'inbound' || destType === 'inbound';
-        const isOutbound = destCat === 'global-outbound' || destCat === 'outbound' || destType === 'outbound' || (!isInbound);
+            const isInbound = destCat === 'srilanka-inbound' || destCat === 'inbound' || destType === 'inbound';
+            const isOutbound = destCat === 'global-outbound' || destCat === 'outbound' || destType === 'outbound' || (!isInbound);
 
-        if (searchCategory.value === 'inbound') {
-            return isInbound;
-        }
-        if (searchCategory.value === 'outbound') {
-            return isOutbound;
-        }
-        return true; // 'all'
-    });
+            if (searchCategory.value === 'inbound') {
+                return isInbound;
+            }
+            if (searchCategory.value === 'outbound') {
+                return isOutbound;
+            }
+            return true; // 'all'
+        })
+        .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
 });
 
 const displayedFilteredDestinations = computed(() => {
