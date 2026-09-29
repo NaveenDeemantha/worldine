@@ -46,15 +46,21 @@ class TourDetailController extends Controller
 
     public function sendPackageInquiry(Request $request)
     {
+        // Bot / Scanner payload & honeypot check
+        if (\App\Services\BotProtectionService::isSuspicious($request)) {
+            // Silently drop spam without saving to DB or sending Brevo notification
+            return back()->with('success', 'Thank you! Your tour inquiry has been submitted. Our travel concierge will contact you shortly.');
+        }
+
         $validated = $request->validate([
             'tour_package_id' => 'nullable|exists:tour_packages,id',
             'package_title' => 'required|string|max:255',
             'customer_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email:rfc|max:255',
             'phone' => 'required|string|max:50',
             'travel_date' => 'nullable|string|max:255',
             'guests' => 'nullable|integer|min:1',
-            'message' => 'nullable|string',
+            'message' => 'nullable|string|max:5000',
         ]);
 
         Inquiry::create([

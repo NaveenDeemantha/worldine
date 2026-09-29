@@ -679,6 +679,7 @@ const storyForm = useForm({
     image: null,
     avatar: '',
     text: '',
+    website_url: '',
 });
 
 const triggerStoryFileInput = () => {
@@ -1572,6 +1573,11 @@ const features = [
                 </div>
 
                 <form @submit.prevent="submitStory" class="space-y-4">
+                    <!-- Honeypot Anti-Bot Field -->
+                    <div class="hidden" style="display:none !important;" aria-hidden="true">
+                        <input v-model="storyForm.website_url" type="text" name="website_url" tabindex="-1" autocomplete="off" />
+                    </div>
+
                     <div>
                         <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1">
                             Your Name *

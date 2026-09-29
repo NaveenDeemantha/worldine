@@ -48,15 +48,21 @@ class ContactController extends Controller
      */
     public function sendInquiry(Request $request)
     {
+        // Bot / Scanner payload & honeypot check
+        if (\App\Services\BotProtectionService::isSuspicious($request)) {
+            // Silently drop spam without saving to DB or sending Brevo notification
+            return back()->with('success', 'Thank you! Your inquiry has been received. Our travel concierge will reach out to you within 2 hours.');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email:rfc|max:255',
             'phone' => 'required|string|max:50',
-            'inquiry_type' => 'nullable|string',
+            'inquiry_type' => 'nullable|string|max:255',
             'destination' => 'nullable|string|max:255',
             'travel_dates' => 'nullable|string|max:255',
             'travelers' => 'nullable|string|max:50',
-            'message' => 'nullable|string',
+            'message' => 'nullable|string|max:5000',
         ]);
 
         Inquiry::create([

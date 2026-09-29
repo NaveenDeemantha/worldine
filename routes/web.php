@@ -22,9 +22,9 @@ Route::get('/destinations', [OutboundDestinationController::class, 'index'])->na
 Route::get('/tours/{slug}', [TourDetailController::class, 'show'])->name('tours.show');
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-Route::post('/contact', [ContactController::class, 'sendInquiry'])->name('contact.send');
-Route::post('/tours/inquire', [TourDetailController::class, 'sendPackageInquiry'])->name('tours.inquire');
-Route::post('/testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
+Route::post('/contact', [ContactController::class, 'sendInquiry'])->middleware('throttle:5,1')->name('contact.send');
+Route::post('/tours/inquire', [TourDetailController::class, 'sendPackageInquiry'])->middleware('throttle:5,1')->name('tours.inquire');
+Route::post('/testimonials', [TestimonialController::class, 'store'])->middleware('throttle:5,1')->name('testimonials.store');
 
 // Admin Dashboard & Auth Protected Routes
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/itineraries', [DestinationController::class, 'indexItineraries'])->name('admin.itineraries.index');
     Route::get('/admin/bookings', [DestinationController::class, 'indexBookings'])->name('admin.bookings.index');
     Route::delete('/admin/inquiries/{inquiry}', [DestinationController::class, 'destroyInquiry'])->name('admin.inquiries.destroy');
+    Route::post('/admin/inquiries/bulk-delete', [DestinationController::class, 'bulkDestroyInquiries'])->name('admin.inquiries.bulk-destroy');
     Route::get('/admin/contact', [ContactAdminController::class, 'index'])->name('admin.contact.index');
     Route::put('/admin/contact', [ContactAdminController::class, 'update'])->name('admin.contact.update');
 
