@@ -20,7 +20,8 @@ const form = useForm({
     destination: '',
     travel_dates: '',
     travelers: '1-2 Guests',
-    message: ''
+    message: '',
+    website_url: '',
 });
 
 const isSubmitted = ref(false);
@@ -334,6 +335,10 @@ const faqs = [
 
                     <!-- Form Controls -->
                     <form v-else @submit.prevent="submitForm" class="space-y-5">
+                        <!-- Honeypot Anti-Bot Field -->
+                        <div class="hidden" style="display:none !important;" aria-hidden="true">
+                            <input v-model="form.website_url" type="text" name="website_url" tabindex="-1" autocomplete="off" />
+                        </div>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <!-- Full Name -->

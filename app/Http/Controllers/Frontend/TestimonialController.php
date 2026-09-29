@@ -12,6 +12,12 @@ class TestimonialController extends Controller
 {
     public function store(Request $request): RedirectResponse
     {
+        // Bot / Scanner payload & honeypot check
+        if (\App\Services\BotProtectionService::isSuspicious($request)) {
+            // Silently drop spam without saving to DB or sending Brevo notification
+            return back()->with('success', 'Thank you for sharing your story! Your experience has been published.');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'nullable|string|max:255',

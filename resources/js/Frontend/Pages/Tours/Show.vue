@@ -21,6 +21,7 @@ const form = useForm({
     travel_date: '',
     guests: 2,
     message: '',
+    website_url: '',
 });
 
 const submitInquiry = () => {
@@ -208,6 +209,11 @@ const formatDescription = (text) => {
 
                         <!-- Inquiry Form -->
                         <form @submit.prevent="submitInquiry" class="space-y-3.5">
+                            <!-- Honeypot Anti-Bot Field -->
+                            <div class="hidden" style="display:none !important;" aria-hidden="true">
+                                <input v-model="form.website_url" type="text" name="website_url" tabindex="-1" autocomplete="off" />
+                            </div>
+
                             <div class="flex items-center justify-between">
                                 <h3 class="text-xs font-black uppercase tracking-wider text-slate-900">Inquire / Book This Tour</h3>
                                 <span class="text-[10px] font-bold text-[#2196F3]">Quick Response</span>

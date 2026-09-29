@@ -91,6 +91,19 @@ class DestinationController extends Controller
     }
 
     /**
+     * Bulk Delete Inquiries / Booking Leads
+     */
+    public function bulkDestroyInquiries(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (!empty($ids) && is_array($ids)) {
+            \App\Models\Inquiry::whereIn('id', $ids)->delete();
+            return redirect()->back()->with('success', count($ids) . ' leads deleted successfully!');
+        }
+        return redirect()->back()->with('error', 'No leads selected for deletion.');
+    }
+
+    /**
      * Store a newly created Destination
      */
     public function storeDestination(Request $request)
