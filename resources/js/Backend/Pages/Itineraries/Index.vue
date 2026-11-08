@@ -22,6 +22,7 @@ const itineraryForm = useForm({
     duration_days: 1,
     duration_nights: 0,
     price: null,
+    currency: 'USD',
     badge: '',
     main_image: '',
     overview: '',
@@ -41,6 +42,7 @@ const loadPackageItinerary = (pkg) => {
     itineraryForm.duration_days = pkg.duration_days || 1;
     itineraryForm.duration_nights = pkg.duration_nights || 0;
     itineraryForm.price = pkg.price;
+    itineraryForm.currency = pkg.currency || 'USD';
     itineraryForm.badge = pkg.badge || '';
     itineraryForm.main_image = pkg.main_image || '';
     itineraryForm.overview = pkg.overview || '';

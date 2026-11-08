@@ -18,6 +18,7 @@ class TourPackage extends Model
         'subtitle',
         'category',
         'price',
+        'currency',
         'duration_days',
         'duration_nights',
         'badge',

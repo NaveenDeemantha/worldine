@@ -27,7 +27,21 @@ class DashboardController extends Controller
         $totalPackages = TourPackage::count();
         $activePackages = TourPackage::where('is_active', true)->count();
         $featuredPackages = TourPackage::where('is_featured', true)->count();
-        $avgPackagePrice = TourPackage::where('is_active', true)->avg('price') ?: 0;
+        
+        $avgUsdPrice = TourPackage::where('is_active', true)->where(function ($q) {
+            $q->where('currency', 'USD')->orWhereNull('currency');
+        })->where('price', '>', 0)->avg('price');
+        $avgLkrPrice = TourPackage::where('is_active', true)->where('currency', 'LKR')->where('price', '>', 0)->avg('price');
+
+        if ($avgUsdPrice && $avgLkrPrice) {
+            $avgPackagePriceDisplay = '$' . number_format($avgUsdPrice, 0) . ' / LKR ' . number_format($avgLkrPrice, 0);
+        } elseif ($avgLkrPrice) {
+            $avgPackagePriceDisplay = 'LKR ' . number_format($avgLkrPrice, 0);
+        } elseif ($avgUsdPrice) {
+            $avgPackagePriceDisplay = '$' . number_format($avgUsdPrice, 0);
+        } else {
+            $avgPackagePriceDisplay = '$0';
+        }
 
         $totalItineraryDays = PackageItineraryDay::count();
         $totalAdminUsers = User::count();
@@ -90,7 +104,8 @@ class DashboardController extends Controller
                     'destination' => $package->destination ? $package->destination->name : 'N/A',
                     'category' => $package->category,
                     'duration' => ($package->itineraryDays && $package->itineraryDays->count() > 0 ? $package->itineraryDays->count() . ' Days' : $package->duration_days . ' Days'),
-                    'price' => ($package->price && (float)$package->price > 0 ? '$' . number_format($package->price, 0) : 'On Request'),
+                    'price' => ($package->price && (float)$package->price > 0 ? ($package->currency === 'LKR' ? 'LKR ' : '$') . number_format($package->price, 0) : 'On Request'),
+                    'currency' => $package->currency ?? 'USD',
                     'is_featured' => $package->is_featured,
                     'is_active' => $package->is_active,
                     'created_at' => $package->created_at ? $package->created_at->format('M d, Y') : 'Recent',
@@ -121,7 +136,7 @@ class DashboardController extends Controller
                 'totalPackages' => $totalPackages,
                 'activePackages' => $activePackages,
                 'featuredPackages' => $featuredPackages,
-                'avgPackagePrice' => '$' . number_format($avgPackagePrice, 0),
+                'avgPackagePrice' => $avgPackagePriceDisplay,
                 'totalItineraryDays' => $totalItineraryDays,
                 'totalAdminUsers' => $totalAdminUsers,
                 'contactSettingsConfigured' => $contactSettingsConfigured,

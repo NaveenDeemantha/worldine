@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 
 defineProps({
@@ -16,6 +16,19 @@ const navInboundPackages = computed(() => page.props.navInboundPackages || []);
 
 const isScrolled = ref(false);
 const mobileMenuOpen = ref(false);
+
+// Lock body scrolling when mobile menu is open to prevent background screen scrolling
+watch(mobileMenuOpen, (isOpen) => {
+    if (typeof document !== 'undefined') {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
+        } else {
+            document.body.style.overflow = '';
+            document.body.style.touchAction = '';
+        }
+    }
+});
 
 // Dropdown states
 const activeSriLankaDropdown = ref(false);
@@ -71,6 +84,10 @@ onMounted(() => {
 
 onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
+    if (typeof document !== 'undefined') {
+        document.body.style.overflow = '';
+        document.body.style.touchAction = '';
+    }
 });
 </script>
 
@@ -107,7 +124,7 @@ onUnmounted(() => {
                 <!-- Dynamic Sri Lanka Inbound Tours Dropdown Menu -->
                 <div 
                     v-if="activeSriLankaDropdown && navInboundPackages.length > 0" 
-                    class="absolute left-0 mt-2.5 w-60 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left max-h-80 overflow-y-auto"
+                    class="absolute left-0 mt-2.5 w-60 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left max-h-80 overflow-y-auto overscroll-contain dropdown-scrollbar"
                     @mouseenter="openSriLanka"
                     @mouseleave="closeSriLanka"
                 >
@@ -141,7 +158,7 @@ onUnmounted(() => {
                 <!-- Dynamic Destinations Countries Dropdown Menu -->
                 <div 
                     v-if="activeDestinationsDropdown && navDestinations.length > 0" 
-                    class="absolute left-0 mt-2.5 w-56 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left max-h-80 overflow-y-auto"
+                    class="absolute left-0 mt-2.5 w-56 bg-[#1E5288] text-white border border-white/20 rounded-xl shadow-2xl py-2 px-2 space-y-1 z-50 normal-case font-semibold text-xs sm:text-sm text-left max-h-80 overflow-y-auto overscroll-contain dropdown-scrollbar"
                     @mouseenter="openDestinations"
                     @mouseleave="closeDestinations"
                 >
@@ -197,7 +214,7 @@ onUnmounted(() => {
                     <span>Sri Lanka</span>
                     <span v-if="navInboundPackages.length > 0" class="text-[10px]">{{ activeSriLankaDropdown ? '▲' : '▼' }}</span>
                 </button>
-                <div v-if="activeSriLankaDropdown && navInboundPackages.length > 0" class="mt-2 pl-3 space-y-1.5 text-slate-600 normal-case font-medium">
+                <div v-if="activeSriLankaDropdown && navInboundPackages.length > 0" class="mt-2 pl-3 space-y-1.5 text-slate-600 normal-case font-medium max-h-48 overflow-y-auto">
                     <Link 
                         v-for="pkg in navInboundPackages" 
                         :key="pkg.id" 
@@ -219,7 +236,7 @@ onUnmounted(() => {
                     <span>Destinations</span>
                     <span v-if="navDestinations.length > 0" class="text-[10px]">{{ activeDestinationsDropdown ? '▲' : '▼' }}</span>
                 </button>
-                <div v-if="activeDestinationsDropdown && navDestinations.length > 0" class="mt-2 pl-3 space-y-1.5 text-slate-600 normal-case font-medium">
+                <div v-if="activeDestinationsDropdown && navDestinations.length > 0" class="mt-2 pl-3 space-y-1.5 text-slate-600 normal-case font-medium max-h-48 overflow-y-auto">
                     <Link 
                         v-for="dest in navDestinations" 
                         :key="dest.id" 
@@ -237,3 +254,24 @@ onUnmounted(() => {
         </div>
     </header>
 </template>
+
+<style scoped>
+/* Sleek custom scrollbar for desktop dropdown menus */
+.dropdown-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+.dropdown-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+.dropdown-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.dropdown-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 9999px;
+}
+.dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.55);
+}
+</style>

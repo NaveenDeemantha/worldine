@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('subtitle')->nullable();
             $table->enum('category', ['all', 'srilanka-inbound', 'global-outbound', 'europe-schengen', 'east-asia', 'luxury-escapes'])->default('global-outbound');
             $table->decimal('price', 10, 2)->nullable();
+            $table->string('currency', 10)->default('USD');
             $table->integer('duration_days')->default(1);
             $table->integer('duration_nights')->default(0);
             $table->string('badge')->nullable();

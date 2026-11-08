@@ -49,6 +49,7 @@ const pkgForm = useForm({
     subtitle: '',
     category: 'srilanka-inbound',
     price: null,
+    currency: 'USD',
     duration_days: 6,
     duration_nights: 5,
     badge: 'Popular Choice',
@@ -131,6 +132,7 @@ const openPackageModal = (pkg = null) => {
         pkgForm.subtitle = pkg.subtitle || '';
         pkgForm.category = pkg.category;
         pkgForm.price = pkg.price;
+        pkgForm.currency = pkg.currency || 'USD';
         pkgForm.duration_days = pkg.duration_days;
         pkgForm.duration_nights = pkg.duration_nights;
         pkgForm.badge = pkg.badge || '';
@@ -142,6 +144,7 @@ const openPackageModal = (pkg = null) => {
         if (pkg.main_image) pkgImagePreview.value = pkg.main_image;
     } else {
         pkgForm.reset();
+        pkgForm.currency = 'USD';
         pkgForm.id = null;
         if (props.destinations.length > 0) {
             pkgForm.destination_id = props.destinations[0].id;
@@ -287,7 +290,7 @@ const filteredDestinations = computed(() => {
                                     </span>
                                 </td>
                                 <td class="py-4 px-4">
-                                    <div class="font-black text-slate-900 text-sm" v-if="pkg.price && Number(pkg.price) > 0">${{ pkg.price }}</div>
+                                    <div class="font-black text-slate-900 text-sm" v-if="pkg.price && Number(pkg.price) > 0">{{ pkg.currency === 'LKR' ? 'LKR ' : '$' }}{{ Number(pkg.price).toLocaleString() }}</div>
                                     <div class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 inline-block mb-0.5" v-else>On Request</div>
                                     <div class="text-[11px] text-slate-500 font-medium">{{ pkg.duration_days }} Days / {{ pkg.duration_nights }} Nights</div>
                                 </td>
@@ -402,7 +405,15 @@ const filteredDestinations = computed(() => {
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Price (USD $) <span class="text-[10px] text-slate-400 font-normal">(Optional)</span></label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Currency</label>
+                            <select v-model="pkgForm.currency" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 bg-white">
+                                <option value="USD">USD ($)</option>
+                                <option value="LKR">LKR (Rs.)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Price <span class="text-[10px] text-slate-400 font-normal">({{ pkgForm.currency || 'USD' }} - Optional)</span></label>
                             <input type="number" step="0.01" v-model="pkgForm.price" placeholder="Leave empty for 'Inquire for Quote'" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-900" />
                         </div>
 
