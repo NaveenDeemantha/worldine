@@ -367,7 +367,7 @@ const filteredDestinations = computed(() => {
         </div>
 
         <!-- PACKAGE & ITINERARY DAY-BY-DAY MODAL -->
-        <div v-if="isPackageModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs overflow-y-auto">
+        <div v-if="isPackageModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm overflow-y-auto">
             <div class="bg-white w-full max-w-4xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto font-spinnaker space-y-6">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                     <div>
@@ -519,7 +519,7 @@ const filteredDestinations = computed(() => {
         </div>
 
         <!-- DESTINATION MODAL -->
-        <div v-if="isDestinationModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
+        <div v-if="isDestinationModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
             <div class="bg-white w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-200 font-spinnaker space-y-5">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <h2 class="text-lg font-black text-[#0D47A1]">{{ editingDestination ? 'Edit Destination' : 'Add New Destination' }}</h2>
