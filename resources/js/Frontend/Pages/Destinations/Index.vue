@@ -122,7 +122,7 @@ const activeHeroImage = computed(() => {
                             {{ pkg.badge || (pkg.destination ? pkg.destination.name : 'Global Tour') }}
                         </span>
                         <div class="absolute bottom-4 left-4 right-4 text-white flex justify-between items-end">
-                            <span v-if="pkg.price && Number(pkg.price) > 0" class="text-2xl font-black">${{ Number(pkg.price).toLocaleString() }}</span>
+                            <span v-if="pkg.price && Number(pkg.price) > 0" class="text-2xl font-black">{{ pkg.currency === 'LKR' ? 'LKR ' : '$' }}{{ Number(pkg.price).toLocaleString() }}</span>
                             <span v-else class="text-xs font-extrabold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/30">Inquire for Quote</span>
                             <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ (pkg.itinerary_days && pkg.itinerary_days.length > 0) ? pkg.itinerary_days.length : pkg.duration_days }} Days</span>
                         </div>

@@ -190,6 +190,7 @@ class DestinationController extends Controller
             'subtitle' => 'nullable|string|max:255',
             'category' => $isUpdate ? 'nullable|string' : 'required|string',
             'price' => 'nullable|numeric|min:0',
+            'currency' => 'nullable|string|in:USD,LKR,usd,lkr',
             'duration_days' => 'nullable|integer|min:1',
             'duration_nights' => 'nullable|integer|min:0',
             'badge' => 'nullable|string|max:255',
@@ -207,6 +208,12 @@ class DestinationController extends Controller
             'days.*.accommodation' => 'nullable|string',
             'days.*.meals' => 'nullable|string',
         ]);
+
+        if (isset($validated['currency'])) {
+            $validated['currency'] = strtoupper($validated['currency']);
+        } elseif (!$isUpdate) {
+            $validated['currency'] = 'USD';
+        }
 
         if ($request->hasFile('main_image')) {
             $validated['main_image'] = \App\Services\ImageOptimizerService::storeOptimized(

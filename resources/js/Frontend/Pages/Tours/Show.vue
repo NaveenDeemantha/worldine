@@ -171,7 +171,7 @@ const formatDescription = (text) => {
                             <template v-if="package.price && Number(package.price) > 0">
                                 <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest block">Starting From</span>
                                 <div class="text-3xl sm:text-4xl font-black text-[#0D47A1] mt-1 tracking-tight">
-                                    ${{ Number(package.price).toLocaleString() }} 
+                                    {{ package.currency === 'LKR' ? 'LKR ' : '$' }}{{ Number(package.price).toLocaleString() }} 
                                     <span class="text-xs text-slate-400 font-semibold tracking-normal">/ person</span>
                                 </div>
                                 <div class="flex items-center justify-center space-x-2 mt-2">
@@ -340,7 +340,7 @@ const formatDescription = (text) => {
                                             <span>{{ relPkg.duration_days }} Days</span>
                                         </span>
                                         <span v-if="relPkg.price && Number(relPkg.price) > 0" class="text-[#0D47A1] font-black">
-                                            ${{ Number(relPkg.price).toLocaleString() }}
+                                            {{ relPkg.currency === 'LKR' ? 'LKR ' : '$' }}{{ Number(relPkg.price).toLocaleString() }}
                                         </span>
                                         <span v-else class="text-emerald-600 font-bold">
                                             Inquire

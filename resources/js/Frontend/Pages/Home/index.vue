@@ -1153,7 +1153,7 @@ const features = [
                                 <template v-if="dest.price && Number(dest.price) > 0">
                                     <span class="text-[10px] text-slate-500 font-medium block">Starting from</span>
                                     <div class="flex items-baseline space-x-1">
-                                        <span class="text-lg sm:text-xl font-black text-[#0D47A1]">${{ Number(dest.price).toLocaleString() }}</span>
+                                        <span class="text-lg sm:text-xl font-black text-[#0D47A1]">{{ dest.currency === 'LKR' ? 'LKR ' : '$' }}{{ Number(dest.price).toLocaleString() }}</span>
                                     </div>
                                 </template>
                                 <template v-else>
@@ -1982,7 +1982,7 @@ const features = [
                     <div>
                         <span class="text-[10px] text-slate-500 font-medium block">Starting Price</span>
                         <div v-if="activeModalDestination.price && Number(activeModalDestination.price) > 0" class="text-2xl font-black text-[#0D47A1]">
-                            ${{ Number(activeModalDestination.price).toLocaleString() }} USD
+                            {{ activeModalDestination.currency === 'LKR' ? 'LKR ' + Number(activeModalDestination.price).toLocaleString() : '$' + Number(activeModalDestination.price).toLocaleString() + ' USD' }}
                         </div>
                         <div v-else class="text-xs font-black bg-blue-50 text-[#0D47A1] px-3 py-1 rounded-lg border border-blue-100">
                             Inquire for Quote

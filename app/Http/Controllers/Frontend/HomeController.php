@@ -50,6 +50,7 @@ class HomeController extends Controller
                     'subtitle' => $pkg->subtitle,
                     'category' => $pkg->category,
                     'price' => $pkg->price !== null ? (float) $pkg->price : null,
+                    'currency' => $pkg->currency ?? 'USD',
                     'duration' => $pkg->duration_days . ' Days' . ($pkg->duration_nights ? ' / ' . $pkg->duration_nights . ' Nights' : ''),
                     'duration_days' => $pkg->duration_days,
                     'duration_nights' => $pkg->duration_nights,

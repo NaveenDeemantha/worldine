@@ -99,7 +99,7 @@ const openQuickDetail = (pkg) => {
                             {{ pkg.badge || 'Sri Lanka Inbound' }}
                         </span>
                         <div class="absolute bottom-4 left-4 right-4 text-white flex justify-between items-end">
-                            <span v-if="pkg.price && Number(pkg.price) > 0" class="text-2xl font-black">${{ Number(pkg.price).toLocaleString() }}</span>
+                            <span v-if="pkg.price && Number(pkg.price) > 0" class="text-2xl font-black">{{ pkg.currency === 'LKR' ? 'LKR ' : '$' }}{{ Number(pkg.price).toLocaleString() }}</span>
                             <span v-else class="text-xs font-extrabold bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/30">Inquire for Quote</span>
                             <span class="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">{{ (pkg.itinerary_days && pkg.itinerary_days.length > 0) ? pkg.itinerary_days.length : pkg.duration_days }} Days</span>
                         </div>
@@ -170,7 +170,9 @@ const openQuickDetail = (pkg) => {
                 </div>
 
                 <div class="pt-4 border-t border-slate-100 flex justify-between items-center">
-                    <span v-if="selectedPackage.price && Number(selectedPackage.price) > 0" class="text-xl font-black text-[#0D47A1]">${{ Number(selectedPackage.price).toLocaleString() }} USD</span>
+                    <span v-if="selectedPackage.price && Number(selectedPackage.price) > 0" class="text-xl font-black text-[#0D47A1]">
+                        {{ selectedPackage.currency === 'LKR' ? 'LKR ' + Number(selectedPackage.price).toLocaleString() : '$' + Number(selectedPackage.price).toLocaleString() + ' USD' }}
+                    </span>
                     <span v-else class="text-xs font-black bg-blue-50 text-[#0D47A1] px-3.5 py-2 rounded-xl border border-blue-100">Custom Tour • Inquire for Quote</span>
                     <Link :href="route('tours.show', selectedPackage.slug || selectedPackage.id)" class="px-6 py-2.5 rounded-full bg-[#2196F3] text-white text-xs font-extrabold shadow-md hover:bg-[#0D47A1] transition-all">
                         Full Itinerary & Booking Page →

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import Navbar from '@/Frontend/Components/Navbar.vue';
 import Footer from '@/Frontend/Components/Footer.vue';
@@ -26,6 +26,25 @@ const form = useForm({
 
 const isSubmitted = ref(false);
 const submitting = ref(false);
+
+onMounted(() => {
+    const params = new URLSearchParams(window.location.search);
+    const service = params.get('service');
+    if (service) {
+        form.message = `Hello Worldine team, I would like to inquire about your ${service} service. Please provide details, rates, and availability.`;
+        if (service.toLowerCase().includes('visa') || service.toLowerCase().includes('ticket')) {
+            form.inquiry_type = 'Visa & Air Ticketing';
+        } else if (service.toLowerCase().includes('package') || service.toLowerCase().includes('holiday')) {
+            form.inquiry_type = 'Custom Tailor-Made Itinerary';
+        } else {
+            form.inquiry_type = 'General Inquiry';
+        }
+        const formElement = document.getElementById('contact-form');
+        if (formElement) {
+            formElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+});
 
 const submitForm = () => {
     submitting.value = true;

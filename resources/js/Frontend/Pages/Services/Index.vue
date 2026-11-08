@@ -3,108 +3,149 @@ import { Head, Link } from '@inertiajs/vue3';
 import Navbar from '@/Frontend/Components/Navbar.vue';
 import Footer from '@/Frontend/Components/Footer.vue';
 
-const serviceList = [
-    { title: 'AIRLINE TICKETING & RESERVATIONS', slug: 'Airline Ticketing & Reservations' },
-    { title: 'HOLIDAYS PACKAGES', slug: 'Holidays Packages' },
-    { title: 'WORLDWIDE HOTEL RESERVATIONS', slug: 'Worldwide Hotel Reservations' },
-    { title: 'VISA ASSISTANCE', slug: 'Visa Assistance' },
-    { title: 'TRAVEL INSURANCE', slug: 'Travel Insurance' },
-    { title: 'HEALTH INSURANCE', slug: 'Health Insurance' },
-    { title: 'CRUISE PACKAGES', slug: 'Cruise Packages' },
-    { title: 'STUDENT VISA CONSULATION', slug: 'Student Visa Consultation' },
-];
+defineProps({
+    coreServices: {
+        type: Array,
+        default: () => []
+    },
+    valueAddedServices: {
+        type: Array,
+        default: () => []
+    }
+});
 </script>
 
 <template>
     <Head title="Our Services - Worldine Destinations" />
 
-    <div class="min-h-screen font-spinnaker bg-slate-50 text-slate-800 selection:bg-[#00B4D8] selection:text-white w-full overflow-x-hidden">
+    <div class="min-h-screen font-spinnaker bg-white text-slate-800 selection:bg-[#2B70B4] selection:text-white w-full overflow-x-hidden flex flex-col justify-between">
         <Navbar />
 
-        <!-- HERO BANNER SECTION -->
-        <section class="relative h-[38vh] min-h-[280px] sm:min-h-[340px] flex items-center justify-center bg-slate-950 text-white overflow-hidden w-full">
-            <div class="absolute inset-0 z-0">
-                <img 
-                    src="/images/Logo/worldineback.png" 
-                    alt="Worldine Travel Services" 
-                    class="w-full h-full object-cover object-center filter brightness-90"
-                    fetchpriority="high"
-                />
-                <!-- Smooth White Top Fade for Navbar -->
-                <div class="absolute top-0 left-0 right-0 h-20 sm:h-28 bg-gradient-to-b from-white via-white/20 to-transparent pointer-events-none z-10"></div>
-                <!-- Soft Dark Protection Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/20 to-slate-950/30 z-10 pointer-events-none"></div>
-            </div>
+        <!-- HERO BANNER SECTION WITH GENTLE ORGANIC CURVE -->
+        <section class="relative bg-gradient-to-br from-[#0B2545] via-[#134074] to-[#1D4E89] text-white pt-12 pb-20 sm:pt-16 sm:pb-28 overflow-hidden">
+            <!-- Subtle Background Accents -->
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+            <div class="absolute -top-20 -right-20 w-80 h-80 bg-sky-400/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div class="relative z-20 text-center w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 pt-10 sm:pt-14 max-w-4xl mx-auto space-y-2">
-                <span class="text-[11px] sm:text-xs font-black uppercase tracking-[0.3em] text-[#00B4D8] bg-white/10 backdrop-blur-md px-4 py-1 rounded-full inline-block" style="color: #00B4D8;">
-                    WORLDINE TRAVEL CONCIERGE
-                </span>
+            <div class="relative z-10 max-w-4xl mx-auto px-6 text-center space-y-3">
+                <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20">
+                    <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                    <span class="text-[11px] sm:text-xs font-black uppercase tracking-[0.25em] text-sky-200">
+                        Worldine Travel Concierge
+                    </span>
+                </div>
+
                 <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-white uppercase leading-tight">
-                    Our Services
+                    Our Travel Services
                 </h1>
+
+                <p class="text-xs sm:text-sm text-slate-200/90 font-medium max-w-xl mx-auto leading-relaxed">
+                    Reliable, licensed travel operations and personalized customer assistance for international holidays and Sri Lanka expeditions.
+                </p>
+            </div>
+
+            <!-- Gentle Wave Separator -->
+            <div class="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
+                <svg class="relative block w-full h-7 sm:h-10 text-white" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path d="M0,0 C150,90 350,-40 500,40 C650,120 900,20 1200,60 L1200,120 L0,120 Z" fill="currentColor"></path>
+                </svg>
             </div>
         </section>
 
-        <!-- MAIN SERVICES SECTION -->
-        <section class="py-16 sm:py-24 w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 bg-white">
-            
-            <div class="w-full max-w-4xl mx-auto space-y-10">
-                
-                <!-- TITLE HEADER WITH TEAL UNDERLINE ACCENT -->
-                <div class="text-center space-y-3">
-                    <h2 class="text-3xl sm:text-4xl font-black tracking-wider uppercase" style="color: #00B4D8;">
-                        OUR SERVICES
+        <!-- SERVICES CONTENT (ELEGANT CENTERED TYPOGRAPHIC DIRECTORY) -->
+        <main class="flex-grow max-w-3xl mx-auto px-6 py-12 sm:py-16 w-full space-y-12 sm:space-y-14">
+
+            <!-- SECTION 1: OUR SERVICES -->
+            <section class="space-y-6 sm:space-y-8">
+                <!-- Section Heading Flanked by Thin Lines -->
+                <div class="flex items-center justify-center space-x-4 max-w-lg mx-auto">
+                    <div class="h-[1px] bg-sky-600/40 flex-1"></div>
+                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-[#102A43] tracking-normal whitespace-nowrap px-2">
+                        Our Services
                     </h2>
-                    <!-- Teal Underline Accent -->
-                    <div class="w-24 h-1.5 mx-auto rounded-full" style="background-color: #00B4D8;"></div>
+                    <div class="h-[1px] bg-sky-600/40 flex-1"></div>
                 </div>
 
-                <!-- HIGH VISIBILITY TEAL BARS (EXACT MATCH TO SCREENSHOT WITH GUARANTEED COLORS) -->
-                <div class="space-y-3.5 w-full">
-                    <Link
-                        v-for="(service, index) in serviceList"
-                        :key="index"
-                        :href="`/contact?service=${encodeURIComponent(service.slug)}`"
-                        class="w-full px-6 sm:px-8 py-4 sm:py-5 flex items-center justify-between font-black text-sm sm:text-base tracking-wider uppercase transition-all duration-200 block shadow-md hover:shadow-lg cursor-pointer group rounded-sm"
-                        style="background-color: #00B4D8; color: #ffffff;"
+                <!-- Centered Service Items List -->
+                <div class="space-y-3.5 sm:space-y-4 text-center">
+                    <div 
+                        v-for="service in coreServices" 
+                        :key="service.id"
+                        class="leading-relaxed"
                     >
-                        <span class="pr-4 leading-tight group-hover:translate-x-1 transition-transform inline-block font-extrabold text-white" style="color: #ffffff;">
+                        <Link 
+                            :href="`/contact?service=${encodeURIComponent(service.slug)}`"
+                            class="text-sm sm:text-base text-slate-700 hover:text-[#2B70B4] font-medium transition-colors duration-200 inline-block px-3 py-1 rounded hover:bg-slate-50"
+                        >
                             {{ service.title }}
-                        </span>
-                        <span class="text-xl sm:text-2xl font-black text-white flex-shrink-0" style="color: #ffffff;">
-                            +
-                        </span>
-                    </Link>
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: VALUE ADDED SERVICES -->
+            <section class="space-y-6 sm:space-y-8 pt-4">
+                <!-- Section Heading Flanked by Thin Lines -->
+                <div class="flex items-center justify-center space-x-4 max-w-lg mx-auto">
+                    <div class="h-[1px] bg-sky-600/40 flex-1"></div>
+                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-[#102A43] tracking-normal whitespace-nowrap px-2">
+                        Value added services
+                    </h2>
+                    <div class="h-[1px] bg-sky-600/40 flex-1"></div>
                 </div>
 
+                <!-- Centered Value Added Services List -->
+                <div class="space-y-3.5 sm:space-y-4 text-center">
+                    <div 
+                        v-for="service in valueAddedServices" 
+                        :key="service.id"
+                        class="leading-relaxed"
+                    >
+                        <Link 
+                            :href="`/contact?service=${encodeURIComponent(service.slug)}`"
+                            class="text-sm sm:text-base text-slate-700 hover:text-[#2B70B4] font-medium transition-colors duration-200 inline-block px-3 py-1 rounded hover:bg-slate-50"
+                        >
+                            {{ service.title }}
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CALL TO ACTION: LET'S CONNECT BUTTON -->
+            <div class="pt-6 sm:pt-8 flex justify-center">
+                <Link 
+                    href="/contact"
+                    class="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-[#1E3A5F] hover:bg-[#2B70B4] text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
+                >
+                    Let's connect
+                </Link>
             </div>
 
-        </section>
+        </main>
 
         <!-- TRUST & ACCREDITATION STRIP -->
-        <section class="py-12 bg-slate-900 text-white w-full font-spinnaker">
-            <div class="w-full px-6 sm:px-10 md:px-14 lg:px-20 xl:px-24 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <section class="py-10 bg-slate-900 text-white w-full border-t border-slate-800">
+            <div class="max-w-6xl mx-auto px-6 sm:px-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div class="space-y-1">
-                    <span class="text-2xl sm:text-3xl font-black text-[#90CAF9]">20+</span>
-                    <div class="text-xs font-bold uppercase tracking-wider text-slate-300">Years Industry Expertise</div>
+                    <span class="text-2xl font-black text-[#90CAF9]">20+</span>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Years Experience</div>
                 </div>
                 <div class="space-y-1">
-                    <span class="text-2xl sm:text-3xl font-black text-[#90CAF9]">100%</span>
-                    <div class="text-xs font-bold uppercase tracking-wider text-slate-300">SLTDA Licensed & Approved</div>
+                    <span class="text-2xl font-black text-[#90CAF9]">100%</span>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300">SLTDA Licensed</div>
                 </div>
                 <div class="space-y-1">
-                    <span class="text-2xl sm:text-3xl font-black text-[#90CAF9]">24/7</span>
-                    <div class="text-xs font-bold uppercase tracking-wider text-slate-300">Personal Travel Concierge</div>
+                    <span class="text-2xl font-black text-[#90CAF9]">24/7</span>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Dedicated Support</div>
                 </div>
                 <div class="space-y-1">
-                    <span class="text-2xl sm:text-3xl font-black text-[#90CAF9]">50,000+</span>
-                    <div class="text-xs font-bold uppercase tracking-wider text-slate-300">Happy Global Travelers</div>
+                    <span class="text-2xl font-black text-[#90CAF9]">50,000+</span>
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Global Travelers</div>
                 </div>
             </div>
         </section>
 
         <Footer />
-
     </div>
 </template>
